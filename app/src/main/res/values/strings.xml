@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">QChess</string>
+    <string name="username">Username</string>
+    <string name="play">Play</string>
+    <string name="how_to">How to play?</string>
 </resources>
