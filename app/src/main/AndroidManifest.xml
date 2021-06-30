@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.bggoranoff.qchess">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/chess_logo"
@@ -9,6 +11,9 @@
         android:roundIcon="@drawable/chess_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.QChess">
+        <activity android:name=".ManualActivity"></activity>
+        <activity android:name=".UserListActivity" />
+        <activity android:name=".IconsActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

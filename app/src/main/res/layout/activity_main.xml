@@ -62,7 +62,7 @@
             app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/manualLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
