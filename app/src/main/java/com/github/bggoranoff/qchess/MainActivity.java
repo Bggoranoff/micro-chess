@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private void chooseIcon(View view) {
         saveUsername();
         hideKeyboard(view);
-        // TODO: start icons activity
+        Intent intent = new Intent(getApplicationContext(), IconsActivity.class);
+        startActivity(intent);
     }
 
     @Override
