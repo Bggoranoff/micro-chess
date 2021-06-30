@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     private void play(View view) {
         saveUsername();
-        // TODO: start play activity
+        Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
+        startActivity(intent);
     }
 
     private void chooseIcon(View view) {
