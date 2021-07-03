@@ -54,6 +54,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                     <TableLayout
+                        android:id="@+id/chooseIconTable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -67,7 +68,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 android:alpha="1.0"
-                                android:background="@drawable/black_bishop"
+                                app:srcCompat="@drawable/black_bishop"
                                 android:contentDescription="@string/black_bishop"
                                 android:tag="black_bishop"
                                 android:id="@+id/blackBishopIcon" />
@@ -77,7 +78,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/white_bishop"
+                                app:srcCompat="@drawable/white_bishop"
                                 android:contentDescription="@string/white_bishop"
                                 android:tag="white_bishop"
                                 android:id="@+id/whiteBishopIcon"/>
@@ -87,7 +88,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/black_knight"
+                                app:srcCompat="@drawable/black_knight"
                                 android:contentDescription="@string/black_knight"
                                 android:tag="black_knight"
                                 android:id="@+id/blackKnightIcon" />
@@ -103,7 +104,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/white_knight"
+                                app:srcCompat="@drawable/white_knight"
                                 android:contentDescription="@string/white_knight"
                                 android:tag="white_knight"
                                 android:id="@+id/whiteKnightIcon" />
@@ -113,7 +114,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/black_king"
+                                app:srcCompat="@drawable/black_king"
                                 android:contentDescription="@string/black_king"
                                 android:tag="black_king"
                                 android:id="@+id/blackKingIcon" />
@@ -123,7 +124,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/white_king"
+                                app:srcCompat="@drawable/white_king"
                                 android:contentDescription="@string/white_king"
                                 android:tag="white_king"
                                 android:id="@+id/whiteKingIcon" />
@@ -139,7 +140,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/black_queen"
+                                app:srcCompat="@drawable/black_queen"
                                 android:contentDescription="@string/black_queen"
                                 android:tag="black_queen"
                                 android:id="@+id/blackQueenIcon" />
@@ -149,7 +150,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/white_queen"
+                                app:srcCompat="@drawable/white_queen"
                                 android:contentDescription="@string/white_queen"
                                 android:tag="white_queen"
                                 android:id="@+id/whiteQueenIcon" />
@@ -159,7 +160,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/black_rook"
+                                app:srcCompat="@drawable/black_rook"
                                 android:contentDescription="@string/black_rook"
                                 android:tag="black_rook"
                                 android:id="@+id/blackRookIcon" />
@@ -175,7 +176,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/white_rook"
+                                app:srcCompat="@drawable/white_rook"
                                 android:contentDescription="@string/white_rook"
                                 android:tag="white_rook"
                                 android:id="@+id/whiteRookIcon" />
@@ -185,7 +186,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/black_pawn"
+                                app:srcCompat="@drawable/black_pawn"
                                 android:contentDescription="@string/black_pawn"
                                 android:tag="black_pawn"
                                 android:id="@+id/blackPawnIcon" />
@@ -195,7 +196,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/white_pawn"
+                                app:srcCompat="@drawable/white_pawn"
                                 android:contentDescription="@string/white_pawn"
                                 android:tag="white_pawn"
                                 android:id="@+id/whitePawnIcon" />

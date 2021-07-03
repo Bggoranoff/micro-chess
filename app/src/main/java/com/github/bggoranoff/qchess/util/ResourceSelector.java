@@ -8,9 +8,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 public class ResourceSelector {
 
-    public static Drawable getDrawable(Context context, String fileName) {
-        int resourceId = context.getResources().getIdentifier(fileName, "drawable", context.getPackageName());
-        Resources resources = context.getResources();
-        return ResourcesCompat.getDrawable(resources, resourceId, context.getTheme());
+    public static int getDrawable(Context context, String fileName) {
+        return context.getResources().getIdentifier(fileName, "drawable", context.getPackageName());
     }
 }

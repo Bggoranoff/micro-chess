@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.ResourceSelector;
 
 import java.util.Objects;
 
@@ -27,6 +28,12 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private Button playButton;
     private ImageView iconView;
     private SharedPreferences sharedPreferences;
+    private String icon = "black_king";
+
+    private void updateIcon() {
+        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", "black_king") : icon;
+        iconView.setImageResource(ResourceSelector.getDrawable(getApplicationContext(), icon));
+    }
 
     private void openManual(View view) {
         manualLink.animate().alpha(0.5f).setDuration(100);
@@ -88,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         iconView = findViewById(R.id.iconView);
         iconView.setOnClickListener(this::chooseIcon);
+        updateIcon();
     }
 
     @Override
@@ -97,5 +105,11 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             hideKeyboard(v);
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateIcon();
     }
 }
