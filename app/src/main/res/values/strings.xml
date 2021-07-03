@@ -3,4 +3,19 @@
     <string name="username">Username</string>
     <string name="play">Play</string>
     <string name="how_to">How to play?</string>
+    <string name="choose">Choose</string>
+
+    <string name="black_bishop">Black Bishop</string>
+    <string name="black_king">Black King</string>
+    <string name="black_knight">Black Knight</string>
+    <string name="black_pawn">Black Pawn</string>
+    <string name="black_queen">Black Queen</string>
+    <string name="black_rook">Black Rook</string>
+
+    <string name="white_bishop">Black Bishop</string>
+    <string name="white_king">Black King</string>
+    <string name="white_knight">Black Knight</string>
+    <string name="white_pawn">Black Pawn</string>
+    <string name="white_queen">Black Queen</string>
+    <string name="white_rook">White Rook</string>
 </resources>
