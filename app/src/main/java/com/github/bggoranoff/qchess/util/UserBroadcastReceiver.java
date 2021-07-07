@@ -1,9 +1,13 @@
 package com.github.bggoranoff.qchess.util;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.wifi.p2p.WifiP2pManager;
+
+import androidx.core.app.ActivityCompat;
 
 import com.github.bggoranoff.qchess.UserListActivity;
 
@@ -33,7 +37,12 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
                 }
                 break;
             case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION:
-                // TODO: call WifiP2pManager.requestPeers()
+                if(manager != null) {
+                    if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    }
+                    manager.requestPeers(channel, activity);
+                }
                 break;
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
                 // TODO: Respond to new connections

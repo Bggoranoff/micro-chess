@@ -13,6 +13,8 @@ import android.content.pm.PackageManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.View;
@@ -26,9 +28,11 @@ import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.UserBroadcastReceiver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener {
 
     private ConstraintLayout layout;
     private Button gamesButton;
@@ -56,15 +60,12 @@ public class UserListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void fillUsers() {
-        // TODO: get usernames over wifi
-        usernames.add("cleopatra");
-        usernames.add("kristian3551");
-        usernames.add("duxmaster");
-        usernames.add("denis7");
-        usernames.add("tedotorpedo");
-        usernames.add("fichkata");
-        usernames.add("dj efe");
+    private void fillUsers(List<WifiP2pDevice> peerList) {
+        usernames.clear();
+        for(WifiP2pDevice peer : peerList) {
+            usernames.add(peer.deviceName);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void setUsername(String username) {
@@ -118,9 +119,8 @@ public class UserListActivity extends AppCompatActivity {
         setUsername(username);
 
         wifiTextView = findViewById(R.id.wifiTextView);
-
         usersListView = findViewById(R.id.userListView);
-        fillUsers();
+
         adapter = new ArrayAdapter<>(
                 UserListActivity.this,
                 android.R.layout.simple_list_item_1,
@@ -134,6 +134,18 @@ public class UserListActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+
+        manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(UserListActivity.this, "Peers discovered successfully!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                Toast.makeText(UserListActivity.this, "Peers discovery failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -146,5 +158,16 @@ public class UserListActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList peers) {
+        Toast.makeText(this, "Found peers!", Toast.LENGTH_SHORT).show();
+        List<WifiP2pDevice> peerList = new ArrayList<>();
+        peerList.addAll(peers.getDeviceList());
+        if(peerList.size() == 0) {
+            Toast.makeText(this, "No devices found!", Toast.LENGTH_SHORT).show();
+        }
+        fillUsers(peerList);
     }
 }
