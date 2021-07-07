@@ -23,14 +23,24 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        if(action.equals(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)) {
-            // TODO: Check to see if wifi is enabled
-        } else if(action.equals(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)) {
-            // TODO: Call WifiP2pManager.requestPeers()
-        } else if(action.equals(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)) {
-            // TODO: Respond to new connections
-        } else if(action.equals(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)) {
-            // TODO: respond to device wifi state change
+        switch (action) {
+            case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION:
+                int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+                if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
+                    activity.setWifiSSID();
+                } else {
+                    activity.notifyNoWifi();
+                }
+                break;
+            case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION:
+                // TODO: call WifiP2pManager.requestPeers()
+                break;
+            case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
+                // TODO: Respond to new connections
+                break;
+            case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION:
+                // TODO: respond to device wifi state change
+                break;
         }
     }
 }

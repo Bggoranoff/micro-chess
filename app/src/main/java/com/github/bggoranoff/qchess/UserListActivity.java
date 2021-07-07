@@ -2,17 +2,18 @@ package com.github.bggoranoff.qchess;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
-import android.content.BroadcastReceiver;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
+import android.content.pm.PackageManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.UserBroadcastReceiver;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -37,7 +39,11 @@ public class UserListActivity extends AppCompatActivity {
     private ArrayList<String> usernames = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private SharedPreferences sharedPreferences;
-    private BroadcastReceiver networkReceiver;
+
+    private WifiP2pManager manager;
+    private WifiP2pManager.Channel channel;
+    private UserBroadcastReceiver broadcastReceiver;
+    private IntentFilter intentFilter;
 
     private void redirectToGames(View view) {
         Intent intent = new Intent(getApplicationContext(), GameListActivity.class);
@@ -65,7 +71,7 @@ public class UserListActivity extends AppCompatActivity {
         usernameTextView.setText("Username: " + username);
     }
 
-    private void setWifiSSID() {
+    public void setWifiSSID() {
         WifiManager manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if(manager.isWifiEnabled()) {
             WifiInfo info = manager.getConnectionInfo();
@@ -79,11 +85,25 @@ public class UserListActivity extends AppCompatActivity {
         }
     }
 
+    public void notifyNoWifi() {
+        Toast.makeText(this, "Not connected to wifi!", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        manager = (WifiP2pManager) getApplicationContext().getSystemService(Context.WIFI_P2P_SERVICE);
+        channel = manager.initialize(this, getMainLooper(), null);
+        broadcastReceiver = new UserBroadcastReceiver(manager, channel, this);
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         sharedPreferences = getSharedPreferences("com.github.bggoranoff.qchess", Context.MODE_PRIVATE);
 
@@ -98,7 +118,6 @@ public class UserListActivity extends AppCompatActivity {
         setUsername(username);
 
         wifiTextView = findViewById(R.id.wifiTextView);
-        setWifiSSID();
 
         usersListView = findViewById(R.id.userListView);
         fillUsers();
@@ -112,7 +131,20 @@ public class UserListActivity extends AppCompatActivity {
                 redirectToLobby(usernames.get(position))
         );
 
-        networkReceiver = null;
-        setWifiSSID();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
     }
 }
