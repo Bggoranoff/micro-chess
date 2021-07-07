@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.bggoranoff.qchess">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +16,9 @@
         android:roundIcon="@drawable/chess_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.QChess">
-        <activity android:name=".ManualActivity"></activity>
+        <activity android:name=".LobbyActivity"></activity>
+        <activity android:name=".GameListActivity" />
+        <activity android:name=".ManualActivity" />
         <activity android:name=".UserListActivity" />
         <activity android:name=".IconsActivity" />
         <activity android:name=".MainActivity">
