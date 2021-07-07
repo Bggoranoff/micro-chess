@@ -25,10 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.util.UserBroadcastReceiver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,6 +40,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     private TextView usernameTextView;
     private TextView wifiTextView;
 
+    private String username;
     private ArrayList<String> usernames = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private SharedPreferences sharedPreferences;
@@ -63,7 +64,8 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     private void fillUsers(List<WifiP2pDevice> peerList) {
         usernames.clear();
         for(WifiP2pDevice peer : peerList) {
-            usernames.add(peer.deviceName);
+            String deviceName = TextFormatter.formatDeviceName(peer.deviceName);
+            usernames.add(deviceName);
         }
         adapter.notifyDataSetChanged();
     }
@@ -107,6 +109,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         sharedPreferences = getSharedPreferences("com.github.bggoranoff.qchess", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString("username", "guest");
 
         layout = findViewById(R.id.userListLayout);
         ChessAnimator.animateBackground(layout);
@@ -138,7 +141,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(UserListActivity.this, "Peers discovered successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserListActivity.this, "Searching for peers...", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -146,6 +149,10 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
                 Toast.makeText(UserListActivity.this, "Peers discovery failed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     @Override
@@ -162,7 +169,6 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peers) {
-        Toast.makeText(this, "Found peers!", Toast.LENGTH_SHORT).show();
         List<WifiP2pDevice> peerList = new ArrayList<>();
         peerList.addAll(peers.getDeviceList());
         if(peerList.size() == 0) {

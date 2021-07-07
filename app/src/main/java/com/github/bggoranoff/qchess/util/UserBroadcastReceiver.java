@@ -6,10 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
 import com.github.bggoranoff.qchess.UserListActivity;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class UserBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager manager;
@@ -34,6 +38,27 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
                     activity.setWifiSSID();
                 } else {
                     activity.notifyNoWifi();
+                }
+                try {
+                    Method method = manager.getClass().getMethod(
+                            "setDeviceName",
+                            WifiP2pManager.Channel.class,
+                            String.class,
+                            WifiP2pManager.ActionListener.class
+                    );
+                    method.invoke(manager, channel, activity.getUsername(), new WifiP2pManager.ActionListener() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(activity, "Username set successfully!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(int reason) {
+                            Toast.makeText(activity, "Username set failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                    ex.printStackTrace();
                 }
                 break;
             case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION:
