@@ -19,7 +19,7 @@
     <string name="white_queen">Black Queen</string>
     <string name="white_rook">White Rook</string>
 
-    <string name="wifi_label">Wifi: wifi</string>
+    <string name="wifi_label">Wifi: not connected</string>
     <string name="username_label">Username: username</string>
     <string name="games">Games</string>
     <string name="players_online">Players online</string>
