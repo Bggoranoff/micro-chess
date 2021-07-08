@@ -28,7 +28,8 @@
             android:layout_marginTop="32dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/black_king" />
+            app:srcCompat="@drawable/black_king"
+            android:contentDescription="@string/username" />
 
         <TextView
             android:id="@+id/firstUserName"
@@ -62,7 +63,8 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/vsTextView"
-            app:srcCompat="@drawable/white_king" />
+            app:srcCompat="@drawable/white_king"
+            android:contentDescription="@string/username" />
 
         <TextView
             android:id="@+id/secondUserName"

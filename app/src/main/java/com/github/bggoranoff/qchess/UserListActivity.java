@@ -42,6 +42,8 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     private String username;
     private ArrayList<String> usernames = new ArrayList<>();
+    private ArrayList<String> icons = new ArrayList<>();
+    private ArrayList<WifiP2pDevice> devices = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private SharedPreferences sharedPreferences;
 
@@ -55,17 +57,25 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         startActivity(intent);
     }
 
-    private void redirectToLobby(String opponentName) {
+    private void redirectToLobby(int position) {
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
-        intent.putExtra("opponentName", opponentName);
+        intent.putExtra("opponentName", usernames.get(position));
+        intent.putExtra("opponentIcon", icons.get(position));
+        intent.putExtra("opponentDevice", devices.get(position));
         startActivity(intent);
     }
 
     private void fillUsers(List<WifiP2pDevice> peerList) {
         usernames.clear();
+        icons.clear();
+        devices.clear();
         for(WifiP2pDevice peer : peerList) {
             String deviceName = TextFormatter.formatDeviceName(peer.deviceName);
-            usernames.add(deviceName);
+            String username = TextFormatter.formatDeviceUsername(deviceName);
+            String icon = TextFormatter.formatDeviceIconName(deviceName);
+            usernames.add(username);
+            icons.add(icon);
+            devices.add(peer);
         }
         adapter.notifyDataSetChanged();
     }
@@ -131,7 +141,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         );
         usersListView.setAdapter(adapter);
         usersListView.setOnItemClickListener((parent, view, position, id) ->
-                redirectToLobby(usernames.get(position))
+                redirectToLobby(position)
         );
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -151,8 +161,9 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         });
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserData() {
+        String icon = sharedPreferences.getString("icon", "black_king");
+        return icon + "|" + username;
     }
 
     @Override

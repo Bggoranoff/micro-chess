@@ -46,7 +46,7 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
                             String.class,
                             WifiP2pManager.ActionListener.class
                     );
-                    method.invoke(manager, channel, activity.getUsername(), new WifiP2pManager.ActionListener() {
+                    method.invoke(manager, channel, activity.getUserData(), new WifiP2pManager.ActionListener() {
                         @Override
                         public void onSuccess() {
                             Toast.makeText(activity, "Username set successfully!", Toast.LENGTH_SHORT).show();

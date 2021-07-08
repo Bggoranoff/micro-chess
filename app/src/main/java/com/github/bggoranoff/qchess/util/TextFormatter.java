@@ -11,4 +11,14 @@ public class TextFormatter {
         deviceName.append(deviceDetails[deviceDetails.length - 1]);
         return deviceName.toString();
     }
+
+    public static String formatDeviceUsername(String formattedName) {
+        String[] deviceDetails = formattedName.split("\\|");
+        return deviceDetails[1];
+    }
+
+    public static String formatDeviceIconName(String formattedName) {
+        String[] deviceDetails = formattedName.split("\\|");
+        return deviceDetails[0];
+    }
 }
