@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
@@ -22,7 +24,13 @@ public class LobbyActivity extends AppCompatActivity {
     private TextView secondUserTextView;
     private ImageView userIconView;
     private ImageView opponentIconView;
+    private Button challengeButton;
     private SharedPreferences sharedPreferences;
+
+    private void challengePlayer(View view) {
+        Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +58,8 @@ public class LobbyActivity extends AppCompatActivity {
 
         opponentIconView = findViewById(R.id.secondUserIcon);
         opponentIconView.setImageResource(ResourceSelector.getDrawable(this, opponentIcon));
+
+        challengeButton = findViewById(R.id.challengeButton);
+        challengeButton.setOnClickListener(this::challengePlayer);
     }
 }
