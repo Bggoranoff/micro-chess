@@ -32,4 +32,9 @@ public class TextFormatter {
         String[] deviceDetails = formattedName.split("\\|");
         return deviceDetails[0];
     }
+
+    public static String formatDeviceIp(String formattedName) {
+        String[] deviceDetails = formattedName.split("\\|");
+        return deviceDetails[2];
+    }
 }

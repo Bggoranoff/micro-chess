@@ -20,21 +20,24 @@ public class MessageReceiveTask extends AsyncTask<Void, Void, Void> {
     private final AppCompatActivity activity;
     private boolean isInUserList;
     private String message;
+    private int port;
 
-    public MessageReceiveTask(LobbyActivity activity) {
+    public MessageReceiveTask(LobbyActivity activity, int port) {
         this.activity = activity;
         this.isInUserList = false;
+        this.port = port;
     }
 
-    public MessageReceiveTask(UserListActivity activity) {
+    public MessageReceiveTask(UserListActivity activity, int port) {
         this.activity = activity;
-        this.isInUserList = false;
+        this.isInUserList = true;
+        this.port = port;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            serverSocket = new ServerSocket(8888);
+            serverSocket = new ServerSocket(port);
             client = serverSocket.accept();
             if(isCancelled()) {
                 if(isInUserList) {
@@ -42,6 +45,7 @@ public class MessageReceiveTask extends AsyncTask<Void, Void, Void> {
                 } else {
                     ((LobbyActivity) activity).sendMessage("Receiving data cancelled!");
                 }
+                return null;
             }
 
             InputStream in = client.getInputStream();
@@ -50,9 +54,9 @@ public class MessageReceiveTask extends AsyncTask<Void, Void, Void> {
             message = (String) ois.readObject();
             if(message != null) {
                 if(isInUserList) {
-                    ((UserListActivity) activity).sendMessage(message);
+                    ((UserListActivity) activity).sendMessage("Received " + message);
                 } else {
-                    ((LobbyActivity) activity).sendMessage(message);
+                    ((LobbyActivity) activity).sendMessage("Received" + message);
                 }
                 // TODO: check if message is yes or no
             } else {

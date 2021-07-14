@@ -5,19 +5,19 @@
     <string name="how_to">How to play?</string>
     <string name="choose">Choose</string>
 
-    <string name="black_bishop">Black Bishop</string>
-    <string name="black_king">Black King</string>
-    <string name="black_knight">Black Knight</string>
-    <string name="black_pawn">Black Pawn</string>
-    <string name="black_queen">Black Queen</string>
-    <string name="black_rook">Black Rook</string>
+    <string name="b_b">Black Bishop</string>
+    <string name="b_k">Black King</string>
+    <string name="b_n">Black Knight</string>
+    <string name="b_p">Black Pawn</string>
+    <string name="b_q">Black Queen</string>
+    <string name="b_r">Black Rook</string>
 
-    <string name="white_bishop">Black Bishop</string>
-    <string name="white_king">Black King</string>
-    <string name="white_knight">Black Knight</string>
-    <string name="white_pawn">Black Pawn</string>
-    <string name="white_queen">Black Queen</string>
-    <string name="white_rook">White Rook</string>
+    <string name="w_b">Black Bishop</string>
+    <string name="w_k">Black King</string>
+    <string name="w_n">Black Knight</string>
+    <string name="w_p">Black Pawn</string>
+    <string name="w_q">Black Queen</string>
+    <string name="w_r">White Rook</string>
 
     <string name="wifi_label">Wifi: not connected</string>
     <string name="username_label">Username: username</string>

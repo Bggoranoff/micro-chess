@@ -20,6 +20,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,6 +56,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     private WifiP2pManager.Channel channel;
     private UserBroadcastReceiver broadcastReceiver;
     private IntentFilter intentFilter;
+    private MessageReceiveTask receiveTask;
 
     public void sendMessage(String message) {
         runOnUiThread(() ->
@@ -190,8 +192,10 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     }
 
     public String getUserData() {
-        String icon = sharedPreferences.getString("icon", "black_king");
-        return icon + "|" + username;
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        String icon = sharedPreferences.getString("icon", "b_k");
+        return icon + "|" + username + "|" + ip;
     }
 
     @Override
@@ -218,9 +222,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        AsyncTask.execute(() -> {
-            MessageReceiveTask receiveTask = new MessageReceiveTask(this);
-            receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        });
+        receiveTask = new MessageReceiveTask(this, 8888);
+        receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

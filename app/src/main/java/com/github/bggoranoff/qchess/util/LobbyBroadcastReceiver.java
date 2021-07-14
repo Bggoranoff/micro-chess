@@ -37,7 +37,7 @@ public class LobbyBroadcastReceiver extends BroadcastReceiver {
                 if(networkInfo.isConnected()) {
                     manager.requestConnectionInfo(channel, activity);
                 } else {
-                    activity.sendMessage("Connection unsuccessful!");
+//                    activity.sendMessage("Connection unsuccessful!");
                 }
                 break;
             case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION:

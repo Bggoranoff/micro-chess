@@ -68,9 +68,9 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 android:alpha="1.0"
-                                app:srcCompat="@drawable/black_bishop"
-                                android:contentDescription="@string/black_bishop"
-                                android:tag="black_bishop"
+                                app:srcCompat="@drawable/b_b"
+                                android:contentDescription="@string/b_b"
+                                android:tag="b_b"
                                 android:id="@+id/blackBishopIcon" />
 
                             <ImageView
@@ -78,9 +78,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/white_bishop"
-                                android:contentDescription="@string/white_bishop"
-                                android:tag="white_bishop"
+                                app:srcCompat="@drawable/w_b"
+                                android:contentDescription="@string/w_b"
+                                android:tag="w_b"
                                 android:id="@+id/whiteBishopIcon"/>
 
                             <ImageView
@@ -88,9 +88,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/black_knight"
-                                android:contentDescription="@string/black_knight"
-                                android:tag="black_knight"
+                                app:srcCompat="@drawable/b_n"
+                                android:contentDescription="@string/b_n"
+                                android:tag="b_n"
                                 android:id="@+id/blackKnightIcon" />
 
                         </TableRow>
@@ -104,9 +104,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/white_knight"
-                                android:contentDescription="@string/white_knight"
-                                android:tag="white_knight"
+                                app:srcCompat="@drawable/w_n"
+                                android:contentDescription="@string/w_n"
+                                android:tag="w_n"
                                 android:id="@+id/whiteKnightIcon" />
 
                             <ImageView
@@ -114,9 +114,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/black_king"
-                                android:contentDescription="@string/black_king"
-                                android:tag="black_king"
+                                app:srcCompat="@drawable/b_k"
+                                android:contentDescription="@string/b_k"
+                                android:tag="b_k"
                                 android:id="@+id/blackKingIcon" />
 
                             <ImageView
@@ -124,9 +124,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/white_king"
-                                android:contentDescription="@string/white_king"
-                                android:tag="white_king"
+                                app:srcCompat="@drawable/w_k"
+                                android:contentDescription="@string/w_k"
+                                android:tag="w_k"
                                 android:id="@+id/whiteKingIcon" />
 
                         </TableRow>
@@ -140,9 +140,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/black_queen"
-                                android:contentDescription="@string/black_queen"
-                                android:tag="black_queen"
+                                app:srcCompat="@drawable/b_q"
+                                android:contentDescription="@string/b_q"
+                                android:tag="b_q"
                                 android:id="@+id/blackQueenIcon" />
 
                             <ImageView
@@ -150,9 +150,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/white_queen"
-                                android:contentDescription="@string/white_queen"
-                                android:tag="white_queen"
+                                app:srcCompat="@drawable/w_q"
+                                android:contentDescription="@string/w_q"
+                                android:tag="w_q"
                                 android:id="@+id/whiteQueenIcon" />
 
                             <ImageView
@@ -160,9 +160,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/black_rook"
-                                android:contentDescription="@string/black_rook"
-                                android:tag="black_rook"
+                                app:srcCompat="@drawable/b_r"
+                                android:contentDescription="@string/b_r"
+                                android:tag="b_r"
                                 android:id="@+id/blackRookIcon" />
 
                         </TableRow>
@@ -176,9 +176,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/white_rook"
-                                android:contentDescription="@string/white_rook"
-                                android:tag="white_rook"
+                                app:srcCompat="@drawable/w_r"
+                                android:contentDescription="@string/w_r"
+                                android:tag="w_r"
                                 android:id="@+id/whiteRookIcon" />
 
                             <ImageView
@@ -186,9 +186,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/black_pawn"
-                                android:contentDescription="@string/black_pawn"
-                                android:tag="black_pawn"
+                                app:srcCompat="@drawable/b_p"
+                                android:contentDescription="@string/b_p"
+                                android:tag="b_p"
                                 android:id="@+id/blackPawnIcon" />
 
                             <ImageView
@@ -196,9 +196,9 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/white_pawn"
-                                android:contentDescription="@string/white_pawn"
-                                android:tag="white_pawn"
+                                app:srcCompat="@drawable/w_p"
+                                android:contentDescription="@string/w_p"
+                                android:tag="w_p"
                                 android:id="@+id/whitePawnIcon" />
 
                         </TableRow>

@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private Button playButton;
     private ImageView iconView;
     private SharedPreferences sharedPreferences;
-    private String icon = "black_king";
+    private String icon = "b_k";
 
     private void updateIcon() {
-        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", "black_king") : icon;
+        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", "b_k") : icon;
         iconView.setImageResource(ResourceSelector.getDrawable(getApplicationContext(), icon));
     }
 
@@ -43,8 +43,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     }
 
     private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        if(getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     private void saveUsername() {
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         iconView = findViewById(R.id.iconView);
         iconView.setOnClickListener(this::chooseIcon);
-        updateIcon();
+//        updateIcon();
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -17,6 +18,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,9 +28,13 @@ import android.widget.Toast;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.LobbyBroadcastReceiver;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
+import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.util.connection.DeviceActionListener;
 import com.github.bggoranoff.qchess.util.connection.MessageReceiveTask;
+import com.github.bggoranoff.qchess.util.connection.MessageSendTask;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Objects;
 
 public class LobbyActivity extends AppCompatActivity implements DeviceActionListener, WifiP2pManager.ChannelListener, WifiP2pManager.ConnectionInfoListener {
@@ -46,6 +52,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
     private boolean retryChannel;
     private IntentFilter intentFilter;
     private LobbyBroadcastReceiver receiver;
+    private String currentIp;
 
     public void redirectToGameActivity() {
         runOnUiThread(() -> {
@@ -88,7 +95,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         String opponentName = getIntent().getStringExtra("opponentName");
         String opponentIcon = getIntent().getStringExtra("opponentIcon");
         String username = sharedPreferences.getString("username", "guest");
-        String icon = sharedPreferences.getString("icon", "black_king");
+        String icon = sharedPreferences.getString("icon", "b_k");
 
         firstUserTextView = findViewById(R.id.firstUserName);
         firstUserTextView.setText(username);
@@ -114,6 +121,12 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
 
         receiver = new LobbyBroadcastReceiver(manager, channel, this);
         retryChannel = false;
+
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        currentIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+        Toast.makeText(this, opponentDevice.deviceName + "\n" + TextFormatter.formatDeviceIp(opponentDevice.deviceName), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -156,12 +169,10 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         manager.connect(channel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(LobbyActivity.this, "Successfully connecting with user!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int reason) {
-                Toast.makeText(LobbyActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -196,8 +207,18 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        Toast.makeText(this, "Connection info received!", Toast.LENGTH_SHORT).show();
-        MessageReceiveTask receiveTask = new MessageReceiveTask(this);
+        AsyncTask.execute(() -> {
+            try {
+                WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+                String opponentIp = TextFormatter.formatDeviceIp(opponentDevice.deviceName);
+                InetAddress serverAddress = InetAddress.getByName(opponentIp);
+                MessageSendTask sendTask = new MessageSendTask(this, serverAddress, currentIp, 8888);
+                sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } catch(UnknownHostException ex) {
+                ex.printStackTrace();
+            }
+        });
+        MessageReceiveTask receiveTask = new MessageReceiveTask(this, 10000);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

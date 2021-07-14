@@ -56,9 +56,9 @@ public class IconsActivity extends AppCompatActivity {
                 Context.MODE_PRIVATE
         );
         if(sharedPreferences.contains("icon")) {
-            icon = sharedPreferences.getString("icon", "black_king");
+            icon = sharedPreferences.getString("icon", "b_k");
         } else {
-            icon = "black_king";
+            icon = "b_k";
         }
 
         layout = findViewById(R.id.iconsListLayout);
