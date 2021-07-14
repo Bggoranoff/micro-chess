@@ -32,7 +32,10 @@ import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.util.UserBroadcastReceiver;
 import com.github.bggoranoff.qchess.util.connection.MessageReceiveTask;
+import com.github.bggoranoff.qchess.util.connection.MessageSendTask;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,7 +67,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         );
     }
 
-    public void popDialog(String opponentName) {
+    public void popDialog(String opponentName, String opponentIp) {
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
                     .setIcon(R.drawable.swords)
@@ -72,14 +75,38 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
                     .setMessage("You are challenged by " + opponentName + "!")
                     .setPositiveButton("Accept", (dialog, which) -> {
                         Toast.makeText(this, "Accepted request!", Toast.LENGTH_SHORT).show();
-                        // TODO: accept and redirect to game
+                        AsyncTask.execute(() -> {
+                            try {
+                                WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+                                InetAddress serverAddress = InetAddress.getByName(opponentIp);
+                                MessageSendTask sendTask = new MessageSendTask(serverAddress, "Yes", 10000);
+                                sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                redirectToGame();
+                            } catch(UnknownHostException ex) {
+                                ex.printStackTrace();
+                            }
+                        });
                     })
                     .setNegativeButton("Decline", (dialog, which) -> {
                         Toast.makeText(this, "Declined request!", Toast.LENGTH_SHORT).show();
-                        // TODO: decline
+                        AsyncTask.execute(() -> {
+                            try {
+                                WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+                                InetAddress serverAddress = InetAddress.getByName(opponentIp);
+                                MessageSendTask sendTask = new MessageSendTask(serverAddress, "No", 10000);
+                                sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            } catch(UnknownHostException ex) {
+                                ex.printStackTrace();
+                            }
+                        });
                     })
                     .show();
         });
+    }
+
+    private void redirectToGame() {
+        Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+        startActivity(intent);
     }
 
     private void redirectToGames(View view) {

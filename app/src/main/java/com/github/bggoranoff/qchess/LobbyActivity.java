@@ -53,6 +53,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
     private IntentFilter intentFilter;
     private LobbyBroadcastReceiver receiver;
     private String currentIp;
+    private String username;
 
     public void redirectToGameActivity() {
         runOnUiThread(() -> {
@@ -94,7 +95,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         sharedPreferences = getSharedPreferences("com.github.bggoranoff.qchess", Context.MODE_PRIVATE);
         String opponentName = getIntent().getStringExtra("opponentName");
         String opponentIcon = getIntent().getStringExtra("opponentIcon");
-        String username = sharedPreferences.getString("username", "guest");
+        username = sharedPreferences.getString("username", "guest");
         String icon = sharedPreferences.getString("icon", "b_k");
 
         firstUserTextView = findViewById(R.id.firstUserName);
@@ -124,9 +125,6 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
 
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-
-        WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
-        Toast.makeText(this, opponentDevice.deviceName + "\n" + TextFormatter.formatDeviceIp(opponentDevice.deviceName), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -212,7 +210,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
                 WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
                 String opponentIp = TextFormatter.formatDeviceIp(opponentDevice.deviceName);
                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
-                MessageSendTask sendTask = new MessageSendTask(this, serverAddress, currentIp, 8888);
+                MessageSendTask sendTask = new MessageSendTask(serverAddress, currentIp + "|" + username, 8888);
                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } catch(UnknownHostException ex) {
                 ex.printStackTrace();

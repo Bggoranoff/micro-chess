@@ -13,13 +13,11 @@ import java.net.Socket;
 
 public class MessageSendTask extends AsyncTask<Void, Void, Void> {
 
-    private LobbyActivity activity;
     private InetAddress serverAddress;
     private String message;
     private int port;
 
-    public MessageSendTask(LobbyActivity activity, InetAddress address, String message, int port) {
-        this.activity = activity;
+    public MessageSendTask(InetAddress address, String message, int port) {
         this.serverAddress = address;
         this.message = message;
         this.port = port;
@@ -30,7 +28,6 @@ public class MessageSendTask extends AsyncTask<Void, Void, Void> {
         Socket socket = new Socket();
         try {
             Thread.sleep(2000);
-            activity.sendMessage("Message sent!");
             socket.bind(null);
             socket.connect(new InetSocketAddress(serverAddress, port));
 
@@ -58,6 +55,5 @@ public class MessageSendTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onCancelled() {
         super.onCancelled();
-        activity.sendMessage("Message send failed!");
     }
 }

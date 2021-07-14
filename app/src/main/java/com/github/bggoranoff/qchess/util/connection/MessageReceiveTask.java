@@ -54,11 +54,15 @@ public class MessageReceiveTask extends AsyncTask<Void, Void, Void> {
             message = (String) ois.readObject();
             if(message != null) {
                 if(isInUserList) {
-                    ((UserListActivity) activity).sendMessage("Received " + message);
+                    String[] messageData = message.split("\\|");
+                    ((UserListActivity) activity).popDialog(messageData[1], messageData[0]);
                 } else {
-                    ((LobbyActivity) activity).sendMessage("Received" + message);
+                    if(message.equals("Yes")) {
+                        ((LobbyActivity) activity).redirectToGameActivity();
+                    } else {
+                        ((LobbyActivity) activity).disconnect();
+                    }
                 }
-                // TODO: check if message is yes or no
             } else {
                 if(isInUserList) {
                     ((UserListActivity) activity).sendMessage("Received null message!");
