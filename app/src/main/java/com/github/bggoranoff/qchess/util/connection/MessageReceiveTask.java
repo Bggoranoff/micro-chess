@@ -2,7 +2,10 @@ package com.github.bggoranoff.qchess.util.connection;
 
 import android.os.AsyncTask;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.bggoranoff.qchess.LobbyActivity;
+import com.github.bggoranoff.qchess.UserListActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,11 +17,18 @@ public class MessageReceiveTask extends AsyncTask<Void, Void, Void> {
 
     private ServerSocket serverSocket;
     private Socket client;
-    private final LobbyActivity activity;
+    private final AppCompatActivity activity;
+    private boolean isInUserList;
     private String message;
 
     public MessageReceiveTask(LobbyActivity activity) {
         this.activity = activity;
+        this.isInUserList = false;
+    }
+
+    public MessageReceiveTask(UserListActivity activity) {
+        this.activity = activity;
+        this.isInUserList = false;
     }
 
     @Override
@@ -27,7 +37,11 @@ public class MessageReceiveTask extends AsyncTask<Void, Void, Void> {
             serverSocket = new ServerSocket(8888);
             client = serverSocket.accept();
             if(isCancelled()) {
-                activity.sendMessage("Receiving data cancelled!");
+                if(isInUserList) {
+                    ((UserListActivity) activity).sendMessage("Receiving data cancelled!");
+                } else {
+                    ((LobbyActivity) activity).sendMessage("Receiving data cancelled!");
+                }
             }
 
             InputStream in = client.getInputStream();
@@ -35,10 +49,18 @@ public class MessageReceiveTask extends AsyncTask<Void, Void, Void> {
 
             message = (String) ois.readObject();
             if(message != null) {
-                activity.sendMessage(message);
+                if(isInUserList) {
+                    ((UserListActivity) activity).sendMessage(message);
+                } else {
+                    ((LobbyActivity) activity).sendMessage(message);
+                }
                 // TODO: check if message is yes or no
             } else {
-                activity.sendMessage("Received null message!");
+                if(isInUserList) {
+                    ((UserListActivity) activity).sendMessage("Received null message!");
+                } else {
+                    ((LobbyActivity) activity).sendMessage("Received null message!");
+                }
             }
 
             in.close();

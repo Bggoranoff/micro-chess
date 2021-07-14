@@ -1,5 +1,6 @@
 package com.github.bggoranoff.qchess;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -15,7 +16,9 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,12 +30,13 @@ import android.widget.Toast;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.util.UserBroadcastReceiver;
+import com.github.bggoranoff.qchess.util.connection.MessageReceiveTask;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UserListActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener {
+public class UserListActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
     private ConstraintLayout layout;
     private Button gamesButton;
@@ -51,6 +55,30 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     private WifiP2pManager.Channel channel;
     private UserBroadcastReceiver broadcastReceiver;
     private IntentFilter intentFilter;
+
+    public void sendMessage(String message) {
+        runOnUiThread(() ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        );
+    }
+
+    public void popDialog(String opponentName) {
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.swords)
+                    .setTitle("Challenge")
+                    .setMessage("You are challenged by " + opponentName + "!")
+                    .setPositiveButton("Accept", (dialog, which) -> {
+                        Toast.makeText(this, "Accepted request!", Toast.LENGTH_SHORT).show();
+                        // TODO: accept and redirect to game
+                    })
+                    .setNegativeButton("Decline", (dialog, which) -> {
+                        Toast.makeText(this, "Declined request!", Toast.LENGTH_SHORT).show();
+                        // TODO: decline
+                    })
+                    .show();
+        });
+    }
 
     private void redirectToGames(View view) {
         Intent intent = new Intent(getApplicationContext(), GameListActivity.class);
@@ -186,5 +214,13 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
             Toast.makeText(this, "No devices found!", Toast.LENGTH_SHORT).show();
         }
         fillUsers(peerList);
+    }
+
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo info) {
+        AsyncTask.execute(() -> {
+            MessageReceiveTask receiveTask = new MessageReceiveTask(this);
+            receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        });
     }
 }
