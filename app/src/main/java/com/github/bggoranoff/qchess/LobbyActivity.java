@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
@@ -27,9 +28,28 @@ public class LobbyActivity extends AppCompatActivity {
     private Button challengeButton;
     private SharedPreferences sharedPreferences;
 
+    public void redirectToGameActivity() {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+            startActivity(intent);
+        });
+    }
+
     private void challengePlayer(View view) {
-        Intent intent = new Intent(getApplicationContext(), GameActivity.class);
-        startActivity(intent);
+        // TODO: connect to opponent device
+    }
+
+    public void redirectToUserListActivity() {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    public void sendMessage(String message) {
+        runOnUiThread(() ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        );
     }
 
     @Override
