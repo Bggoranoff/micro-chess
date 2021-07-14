@@ -2,10 +2,20 @@ package com.github.bggoranoff.qchess;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,11 +24,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.LobbyBroadcastReceiver;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
+import com.github.bggoranoff.qchess.util.connection.DeviceActionListener;
+import com.github.bggoranoff.qchess.util.connection.MessageReceiveTask;
 
 import java.util.Objects;
 
-public class LobbyActivity extends AppCompatActivity {
+public class LobbyActivity extends AppCompatActivity implements DeviceActionListener, WifiP2pManager.ChannelListener, WifiP2pManager.ConnectionInfoListener {
 
     private ConstraintLayout layout;
     private TextView firstUserTextView;
@@ -28,6 +41,12 @@ public class LobbyActivity extends AppCompatActivity {
     private Button challengeButton;
     private SharedPreferences sharedPreferences;
 
+    private WifiP2pManager manager;
+    private WifiP2pManager.Channel channel;
+    private boolean retryChannel;
+    private IntentFilter intentFilter;
+    private LobbyBroadcastReceiver receiver;
+
     public void redirectToGameActivity() {
         runOnUiThread(() -> {
             Intent intent = new Intent(getApplicationContext(), GameActivity.class);
@@ -36,7 +55,11 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void challengePlayer(View view) {
-        // TODO: connect to opponent device
+        WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = opponentDevice.deviceAddress;
+        config.wps.setup = WpsInfo.PBC;
+        connect(config);
     }
 
     public void redirectToUserListActivity() {
@@ -81,5 +104,100 @@ public class LobbyActivity extends AppCompatActivity {
 
         challengeButton = findViewById(R.id.challengeButton);
         challengeButton.setOnClickListener(this::challengePlayer);
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        channel = manager.initialize(this, getMainLooper(), this);
+
+        receiver = new LobbyBroadcastReceiver(manager, channel, this);
+        retryChannel = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void cancelDisconnect(WifiP2pDevice device) {
+        if(device.status == WifiP2pDevice.CONNECTED) {
+            disconnect();
+        } else if(device.status == WifiP2pDevice.AVAILABLE || device.status == WifiP2pDevice.INVITED) {
+            manager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(LobbyActivity.this, "Aborting connection...", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(int reason) {
+                    Toast.makeText(LobbyActivity.this, "Connection abort request failed!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void connect(WifiP2pConfig config) {
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+        manager.connect(channel, config, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(LobbyActivity.this, "Successfully connecting with user!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                Toast.makeText(LobbyActivity.this, "Connection failed!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void disconnect() {
+        manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(LobbyActivity.this, "Disconnected successfully!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                Toast.makeText(LobbyActivity.this, "Failed to disconnect!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onChannelDisconnected() {
+        if(manager != null && !retryChannel) {
+            Toast.makeText(this, "Channel lost! Trying to reconnect...", Toast.LENGTH_SHORT).show();
+            retryChannel = true;
+            manager.initialize(this, getMainLooper(), this);
+        } else {
+            Toast.makeText(this, "Channel lost permanently!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo info) {
+        Toast.makeText(this, "Connection info received!", Toast.LENGTH_SHORT).show();
+        MessageReceiveTask receiveTask = new MessageReceiveTask(this);
+        receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }
