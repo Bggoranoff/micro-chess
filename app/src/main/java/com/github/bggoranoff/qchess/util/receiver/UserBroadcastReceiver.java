@@ -1,10 +1,11 @@
-package com.github.bggoranoff.qchess.util;
+package com.github.bggoranoff.qchess.util.receiver;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.widget.Toast;
 
@@ -46,17 +47,7 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
                             String.class,
                             WifiP2pManager.ActionListener.class
                     );
-                    method.invoke(manager, channel, activity.getUsername(), new WifiP2pManager.ActionListener() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(activity, "Username set successfully!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(int reason) {
-                            Toast.makeText(activity, "Username set failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    method.invoke(manager, channel, activity.getUserData(), null);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
@@ -70,7 +61,15 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
                 }
                 break;
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
-                // TODO: Respond to new connections
+                if(manager == null) {
+                    return;
+                }
+                NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+                if(networkInfo.isConnected()) {
+                    manager.requestConnectionInfo(channel, activity);
+                } else {
+                    activity.notifyUnsuccessfulConnection();
+                }
                 break;
             case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION:
                 // TODO: respond to device wifi state change

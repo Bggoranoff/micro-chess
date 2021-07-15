@@ -16,7 +16,8 @@
         android:roundIcon="@drawable/chess_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.QChess">
-        <activity android:name=".LobbyActivity"></activity>
+        <activity android:name=".GameActivity"></activity>
+        <activity android:name=".LobbyActivity" />
         <activity android:name=".GameListActivity" />
         <activity android:name=".ManualActivity" />
         <activity android:name=".UserListActivity" />

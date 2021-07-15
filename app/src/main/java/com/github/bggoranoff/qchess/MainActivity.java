@@ -28,14 +28,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private Button playButton;
     private ImageView iconView;
     private SharedPreferences sharedPreferences;
-    private String icon = "black_king";
+    private String icon = "b_k";
 
     private void updateIcon() {
-        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", "black_king") : icon;
+        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", "b_k") : icon;
         iconView.setImageResource(ResourceSelector.getDrawable(getApplicationContext(), icon));
     }
 
-    private void openManual(View view) {
+    private void redirectToManualActivity(View view) {
         manualLink.animate().alpha(0.5f).setDuration(100);
         Intent intent = new Intent(getApplicationContext(), ManualActivity.class);
         startActivity(intent);
@@ -43,8 +43,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     }
 
     private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        if(getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     private void saveUsername() {
@@ -52,13 +54,13 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         sharedPreferences.edit().putString("username", username).apply();
     }
 
-    private void play(View view) {
+    private void redirectToUserListActivity(View view) {
         saveUsername();
         Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
         startActivity(intent);
     }
 
-    private void chooseIcon(View view) {
+    private void redirectToIconsActivity(View view) {
         saveUsername();
         hideKeyboard(view);
         Intent intent = new Intent(getApplicationContext(), IconsActivity.class);
@@ -88,14 +90,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         );
 
         manualLink = findViewById(R.id.manualLink);
-        manualLink.setOnClickListener(this::openManual);
+        manualLink.setOnClickListener(this::redirectToManualActivity);
 
         playButton = findViewById(R.id.playButton);
-        playButton.setOnClickListener(this::play);
+        playButton.setOnClickListener(this::redirectToUserListActivity);
 
         iconView = findViewById(R.id.iconView);
-        iconView.setOnClickListener(this::chooseIcon);
-        updateIcon();
+        iconView.setOnClickListener(this::redirectToIconsActivity);
+//        updateIcon();
     }
 
     @Override
