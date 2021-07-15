@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -30,8 +31,8 @@ import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.TextFormatter;
-import com.github.bggoranoff.qchess.util.UserBroadcastReceiver;
-import com.github.bggoranoff.qchess.util.connection.MessageReceiveTask;
+import com.github.bggoranoff.qchess.util.receiver.UserBroadcastReceiver;
+import com.github.bggoranoff.qchess.util.connection.InviteReceiveTask;
 import com.github.bggoranoff.qchess.util.connection.MessageSendTask;
 
 import java.net.InetAddress;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressLint("SetTextI18n")
 public class UserListActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
     private ConstraintLayout layout;
@@ -59,13 +61,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     private WifiP2pManager.Channel channel;
     private UserBroadcastReceiver broadcastReceiver;
     private IntentFilter intentFilter;
-    private MessageReceiveTask receiveTask;
-
-    public void sendMessage(String message) {
-        runOnUiThread(() ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        );
-    }
+    private InviteReceiveTask receiveTask;
 
     public void popDialog(String opponentName, String opponentIp) {
         runOnUiThread(() -> {
@@ -77,11 +73,10 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
                         Toast.makeText(this, "Accepted request!", Toast.LENGTH_SHORT).show();
                         AsyncTask.execute(() -> {
                             try {
-                                WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
                                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
                                 MessageSendTask sendTask = new MessageSendTask(serverAddress, "Yes", 10000);
                                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                redirectToGame();
+                                redirectToGameActivity();
                             } catch(UnknownHostException ex) {
                                 ex.printStackTrace();
                             }
@@ -91,7 +86,6 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
                         Toast.makeText(this, "Declined request!", Toast.LENGTH_SHORT).show();
                         AsyncTask.execute(() -> {
                             try {
-                                WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
                                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
                                 MessageSendTask sendTask = new MessageSendTask(serverAddress, "No", 10000);
                                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -104,22 +98,28 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         });
     }
 
-    private void redirectToGame() {
+    private void redirectToGameActivity() {
         Intent intent = new Intent(getApplicationContext(), GameActivity.class);
         startActivity(intent);
     }
 
-    private void redirectToGames(View view) {
+    private void redirectToGamesActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), GameListActivity.class);
         startActivity(intent);
     }
 
-    private void redirectToLobby(int position) {
+    private void redirectToLobbyActivity(int position) {
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
         intent.putExtra("opponentName", usernames.get(position));
         intent.putExtra("opponentIcon", icons.get(position));
         intent.putExtra("opponentDevice", devices.get(position));
         startActivity(intent);
+    }
+
+    public void notifyUnsuccessfulConnection() {
+        runOnUiThread(() -> {
+            Toast.makeText(this, "Connection unsuccessful!", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void fillUsers(List<WifiP2pDevice> peerList) {
@@ -182,7 +182,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         ChessAnimator.animateBackground(layout);
 
         gamesButton = findViewById(R.id.gamesButton);
-        gamesButton.setOnClickListener(this::redirectToGames);
+        gamesButton.setOnClickListener(this::redirectToGamesActivity);
 
         usernameTextView = findViewById(R.id.usernameTextView);
         String username = sharedPreferences.getString("username", "guest");
@@ -198,24 +198,14 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         );
         usersListView.setAdapter(adapter);
         usersListView.setOnItemClickListener((parent, view, position, id) ->
-                redirectToLobby(position)
+                redirectToLobbyActivity(position)
         );
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
-        manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(UserListActivity.this, "Searching for peers...", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int reason) {
-                Toast.makeText(UserListActivity.this, "Peers discovery failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+        manager.discoverPeers(channel, null);
     }
 
     public String getUserData() {
@@ -239,8 +229,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peers) {
-        List<WifiP2pDevice> peerList = new ArrayList<>();
-        peerList.addAll(peers.getDeviceList());
+        List<WifiP2pDevice> peerList = new ArrayList<>(peers.getDeviceList());
         if(peerList.size() == 0) {
             Toast.makeText(this, "No devices found!", Toast.LENGTH_SHORT).show();
         }
@@ -249,7 +238,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        receiveTask = new MessageReceiveTask(this, 8888);
+        receiveTask = new InviteReceiveTask(this, 8888);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

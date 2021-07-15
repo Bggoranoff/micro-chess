@@ -26,11 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.util.ChessAnimator;
-import com.github.bggoranoff.qchess.util.LobbyBroadcastReceiver;
+import com.github.bggoranoff.qchess.util.receiver.LobbyBroadcastReceiver;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.util.connection.DeviceActionListener;
-import com.github.bggoranoff.qchess.util.connection.MessageReceiveTask;
+import com.github.bggoranoff.qchess.util.connection.InviteReceiveTask;
 import com.github.bggoranoff.qchess.util.connection.MessageSendTask;
 
 import java.net.InetAddress;
@@ -77,10 +77,10 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         });
     }
 
-    public void sendMessage(String message) {
-        runOnUiThread(() ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        );
+    public void notifyUnsuccessfulConnection() {
+        runOnUiThread(() -> {
+            Toast.makeText(this, "Connection unsuccessful!", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -144,17 +144,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         if(device.status == WifiP2pDevice.CONNECTED) {
             disconnect();
         } else if(device.status == WifiP2pDevice.AVAILABLE || device.status == WifiP2pDevice.INVITED) {
-            manager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
-                @Override
-                public void onSuccess() {
-                    Toast.makeText(LobbyActivity.this, "Aborting connection...", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(int reason) {
-                    Toast.makeText(LobbyActivity.this, "Connection abort request failed!", Toast.LENGTH_SHORT).show();
-                }
-            });
+            manager.cancelConnect(channel, null);
         }
     }
 
@@ -164,31 +154,13 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
-        manager.connect(channel, config, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onFailure(int reason) {
-            }
-        });
+        manager.connect(channel, config, null);
     }
 
     @Override
     public void disconnect() {
-        manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(LobbyActivity.this, "Disconnected successfully!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
-            @Override
-            public void onFailure(int reason) {
-                Toast.makeText(LobbyActivity.this, "Failed to disconnect!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        manager.removeGroup(channel, null);
+        redirectToUserListActivity();
     }
 
     @Override
@@ -216,7 +188,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
                 ex.printStackTrace();
             }
         });
-        MessageReceiveTask receiveTask = new MessageReceiveTask(this, 10000);
+        InviteReceiveTask receiveTask = new InviteReceiveTask(this, 10000);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

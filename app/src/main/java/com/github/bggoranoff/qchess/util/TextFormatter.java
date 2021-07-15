@@ -2,17 +2,6 @@ package com.github.bggoranoff.qchess.util;
 
 public class TextFormatter {
 
-    public static String formatDeviceAddress(byte[] address) {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < address.length; i++) {
-            if(i > 0) {
-                sb.append(":");
-            }
-            sb.append(String.format("%02x", address[i]));
-        }
-        return sb.toString();
-    }
-
     public static String formatDeviceName(String nameToFormat) {
         String[] deviceDetails = nameToFormat.split("\\s+");
         StringBuilder deviceName = new StringBuilder();

@@ -1,4 +1,4 @@
-package com.github.bggoranoff.qchess.util;
+package com.github.bggoranoff.qchess.util.receiver;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -47,17 +47,7 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
                             String.class,
                             WifiP2pManager.ActionListener.class
                     );
-                    method.invoke(manager, channel, activity.getUserData(), new WifiP2pManager.ActionListener() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(activity, "Username set successfully!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(int reason) {
-                            Toast.makeText(activity, "Username set failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    method.invoke(manager, channel, activity.getUserData(), null);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
@@ -78,7 +68,7 @@ public class UserBroadcastReceiver extends BroadcastReceiver {
                 if(networkInfo.isConnected()) {
                     manager.requestConnectionInfo(channel, activity);
                 } else {
-                    activity.sendMessage("Connection unsuccessful!");
+                    activity.notifyUnsuccessfulConnection();
                 }
                 break;
             case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION:

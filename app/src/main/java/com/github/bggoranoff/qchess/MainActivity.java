@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         iconView.setImageResource(ResourceSelector.getDrawable(getApplicationContext(), icon));
     }
 
-    private void openManual(View view) {
+    private void redirectToManualActivity(View view) {
         manualLink.animate().alpha(0.5f).setDuration(100);
         Intent intent = new Intent(getApplicationContext(), ManualActivity.class);
         startActivity(intent);
@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         sharedPreferences.edit().putString("username", username).apply();
     }
 
-    private void play(View view) {
+    private void redirectToUserListActivity(View view) {
         saveUsername();
         Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
         startActivity(intent);
     }
 
-    private void chooseIcon(View view) {
+    private void redirectToIconsActivity(View view) {
         saveUsername();
         hideKeyboard(view);
         Intent intent = new Intent(getApplicationContext(), IconsActivity.class);
@@ -90,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         );
 
         manualLink = findViewById(R.id.manualLink);
-        manualLink.setOnClickListener(this::openManual);
+        manualLink.setOnClickListener(this::redirectToManualActivity);
 
         playButton = findViewById(R.id.playButton);
-        playButton.setOnClickListener(this::play);
+        playButton.setOnClickListener(this::redirectToUserListActivity);
 
         iconView = findViewById(R.id.iconView);
-        iconView.setOnClickListener(this::chooseIcon);
+        iconView.setOnClickListener(this::redirectToIconsActivity);
 //        updateIcon();
     }
 

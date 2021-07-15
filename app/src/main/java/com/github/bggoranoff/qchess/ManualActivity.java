@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.github.bggoranoff.qchess.util.ChessWebViewClient;
 

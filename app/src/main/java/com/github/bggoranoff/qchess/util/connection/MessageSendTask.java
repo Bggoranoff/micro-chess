@@ -2,8 +2,6 @@ package com.github.bggoranoff.qchess.util.connection;
 
 import android.os.AsyncTask;
 
-import com.github.bggoranoff.qchess.LobbyActivity;
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
