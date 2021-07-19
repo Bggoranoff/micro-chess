@@ -57,6 +57,10 @@ public class Board implements ChessBoard {
         return history;
     }
 
+    public Square get(int x, int y) {
+        return matrix[x][y];
+    }
+
     @Override
     public @NotNull
     String toString() {

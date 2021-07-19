@@ -7,7 +7,7 @@ import com.github.bggoranoff.qchess.engine.util.ChessColor;
 public abstract class Piece implements ChessPiece {
 
     protected String iconName;
-    protected Square[] squares = null;
+    protected Square square = null;
     protected Board board;
     protected float probability;
     protected ChessColor color;
@@ -32,6 +32,10 @@ public abstract class Piece implements ChessPiece {
     @Override
     public void split(Square initialSquare, Square... squares) {
         // TODO: split the piece between two squares and reflect this on its probability
+    }
+
+    protected boolean isAvailable(int x, int y) {
+        return x >= 0 && x < 8 && y >= 0 && y < 8 && board.get(x, y).getPiece() == null;
     }
 
     public String getIconName() {
