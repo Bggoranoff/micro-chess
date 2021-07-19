@@ -2,6 +2,7 @@ package com.github.bggoranoff.qchess.engine.board;
 
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import com.github.bggoranoff.qchess.engine.piece.Piece;
+import com.github.bggoranoff.qchess.engine.util.ChessTextFormatter;
 import com.github.bggoranoff.qchess.engine.util.Coordinates;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ public class Square {
     public Square(int x, int y) {
         this.coordinates = new Coordinates(x, y);
         color = (x + y) % 2 == 0 ? ChessColor.BLACK : ChessColor.WHITE;
-        tag = String.format(Locale.ENGLISH, "%c%d", (char) x + 97, y + 1);
+        tag = ChessTextFormatter.formatTag(x, y);
         id = String.format(Locale.ENGLISH, "cell%d%d", y, x);
     }
 
