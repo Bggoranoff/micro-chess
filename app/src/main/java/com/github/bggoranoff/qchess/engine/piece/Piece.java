@@ -4,6 +4,9 @@ import com.github.bggoranoff.qchess.engine.board.Board;
 import com.github.bggoranoff.qchess.engine.board.Square;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Piece implements ChessPiece {
 
     protected String iconName;
@@ -19,9 +22,9 @@ public abstract class Piece implements ChessPiece {
     }
 
     @Override
-    public String[] getAvailableSquares() {
+    public List<String> getAvailableSquares() {
         // TODO: get all valid squares to move by tag
-        return new String[0];
+        return new ArrayList<>();
     }
 
     @Override
