@@ -1,4 +1,4 @@
-package com.github.bggoranoff.qchess.engine;
+package com.github.bggoranoff.qchess.engine.util;
 
 public enum ChessColor {
 
