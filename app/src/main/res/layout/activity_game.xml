@@ -80,56 +80,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell00"
+                    android:id="@+id/cell70"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="a8" />
 
                 <View
-                    android:id="@+id/cell01"
+                    android:id="@+id/cell71"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="b8" />
 
                 <View
-                    android:id="@+id/cell02"
+                    android:id="@+id/cell72"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="c8" />
 
                 <View
-                    android:id="@+id/cell03"
+                    android:id="@+id/cell73"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="d8" />
 
                 <View
-                    android:id="@+id/cell04"
+                    android:id="@+id/cell74"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="e8" />
 
                 <View
-                    android:id="@+id/cell05"
+                    android:id="@+id/cell75"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="f8" />
 
                 <View
-                    android:id="@+id/cell06"
+                    android:id="@+id/cell76"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="g8" />
 
                 <View
-                    android:id="@+id/cell07"
+                    android:id="@+id/cell77"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
@@ -143,56 +143,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell10"
+                    android:id="@+id/cell60"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="a7" />
 
                 <View
-                    android:id="@+id/cell11"
+                    android:id="@+id/cell61"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="b7" />
 
                 <View
-                    android:id="@+id/cell12"
+                    android:id="@+id/cell62"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="c7" />
 
                 <View
-                    android:id="@+id/cell13"
+                    android:id="@+id/cell63"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="d7" />
 
                 <View
-                    android:id="@+id/cell14"
+                    android:id="@+id/cell64"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="e7" />
 
                 <View
-                    android:id="@+id/cell15"
+                    android:id="@+id/cell65"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="f7" />
 
                 <View
-                    android:id="@+id/cell16"
+                    android:id="@+id/cell66"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="g7" />
 
                 <View
-                    android:id="@+id/cell17"
+                    android:id="@+id/cell67"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
@@ -206,56 +206,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell20"
+                    android:id="@+id/cell50"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="a6" />
 
                 <View
-                    android:id="@+id/cell21"
+                    android:id="@+id/cell51"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="b6" />
 
                 <View
-                    android:id="@+id/cell22"
+                    android:id="@+id/cell52"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="c6" />
 
                 <View
-                    android:id="@+id/cell23"
+                    android:id="@+id/cell53"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="d6" />
 
                 <View
-                    android:id="@+id/cell24"
+                    android:id="@+id/cell54"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="e6" />
 
                 <View
-                    android:id="@+id/cell25"
+                    android:id="@+id/cell55"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="f6" />
 
                 <View
-                    android:id="@+id/cell26"
+                    android:id="@+id/cell56"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="g6" />
 
                 <View
-                    android:id="@+id/cell27"
+                    android:id="@+id/cell57"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
@@ -269,56 +269,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell30"
+                    android:id="@+id/cell40"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="a5" />
 
                 <View
-                    android:id="@+id/cell31"
+                    android:id="@+id/cell41"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="b5" />
 
                 <View
-                    android:id="@+id/cell32"
+                    android:id="@+id/cell42"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="c5" />
 
                 <View
-                    android:id="@+id/cell33"
+                    android:id="@+id/cell43"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="d5" />
 
                 <View
-                    android:id="@+id/cell34"
+                    android:id="@+id/cell44"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="e5" />
 
                 <View
-                    android:id="@+id/cell35"
+                    android:id="@+id/cell45"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="f5" />
 
                 <View
-                    android:id="@+id/cell36"
+                    android:id="@+id/cell46"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="g5" />
 
                 <View
-                    android:id="@+id/cell37"
+                    android:id="@+id/cell47"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
@@ -332,56 +332,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell40"
+                    android:id="@+id/cell30"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="a4" />
 
                 <View
-                    android:id="@+id/cell41"
+                    android:id="@+id/cell31"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="b4" />
 
                 <View
-                    android:id="@+id/cell42"
+                    android:id="@+id/cell32"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="c4" />
 
                 <View
-                    android:id="@+id/cell43"
+                    android:id="@+id/cell33"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="d4" />
 
                 <View
-                    android:id="@+id/cell44"
+                    android:id="@+id/cell34"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="e4" />
 
                 <View
-                    android:id="@+id/cell45"
+                    android:id="@+id/cell35"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="f4" />
 
                 <View
-                    android:id="@+id/cell46"
+                    android:id="@+id/cell36"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="g4" />
 
                 <View
-                    android:id="@+id/cell47"
+                    android:id="@+id/cell37"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
@@ -395,56 +395,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell50"
+                    android:id="@+id/cell20"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="a3" />
 
                 <View
-                    android:id="@+id/cell51"
+                    android:id="@+id/cell21"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="b3" />
 
                 <View
-                    android:id="@+id/cell52"
+                    android:id="@+id/cell22"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="c3" />
 
                 <View
-                    android:id="@+id/cell53"
+                    android:id="@+id/cell23"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="d3" />
 
                 <View
-                    android:id="@+id/cell54"
+                    android:id="@+id/cell24"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="e3" />
 
                 <View
-                    android:id="@+id/cell55"
+                    android:id="@+id/cell25"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="f3" />
 
                 <View
-                    android:id="@+id/cell56"
+                    android:id="@+id/cell26"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="g3" />
 
                 <View
-                    android:id="@+id/cell57"
+                    android:id="@+id/cell27"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
@@ -458,56 +458,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell60"
+                    android:id="@+id/cell10"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="a2" />
 
                 <View
-                    android:id="@+id/cell61"
+                    android:id="@+id/cell11"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="b2" />
 
                 <View
-                    android:id="@+id/cell62"
+                    android:id="@+id/cell12"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="c2" />
 
                 <View
-                    android:id="@+id/cell63"
+                    android:id="@+id/cell13"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="d2" />
 
                 <View
-                    android:id="@+id/cell64"
+                    android:id="@+id/cell14"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="e2" />
 
                 <View
-                    android:id="@+id/cell65"
+                    android:id="@+id/cell15"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="f2" />
 
                 <View
-                    android:id="@+id/cell66"
+                    android:id="@+id/cell16"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="g2" />
 
                 <View
-                    android:id="@+id/cell67"
+                    android:id="@+id/cell17"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
@@ -521,56 +521,56 @@
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/cell70"
+                    android:id="@+id/cell00"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="a1" />
 
                 <View
-                    android:id="@+id/cell71"
+                    android:id="@+id/cell01"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="b1" />
 
                 <View
-                    android:id="@+id/cell72"
+                    android:id="@+id/cell02"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="c1" />
 
                 <View
-                    android:id="@+id/cell73"
+                    android:id="@+id/cell03"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="d1" />
 
                 <View
-                    android:id="@+id/cell74"
+                    android:id="@+id/cell04"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="e1" />
 
                 <View
-                    android:id="@+id/cell75"
+                    android:id="@+id/cell05"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
                     android:tag="f1" />
 
                 <View
-                    android:id="@+id/cell76"
+                    android:id="@+id/cell06"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/black"
                     android:tag="g1" />
 
                 <View
-                    android:id="@+id/cell77"
+                    android:id="@+id/cell07"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/white"
