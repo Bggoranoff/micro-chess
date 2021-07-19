@@ -38,7 +38,7 @@ public abstract class Piece implements ChessPiece {
     }
 
     protected boolean isAvailable(int x, int y) {
-        return x >= 0 && x < 8 && y >= 0 && y < 8 && board.get(x, y).getPiece() == null;
+        return x >= 0 && x < 8 && y >= 0 && y < 8;
     }
 
     public String getIconName() {

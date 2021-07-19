@@ -11,7 +11,7 @@ public class King extends Piece {
 
     public King(Board board, ChessColor color) {
         super(board, color);
-        this.iconName = (color.equals(ChessColor.WHITE) ? "w" : "b") + "_k";
+        this.iconName = color.getLabel() + "_k";
     }
 
     public void castle(int file) {
