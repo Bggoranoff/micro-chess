@@ -1,10 +1,12 @@
 package com.github.bggoranoff.qchess;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -35,14 +37,21 @@ public class GameActivity extends AppCompatActivity {
     private void fillBoard() {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
-                if(board.get(i, j).getPiece() != null) {
-                    Square currentSquare = board.get(i, j);
+                Square currentSquare = board.get(i, j);
+                int squareId = ResourceSelector.getResourceId(this, currentSquare.getId());
+                View squareView = findViewById(squareId);
+                squareView.setOnClickListener(v -> {
+                    v.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
+                });
+                if(currentSquare.getPiece() != null) {
                     PieceView pieceView = new PieceView(this, currentSquare.getPiece());
-                    int squareId = ResourceSelector.getResourceId(this, currentSquare.getId());
-                    View squareView = findViewById(squareId);
                     pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
                     layout.addView(pieceView);
                     setPieceLocation(pieceView, squareView);
+                    pieceView.setOnClickListener(v -> {
+                        Toast.makeText(this, "Clicked " + pieceView.getPiece().toString(), Toast.LENGTH_SHORT).show();
+                        squareView.performClick();
+                    });
                 }
             }
         }
