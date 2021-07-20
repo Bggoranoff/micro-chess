@@ -2,6 +2,8 @@ package com.github.bggoranoff.qchess.util;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.util.TypedValue;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
@@ -22,5 +24,9 @@ public class ChessAnimator {
                 view.setBackgroundColor((int) animator.getAnimatedValue())
         );
         colourAnimation.start();
+    }
+
+    public static int getInDps(Context context, int d) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, d, context.getResources().getDisplayMetrics());
     }
 }
