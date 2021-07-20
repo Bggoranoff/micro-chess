@@ -48,6 +48,6 @@ public class Knight extends Piece {
             availableSquares.add(formatTag(x - 1, y + 2));
         }
 
-        return super.getAvailableSquares();
+        return availableSquares;
     }
 }
