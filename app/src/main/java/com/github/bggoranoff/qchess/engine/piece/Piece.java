@@ -37,7 +37,7 @@ public abstract class Piece implements ChessPiece {
         // TODO: split the piece between two squares and reflect this on its probability
     }
 
-    protected boolean isAvailable(int x, int y) {
+    protected boolean isValid(int x, int y) {
         return x >= 0 && x < 8 && y >= 0 && y < 8;
     }
 

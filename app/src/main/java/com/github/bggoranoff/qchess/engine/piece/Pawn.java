@@ -25,17 +25,17 @@ public class Pawn extends Piece {
         int y = square.getCoordinates().getY();
         int i = color.equals(ChessColor.BLACK) ? -1 : +1;
 
-        if(isAvailable(x, y + i) && board.get(x, y + i).getPiece() == null) {
+        if(isValid(x, y + i) && board.get(x, y + i).getPiece() == null) {
             availableSquares.add(formatTag(x, y + i));
         }
-        if(isAvailable(x, y + 2 * i) && board.get(x, y + i).getPiece() == null) {
+        if(isValid(x, y + 2 * i) && board.get(x, y + i).getPiece() == null) {
             availableSquares.add(formatTag(x, y + 2 * i));
         }
 
-        if(isAvailable(x + 1, y + i) && board.get(x + 1, y + i).getPiece() != null) {
+        if(isValid(x + 1, y + i) && board.get(x + 1, y + i).getPiece() != null) {
             availableSquares.add(formatTag(x + 1, y + i));
         }
-        if(isAvailable(x - 1, y + i) && board.get(x - 1, y + i).getPiece() != null) {
+        if(isValid(x - 1, y + i) && board.get(x - 1, y + i).getPiece() != null) {
             availableSquares.add(formatTag(x - 1, y + i));
         }
 

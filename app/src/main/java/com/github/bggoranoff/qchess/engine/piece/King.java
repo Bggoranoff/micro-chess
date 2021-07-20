@@ -25,31 +25,31 @@ public class King extends Piece {
         int x = square.getCoordinates().getX();
         int y = square.getCoordinates().getY();
 
-        if(isAvailable(x - 1, y)) {
+        if(isValid(x - 1, y)) {
             availableSquares.add(formatTag(x - 1, y));
         }
-        if(isAvailable(x + 1, y)) {
+        if(isValid(x + 1, y)) {
             availableSquares.add(formatTag(x + 1, y));
         }
 
-        if(isAvailable(x, y - 1)) {
+        if(isValid(x, y - 1)) {
             availableSquares.add(formatTag(x, y - 1));
         }
-        if(isAvailable(x, y + 1)) {
+        if(isValid(x, y + 1)) {
             availableSquares.add(formatTag(x, y + 1));
         }
 
-        if(isAvailable(x - 1, y - 1)) {
+        if(isValid(x - 1, y - 1)) {
             availableSquares.add(formatTag(x - 1, y - 1));
         }
-        if(isAvailable(x - 1, y + 1)) {
+        if(isValid(x - 1, y + 1)) {
             availableSquares.add(formatTag(x - 1, y + 1));
         }
 
-        if(isAvailable(x + 1, y - 1)) {
+        if(isValid(x + 1, y - 1)) {
             availableSquares.add(formatTag(x + 1, y - 1));
         }
-        if(isAvailable(x + 1, y + 1)) {
+        if(isValid(x + 1, y + 1)) {
             availableSquares.add(formatTag(x + 1, y + 1));
         }
 
