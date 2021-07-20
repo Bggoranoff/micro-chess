@@ -7,6 +7,8 @@ import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.bggoranoff.qchess.engine.util.ChessTextFormatter.formatTag;
+
 public abstract class Piece implements ChessPiece {
 
     protected String iconName;
@@ -39,6 +41,82 @@ public abstract class Piece implements ChessPiece {
 
     protected boolean isValid(int x, int y) {
         return x >= 0 && x < 8 && y >= 0 && y < 8;
+    }
+
+    protected void getRookAvailableSquares(List<String> availableSquares, int x, int y) {
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x + i, y) && board.get(x + i, y).getPiece() == null) {
+                availableSquares.add(formatTag(x + i, y));
+            } else if(isValid(x + i, y)) {
+                availableSquares.add(formatTag(x + i, y));
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x - i, y) && board.get(x - i, y).getPiece() == null) {
+                availableSquares.add(formatTag(x - i, y));
+            } else if(isValid(x - i, y)) {
+                availableSquares.add(formatTag(x - i, y));
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x, y + i) && board.get(x, y + i).getPiece() == null) {
+                availableSquares.add(formatTag(x, y + i));
+            } else if(isValid(x, y + i)) {
+                availableSquares.add(formatTag(x, y + i));
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x, y - i) && board.get(x, y - i).getPiece() == null) {
+                availableSquares.add(formatTag(x, y - i));
+            } else if(isValid(x, y - i)) {
+                availableSquares.add(formatTag(x, y - i));
+                break;
+            }
+        }
+    }
+
+    protected void getBishopAvailableSquares(List<String> availableSquares, int x, int y) {
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x + i, y + i) && board.get(x + i, y + i).getPiece() == null) {
+                availableSquares.add(formatTag(x + i, y + i));
+            } else if(isValid(x + i, y + i)) {
+                availableSquares.add(formatTag(x + i, y + i));
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x + i, y - i) && board.get(x + i, y - i).getPiece() == null) {
+                availableSquares.add(formatTag(x + i, y - i));
+            } else if(isValid(x + i, y - i)) {
+                availableSquares.add(formatTag(x + i, y - i));
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x - i, y + i) && board.get(x - i, y + i).getPiece() == null) {
+                availableSquares.add(formatTag(x - i, y + i));
+            } else if(isValid(x - i, y + i)) {
+                availableSquares.add(formatTag(x - i, y + i));
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isValid(x - i, y - i) && board.get(x - i, y - i).getPiece() == null) {
+                availableSquares.add(formatTag(x - i, y - i));
+            } else if(isValid(x - i, y - i)) {
+                availableSquares.add(formatTag(x - i, y - i));
+                break;
+            }
+        }
     }
 
     public String getIconName() {

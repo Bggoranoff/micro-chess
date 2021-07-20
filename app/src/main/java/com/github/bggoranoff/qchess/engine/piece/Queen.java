@@ -2,16 +2,15 @@ package com.github.bggoranoff.qchess.engine.piece;
 
 import com.github.bggoranoff.qchess.engine.board.Board;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
-import static com.github.bggoranoff.qchess.engine.util.ChessTextFormatter.formatTag;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Rook extends Piece {
+public class Queen extends Piece {
 
-    public Rook(Board board, ChessColor color) {
+    public Queen(Board board, ChessColor color) {
         super(board, color);
-        this.iconName = color.getLabel() + "_r";
+        this.iconName = color.getLabel() + "_q";
     }
 
     @Override
@@ -20,6 +19,7 @@ public class Rook extends Piece {
         int x = square.getCoordinates().getX();
         int y = square.getCoordinates().getY();
 
+        getBishopAvailableSquares(availableSquares, x, y);
         getRookAvailableSquares(availableSquares, x, y);
 
         return availableSquares;

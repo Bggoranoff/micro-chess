@@ -20,41 +20,7 @@ public class Bishop extends Piece {
         int x = square.getCoordinates().getX();
         int y = square.getCoordinates().getY();
 
-        for(int i = 1; i < 8; i++) {
-            if(isValid(x + i, y + i) && board.get(x + i, y + i).getPiece() == null) {
-                availableSquares.add(formatTag(x + i, y + i));
-            } else if(isValid(x + i, y + i)) {
-                availableSquares.add(formatTag(x + i, y + i));
-                break;
-            }
-        }
-
-        for(int i = 1; i < 8; i++) {
-            if(isValid(x + i, y - i) && board.get(x + i, y - i).getPiece() == null) {
-                availableSquares.add(formatTag(x + i, y - i));
-            } else if(isValid(x + i, y - i)) {
-                availableSquares.add(formatTag(x + i, y - i));
-                break;
-            }
-        }
-
-        for(int i = 1; i < 8; i++) {
-            if(isValid(x - i, y + i) && board.get(x - i, y + i).getPiece() == null) {
-                availableSquares.add(formatTag(x - i, y + i));
-            } else if(isValid(x - i, y + i)) {
-                availableSquares.add(formatTag(x - i, y + i));
-                break;
-            }
-        }
-
-        for(int i = 1; i < 8; i++) {
-            if(isValid(x - i, y - i) && board.get(x - i, y - i).getPiece() == null) {
-                availableSquares.add(formatTag(x - i, y - i));
-            } else if(isValid(x - i, y - i)) {
-                availableSquares.add(formatTag(x - i, y - i));
-                break;
-            }
-        }
+        getBishopAvailableSquares(availableSquares, x, y);
 
         return availableSquares;
     }
