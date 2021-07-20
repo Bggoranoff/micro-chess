@@ -1,6 +1,13 @@
 package com.github.bggoranoff.qchess.engine.board;
 
 import com.github.bggoranoff.qchess.engine.move.Move;
+import com.github.bggoranoff.qchess.engine.piece.Bishop;
+import com.github.bggoranoff.qchess.engine.piece.King;
+import com.github.bggoranoff.qchess.engine.piece.Knight;
+import com.github.bggoranoff.qchess.engine.piece.Pawn;
+import com.github.bggoranoff.qchess.engine.piece.Queen;
+import com.github.bggoranoff.qchess.engine.piece.Rook;
+import com.github.bggoranoff.qchess.engine.util.ChessColor;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,9 +29,56 @@ public class Board implements ChessBoard {
                 matrix[i][j] = new Square(j, i);
             }
         }
+
         takenBlackPieces = new ArrayList<>();
         takenWhitePieces = new ArrayList<>();
         history = new ArrayList<>();
+    }
+
+    public void reset(ChessColor primaryColor) {
+        ChessColor secondaryColor = primaryColor.equals(ChessColor.WHITE) ? ChessColor.BLACK : ChessColor.WHITE;
+
+        // user pawns
+        for(int i = 0; i < 8; i++) {
+            matrix[1][i].setPiece(new Pawn(this, primaryColor));
+        }
+
+        // user rooks
+        matrix[0][0].setPiece(new Rook(this, primaryColor));
+        matrix[0][7].setPiece(new Rook(this, primaryColor));
+
+        // user knights
+        matrix[0][1].setPiece(new Knight(this, primaryColor));
+        matrix[0][6].setPiece(new Knight(this, primaryColor));
+
+        // user bishops
+        matrix[0][2].setPiece(new Bishop(this, primaryColor));
+        matrix[0][5].setPiece(new Bishop(this, primaryColor));
+
+        // user king and queen
+        matrix[0][3].setPiece(new King(this, primaryColor));
+        matrix[0][4].setPiece(new Queen(this, primaryColor));
+
+        // opponent pawns
+        for(int i = 0; i < 8; i++) {
+            matrix[6][i].setPiece(new Pawn(this, secondaryColor));
+        }
+
+        // opponent rooks
+        matrix[7][0].setPiece(new Rook(this, secondaryColor));
+        matrix[7][7].setPiece(new Rook(this, secondaryColor));
+
+        // opponent knights
+        matrix[7][1].setPiece(new Knight(this, secondaryColor));
+        matrix[7][6].setPiece(new Knight(this, secondaryColor));
+
+        // opponent bishops
+        matrix[7][2].setPiece(new Bishop(this, secondaryColor));
+        matrix[7][5].setPiece(new Bishop(this, secondaryColor));
+
+        // opponent king and queen
+        matrix[7][3].setPiece(new King(this, secondaryColor));
+        matrix[7][4].setPiece(new Queen(this, secondaryColor));
     }
 
     @Override

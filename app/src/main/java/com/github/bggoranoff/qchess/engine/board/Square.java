@@ -51,6 +51,6 @@ public class Square {
 
     @Override
     public @NotNull String toString() {
-        return tag;
+        return piece == null ? "." : piece.toString();
     }
 }

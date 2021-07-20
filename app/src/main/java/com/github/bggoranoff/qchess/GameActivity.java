@@ -5,6 +5,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 
+import com.github.bggoranoff.qchess.engine.board.Board;
+import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 
 import java.util.Objects;
@@ -12,6 +14,7 @@ import java.util.Objects;
 public class GameActivity extends AppCompatActivity {
 
     ConstraintLayout layout;
+    Board board;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +24,9 @@ public class GameActivity extends AppCompatActivity {
 
         layout = findViewById(R.id.gameLayout);
         ChessAnimator.animateBackground(layout);
+
+        board = new Board();
+        board.reset(ChessColor.WHITE);
+        System.out.println(board.toString());
     }
 }

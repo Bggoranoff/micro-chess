@@ -1,7 +1,11 @@
 package com.github.bggoranoff.qchess.engine.piece;
 
+import androidx.annotation.NonNull;
+
 import com.github.bggoranoff.qchess.engine.board.Board;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,5 +27,12 @@ public class Queen extends Piece {
         getRookAvailableSquares(availableSquares, x, y);
 
         return availableSquares;
+    }
+
+    @NonNull
+    @NotNull
+    @Override
+    public String toString() {
+        return "q";
     }
 }
