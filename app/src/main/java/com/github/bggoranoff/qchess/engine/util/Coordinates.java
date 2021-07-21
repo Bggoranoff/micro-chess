@@ -1,5 +1,7 @@
 package com.github.bggoranoff.qchess.engine.util;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Coordinates {
 
     private int x;
@@ -24,5 +26,10 @@ public class Coordinates {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return x + " " + y;
     }
 }

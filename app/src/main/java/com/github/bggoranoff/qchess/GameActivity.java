@@ -12,6 +12,7 @@ import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
 import com.github.bggoranoff.qchess.engine.board.Square;
 import com.github.bggoranoff.qchess.engine.move.Move;
+import com.github.bggoranoff.qchess.engine.piece.King;
 import com.github.bggoranoff.qchess.engine.piece.Piece;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import com.github.bggoranoff.qchess.engine.util.Coordinates;
@@ -21,6 +22,7 @@ import com.github.bggoranoff.qchess.util.TextFormatter;
 
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,10 +31,12 @@ public class GameActivity extends AppCompatActivity {
     private static final int PIECE_OFFSET = 10;
 
     private ConstraintLayout layout;
+
     private Board board;
     private PieceView currentPiece = null;
     private PieceView lastPiece = null;
     private View currentSquare = null;
+    private HashMap<String, PieceView> pieceViews;
 
     private void clickSquare(View view) {
         if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
@@ -43,11 +47,46 @@ public class GameActivity extends AppCompatActivity {
                         TextFormatter.getCoordinates(view.getTag().toString())
                 );
                 lastPiece.getPiece().move(move);
+
+                // Castling check
+                if(Math.abs(move.getStart().getX() - move.getEnd().getX()) == 2 && lastPiece.getPiece() instanceof King) {
+                    PieceView rook;
+                    Coordinates rookCoordinates;
+                    Coordinates updatedRookCoordinates;
+                    if(move.getStart().getX() > move.getEnd().getX()) {
+                        rookCoordinates = new Coordinates(move.getStart().getX() - 3, move.getStart().getY());
+                        rook = pieceViews.get(rookCoordinates.toString());
+                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() + 2, rookCoordinates.getY());
+                    } else {
+                        rookCoordinates = new Coordinates(move.getStart().getX() + 4, move.getStart().getY());
+                        rook = pieceViews.get(rookCoordinates.toString());
+                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() - 3, rookCoordinates.getY());
+                    }
+
+                    if(rook != null) {
+                        Move rookMove = new Move(
+                                rookCoordinates,
+                                updatedRookCoordinates
+                        );
+                        rook.getPiece().move(rookMove);
+
+                        int rookSquareId = ResourceSelector.getResourceId(
+                                this,
+                                "cell" + updatedRookCoordinates.getY() + "" + updatedRookCoordinates.getX()
+                        );
+                        View rookSquare = findViewById(rookSquareId);
+                        rook.setSquareId(rookSquareId);
+                        visualiseMove(rook, rookSquare);
+                    }
+                }
+
                 lastPiece.setSquareId(view.getId());
                 visualiseMove(lastPiece, view);
+
                 if(currentPiece != null) {
                     ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
                 }
+
                 resetBoardColors();
                 currentSquare = null;
                 lastPiece = null;
@@ -118,6 +157,7 @@ public class GameActivity extends AppCompatActivity {
                 squareView.setOnClickListener(this::clickSquare);
                 if(currentSquare.getPiece() != null) {
                     PieceView pieceView = new PieceView(this, currentSquare.getPiece(), squareId);
+                    pieceViews.put(currentSquare.getCoordinates().toString(), pieceView);
                     pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
                     layout.addView(pieceView);
                     setPieceLocation(pieceView, squareView);
@@ -154,6 +194,7 @@ public class GameActivity extends AppCompatActivity {
 
         board = new Board();
         board.reset(ChessColor.WHITE);
+        pieceViews = new HashMap<>();
         fillBoard();
     }
 }

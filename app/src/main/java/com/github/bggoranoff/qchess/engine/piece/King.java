@@ -19,8 +19,36 @@ public class King extends Piece {
         this.iconName = color.getLabel() + "_k";
     }
 
-    public void castle(int file) {
-        // TODO: find rook on file, move rook and king
+    private boolean isRookForCastling(int x, int y) {
+        return board.get(x, y).getPiece() != null && board.get(x, y).getPiece() instanceof Rook && !board.get(x, y).getPiece().isMoved();
+    }
+
+    private void getCastlingSquares(int file, List<String> availableSquares) {
+        boolean isCastlingAvailable = true;
+        int x = square.getCoordinates().getX();
+
+        // king side castling
+        for(int i = x - 1; i > 0; i--) {
+            if(board.get(i, file).getPiece() != null) {
+                isCastlingAvailable = false;
+                break;
+            }
+        }
+        if(isCastlingAvailable && isRookForCastling(x - 3, file)) {
+            availableSquares.add(formatTag(x - 2, file));
+        }
+
+        // queen side castling
+        isCastlingAvailable = true;
+        for(int i = x + 1; i < 7; i++) {
+            if(board.get(i, file).getPiece() != null) {
+                isCastlingAvailable = false;
+                break;
+            }
+        }
+        if(isCastlingAvailable && isRookForCastling(x + 4, file)) {
+            availableSquares.add(formatTag(x + 2, file));
+        }
     }
 
     @Override
@@ -56,6 +84,10 @@ public class King extends Piece {
         }
         if(isValid(x + 1, y + 1)) {
             availableSquares.add(formatTag(x + 1, y + 1));
+        }
+
+        if(!moved) {
+            getCastlingSquares(y, availableSquares);
         }
 
         return availableSquares;

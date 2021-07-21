@@ -148,6 +148,10 @@ public abstract class Piece implements ChessPiece {
         return iconName;
     }
 
+    public boolean isMoved() {
+        return moved;
+    }
+
     public float getProbability() {
         return probability;
     }
