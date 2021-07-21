@@ -5,6 +5,7 @@ import com.github.bggoranoff.qchess.engine.piece.Bishop;
 import com.github.bggoranoff.qchess.engine.piece.King;
 import com.github.bggoranoff.qchess.engine.piece.Knight;
 import com.github.bggoranoff.qchess.engine.piece.Pawn;
+import com.github.bggoranoff.qchess.engine.piece.Piece;
 import com.github.bggoranoff.qchess.engine.piece.Queen;
 import com.github.bggoranoff.qchess.engine.piece.Rook;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
 public class Board implements ChessBoard {
 
     private Square[][] matrix;
-    private ArrayList<Square> takenBlackPieces;
-    private ArrayList<Square> takenWhitePieces;
+    private ArrayList<Piece> takenBlackPieces;
+    private ArrayList<Piece> takenWhitePieces;
     private ArrayList<Move> history; // could be deque
     private boolean finished = false;
     private String result = "";
@@ -82,9 +83,17 @@ public class Board implements ChessBoard {
     }
 
     @Override
-    public boolean executeMove(Move move) {
-        // TODO: execute move by given coordinates and add it to the move history
-        return false;
+    public void executeMove(Piece piece, Move move) {
+        get(move.getStart().getX(), move.getStart().getY()).setPiece(null);
+        Square square = get(move.getEnd().getX(), move.getEnd().getY());
+        if(square.getPiece() != null) {
+            if(square.getPiece().getColor().equals(ChessColor.WHITE)) {
+                takenWhitePieces.add(square.getPiece());
+            } else {
+                takenBlackPieces.add(square.getPiece());
+            }
+        }
+        square.setPiece(piece);
     }
 
     @Override
@@ -112,7 +121,7 @@ public class Board implements ChessBoard {
     }
 
     public Square get(int x, int y) {
-        return matrix[x][y];
+        return matrix[y][x];
     }
 
     @Override

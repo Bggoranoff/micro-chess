@@ -9,6 +9,7 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 
 import com.github.bggoranoff.qchess.R;
+import com.github.bggoranoff.qchess.engine.util.ChessColor;
 
 public class ChessAnimator {
 
@@ -28,5 +29,11 @@ public class ChessAnimator {
 
     public static int getInDps(Context context, int d) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, d, context.getResources().getDisplayMetrics());
+    }
+
+    public static int getSquareColor(String tag) {
+        int file = tag.charAt(0) - 97;
+        int rank = tag.charAt(1) - 48 - 1;
+        return (file + rank) % 2 == 0 ? R.color.black : R.color.white;
     }
 }

@@ -1,5 +1,7 @@
 package com.github.bggoranoff.qchess.util;
 
+import com.github.bggoranoff.qchess.engine.util.Coordinates;
+
 public class TextFormatter {
 
     public static String formatDeviceName(String nameToFormat) {
@@ -25,5 +27,11 @@ public class TextFormatter {
     public static String formatDeviceIp(String formattedName) {
         String[] deviceDetails = formattedName.split("\\|");
         return deviceDetails[2];
+    }
+
+    public static Coordinates getCoordinates(String tag) {
+        int x = tag.charAt(0) - 97;
+        int y = tag.charAt(1) - 48 - 1;
+        return new Coordinates(x, y);
     }
 }

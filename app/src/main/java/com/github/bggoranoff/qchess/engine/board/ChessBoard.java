@@ -1,10 +1,11 @@
 package com.github.bggoranoff.qchess.engine.board;
 
 import com.github.bggoranoff.qchess.engine.move.Move;
+import com.github.bggoranoff.qchess.engine.piece.Piece;
 
 public interface ChessBoard {
 
-    boolean executeMove(Move move);
+    void executeMove(Piece piece, Move move);
 
     boolean takeBack();
 
