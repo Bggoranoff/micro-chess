@@ -44,10 +44,10 @@ public class GameActivity extends AppCompatActivity {
                 );
                 lastPiece.getPiece().move(move);
                 lastPiece.setSquareId(view.getId());
+                visualiseMove(lastPiece, view);
                 if(currentPiece != null) {
                     ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
                 }
-                setPieceLocation(lastPiece, view);
                 resetBoardColors();
                 currentSquare = null;
                 lastPiece = null;
@@ -92,6 +92,19 @@ public class GameActivity extends AppCompatActivity {
             int[] location = new int[2];
             squareView.getLocationOnScreen(location);
             pieceView.setX(location[0]);
+            pieceView.setY(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET);
+        });
+    }
+
+    private void visualiseMove(PieceView pieceView, View squareView) {
+        squareView.post(() -> {
+            int[] location = new int[2];
+            squareView.getLocationOnScreen(location);
+            pieceView.animate()
+                    .y(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET)
+                    .x(location[0])
+                    .setDuration(350)
+                    .start();
             pieceView.setY(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET);
         });
     }
