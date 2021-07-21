@@ -18,6 +18,7 @@ public abstract class Piece implements ChessPiece {
     protected Board board;
     protected float probability;
     protected ChessColor color;
+    protected boolean moved = false;
 
     public Piece(Board board, ChessColor color) {
         this.board = board;
@@ -34,6 +35,7 @@ public abstract class Piece implements ChessPiece {
     @Override
     public void move(Move move) {
         // TODO: handle probability measurements
+        moved = true;
         board.executeMove(this, move);
     }
 

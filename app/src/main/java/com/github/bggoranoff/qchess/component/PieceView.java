@@ -8,14 +8,16 @@ import com.github.bggoranoff.qchess.util.ResourceSelector;
 public class PieceView extends androidx.appcompat.widget.AppCompatImageView {
 
     private Piece piece;
+    private int squareId;
 
     public PieceView(Context context) {
         super(context);
     }
 
-    public PieceView(Context context, Piece piece) {
+    public PieceView(Context context, Piece piece, int squareId) {
         super(context);
         this.piece = piece;
+        this.squareId = squareId;
         setImageResource(ResourceSelector.getDrawable(context, piece.getIconName()));
     }
 
@@ -25,5 +27,13 @@ public class PieceView extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+    }
+
+    public int getSquareId() {
+        return squareId;
+    }
+
+    public void setSquareId(int squareId) {
+        this.squareId = squareId;
     }
 }

@@ -6,7 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+import android.view.ViewManager;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -21,7 +21,6 @@ import com.github.bggoranoff.qchess.util.TextFormatter;
 
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,20 +31,26 @@ public class GameActivity extends AppCompatActivity {
     private ConstraintLayout layout;
     private Board board;
     private PieceView currentPiece = null;
+    private PieceView lastPiece = null;
     private View currentSquare = null;
 
     private void clickSquare(View view) {
         if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
             // TODO: check if there is a split to perform
-            if(currentPiece != null && currentSquare != null) {
+            if(lastPiece != null && currentSquare != null) {
                 Move move = new Move(
                         TextFormatter.getCoordinates(currentSquare.getTag().toString()),
                         TextFormatter.getCoordinates(view.getTag().toString())
                 );
-                currentPiece.getPiece().move(move);
+                lastPiece.getPiece().move(move);
+                lastPiece.setSquareId(view.getId());
+                if(currentPiece != null) {
+                    ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+                }
+                setPieceLocation(lastPiece, view);
                 resetBoardColors();
                 currentSquare = null;
-                currentPiece = null;
+                lastPiece = null;
             }
         } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
             // TODO: check if a split should be initiated
@@ -68,16 +73,17 @@ public class GameActivity extends AppCompatActivity {
                     View v = findViewById(squareId);
                     v.setBackground(AppCompatResources.getDrawable(this, R.color.dark_red));
                 }
+                lastPiece = currentPiece;
                 currentPiece = null;
-                // TODO: set last piece for move execution
             }
             view.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
             currentSquare = view;
         }
     }
 
-    private void clickPiece(PieceView pieceView, View squareView) {
+    private void clickPiece(PieceView pieceView) {
         currentPiece = pieceView;
+        View squareView = findViewById(pieceView.getSquareId());
         squareView.performClick();
     }
 
@@ -86,7 +92,7 @@ public class GameActivity extends AppCompatActivity {
             int[] location = new int[2];
             squareView.getLocationOnScreen(location);
             pieceView.setX(location[0]);
-            pieceView.setY(location[1] - squareView.getHeight() / 2 - PIECE_OFFSET);
+            pieceView.setY(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET);
         });
     }
 
@@ -98,11 +104,11 @@ public class GameActivity extends AppCompatActivity {
                 View squareView = findViewById(squareId);
                 squareView.setOnClickListener(this::clickSquare);
                 if(currentSquare.getPiece() != null) {
-                    PieceView pieceView = new PieceView(this, currentSquare.getPiece());
+                    PieceView pieceView = new PieceView(this, currentSquare.getPiece(), squareId);
                     pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
                     layout.addView(pieceView);
                     setPieceLocation(pieceView, squareView);
-                    pieceView.setOnClickListener(v -> clickPiece(pieceView, squareView));
+                    pieceView.setOnClickListener(v -> clickPiece(pieceView));
                 }
             }
         }

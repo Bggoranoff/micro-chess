@@ -31,10 +31,10 @@ public class Pawn extends Piece {
         int i = color.equals(ChessColor.BLACK) ? -1 : +1;
 
         if(isValid(x, y + i) && board.get(x, y + i).getPiece() == null) {
+            if(!moved && isValid(x, y + 2 * i) && board.get(x, y + 2 * i).getPiece() == null) {
+                availableSquares.add(formatTag(x, y + 2 * i));
+            }
             availableSquares.add(formatTag(x, y + i));
-        }
-        if(isValid(x, y + 2 * i) && board.get(x, y + i).getPiece() == null) {
-            availableSquares.add(formatTag(x, y + 2 * i));
         }
 
         if(isValid(x + 1, y + i) && board.get(x + 1, y + i).getPiece() != null) {
