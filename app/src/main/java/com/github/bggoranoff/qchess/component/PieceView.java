@@ -18,6 +18,7 @@ public class PieceView extends androidx.appcompat.widget.AppCompatImageView {
         super(context);
         this.piece = piece;
         this.squareId = squareId;
+        setAlpha(piece.getProbability());
         setImageResource(ResourceSelector.getDrawable(context, piece.getIconName()));
     }
 

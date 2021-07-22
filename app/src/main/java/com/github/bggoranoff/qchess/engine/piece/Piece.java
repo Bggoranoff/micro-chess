@@ -4,10 +4,10 @@ import com.github.bggoranoff.qchess.engine.board.Board;
 import com.github.bggoranoff.qchess.engine.board.Square;
 import com.github.bggoranoff.qchess.engine.move.Move;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
-import com.github.bggoranoff.qchess.engine.util.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.github.bggoranoff.qchess.engine.util.ChessTextFormatter.formatTag;
 
@@ -19,16 +19,31 @@ public abstract class Piece implements ChessPiece {
     protected float probability;
     protected ChessColor color;
     protected boolean moved = false;
+    protected String id;
+    protected boolean split = false;
 
     public Piece(Board board, ChessColor color) {
         this.board = board;
         this.color = color;
         this.probability = 1.0f;
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public Piece(Board board, ChessColor chessColor, String id, float probability) {
+        this(board, chessColor);
+        this.id = id;
+        this.probability = probability;
+        this.split = true;
     }
 
     @Override
     public List<String> getAvailableSquares() {
         // TODO: get all valid squares to move by tag
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getAvailableSplitSquares() {
         return new ArrayList<>();
     }
 
@@ -40,12 +55,17 @@ public abstract class Piece implements ChessPiece {
     }
 
     @Override
-    public void split(Square initialSquare, Square... squares) {
-        // TODO: split the piece between two squares and reflect this on its probability
+    public void split(Move firstMove, Move secondMove) {
+        // TODO: handle for every instance
+        return;
     }
 
     protected boolean isValid(int x, int y) {
         return x >= 0 && x < 8 && y >= 0 && y < 8 && (board.get(x, y).getPiece() == null || board.get(x, y).getPiece().getColor() != color);
+    }
+
+    protected boolean isAvailableForSplit(int x, int y) {
+        return x >= 0 && x < 8 && y >= 0 && y < 8 && (board.get(x, y).getPiece() == null || board.get(x, y).getPiece().getId().equals(id));
     }
 
     protected void getRookAvailableSquares(List<String> availableSquares, int x, int y) {
@@ -140,6 +160,74 @@ public abstract class Piece implements ChessPiece {
         }
     }
 
+    protected void getBishopAvailableSplitSquares(List<String> availableSquares, int x, int y) {
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x + i, y + i)) {
+                availableSquares.add(formatTag(x + i, y + i));
+            } else {
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x + i, y - i)) {
+                availableSquares.add(formatTag(x + i, y - i));
+            } else {
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x - i, y + i)) {
+                availableSquares.add(formatTag(x - i, y + i));
+            } else {
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x - i, y - i)) {
+                availableSquares.add(formatTag(x - i, y - i));
+            } else {
+                break;
+            }
+        }
+    }
+
+    protected void getRookAvailableSplitSquares(List<String> availableSquares, int x, int y) {
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x + i, y)) {
+                availableSquares.add(formatTag(x + i, y));
+            } else {
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x - i, y)) {
+                availableSquares.add(formatTag(x - i, y));
+            } else {
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x, y + i)) {
+                availableSquares.add(formatTag(x, y + i));
+            } else {
+                break;
+            }
+        }
+
+        for(int i = 1; i < 8; i++) {
+            if(isAvailableForSplit(x, y - i)) {
+                availableSquares.add(formatTag(x, y - i));
+            } else {
+                break;
+            }
+        }
+    }
+
     public void setSquare(Square square) {
         this.square = square;
     }
@@ -154,6 +242,18 @@ public abstract class Piece implements ChessPiece {
 
     public float getProbability() {
         return probability;
+    }
+
+    public void setProbability(float probability) {
+        this.probability = probability;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public boolean isSplit() {
+        return split;
     }
 
     public ChessColor getColor() {

@@ -10,7 +10,9 @@ public interface ChessPiece {
 
     List<String> getAvailableSquares();
 
+    List<String> getAvailableSplitSquares();
+
     void move(Move move);
 
-    void split(Square initialSquare, Square... squares);
+    void split(Move firstMove, Move secondMove);
 }

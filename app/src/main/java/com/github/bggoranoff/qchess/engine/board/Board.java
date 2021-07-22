@@ -19,7 +19,7 @@ public class Board implements ChessBoard {
     private Square[][] matrix;
     private ArrayList<Piece> takenBlackPieces;
     private ArrayList<Piece> takenWhitePieces;
-    private ArrayList<Move> history; // could be deque
+    private ArrayList<String> history; // could be deque
     private boolean finished = false;
     private String result = "";
 
@@ -88,7 +88,7 @@ public class Board implements ChessBoard {
         Square square = get(move.getEnd().getX(), move.getEnd().getY());
         take(move.getEnd().getX(), move.getEnd().getY());
         square.setPiece(piece);
-        history.add(move);
+        history.add(move.toString());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class Board implements ChessBoard {
         return result;
     }
 
-    public ArrayList<Move> getHistory() {
+    public ArrayList<String> getHistory() {
         return history;
     }
 

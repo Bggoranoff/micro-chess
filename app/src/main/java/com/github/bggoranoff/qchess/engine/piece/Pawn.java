@@ -85,6 +85,11 @@ public class Pawn extends Piece {
     }
 
     @Override
+    public List<String> getAvailableSplitSquares() {
+        return super.getAvailableSplitSquares();
+    }
+
+    @Override
     public void move(Move move) {
         justMovedDouble = !moved && Math.abs(move.getStart().getY() - move.getEnd().getY()) == 2;
         super.move(move);

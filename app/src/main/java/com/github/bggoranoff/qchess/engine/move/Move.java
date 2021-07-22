@@ -19,4 +19,9 @@ public class Move {
     public Coordinates getEnd() {
         return end;
     }
+
+    @Override
+    public String toString() {
+        return start.toString() + "-" + end.toString();
+    }
 }
