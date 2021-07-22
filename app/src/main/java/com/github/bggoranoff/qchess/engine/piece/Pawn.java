@@ -3,6 +3,7 @@ package com.github.bggoranoff.qchess.engine.piece;
 import androidx.annotation.NonNull;
 
 import com.github.bggoranoff.qchess.engine.board.Board;
+import com.github.bggoranoff.qchess.engine.move.Move;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,13 +15,47 @@ import java.util.List;
 
 public class Pawn extends Piece {
 
+    private boolean justMovedDouble = false;
+
     public Pawn(Board board, ChessColor color) {
         super(board, color);
         this.iconName = color.getLabel() + "_p";
     }
 
-    public void enPassant() {
-        // TODO: check available en passant moves & take
+    public void getEnPassantMoves(List<String> availableMoves, int x, int y) {
+        if(justMovedDouble) {
+            if(color.equals(ChessColor.WHITE)) {
+                if(
+                        isValid(x + 1, y) && board.get(x + 1, y).getPiece() != null &&
+                        !board.get(x + 1, y).getPiece().getColor().equals(color) &&
+                        isValid(x + 1, y + 1) && board.get(x + 1, y + 1).getPiece() == null
+                ) {
+                    availableMoves.add(formatTag(x + 1, y + 1));
+                }
+                if(
+                        isValid(x - 1, y) && board.get(x - 1, y).getPiece() != null &&
+                                !board.get(x - 1, y).getPiece().getColor().equals(color) &&
+                                isValid(x - 1, y + 1) && board.get(x - 1, y + 1).getPiece() == null
+                ) {
+                    availableMoves.add(formatTag(x - 1, y + 1));
+                }
+            } else {
+                if(
+                        isValid(x + 1, y) && board.get(x + 1, y).getPiece() != null &&
+                                !board.get(x + 1, y).getPiece().getColor().equals(color) &&
+                                isValid(x + 1, y - 1) && board.get(x + 1, y - 1).getPiece() == null
+                ) {
+                    availableMoves.add(formatTag(x + 1, y - 1));
+                }
+                if(
+                        isValid(x - 1, y) && board.get(x - 1, y).getPiece() != null &&
+                                !board.get(x - 1, y).getPiece().getColor().equals(color) &&
+                                isValid(x - 1, y - 1) && board.get(x - 1, y - 1).getPiece() == null
+                ) {
+                    availableMoves.add(formatTag(x - 1, y - 1));
+                }
+            }
+        }
     }
 
     @Override
@@ -44,7 +79,15 @@ public class Pawn extends Piece {
             availableSquares.add(formatTag(x - 1, y + i));
         }
 
+        getEnPassantMoves(availableSquares, x, y);
+
         return availableSquares;
+    }
+
+    @Override
+    public void move(Move move) {
+        justMovedDouble = !moved && Math.abs(move.getStart().getY() - move.getEnd().getY()) == 2;
+        super.move(move);
     }
 
     @NonNull

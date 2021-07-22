@@ -10,4 +10,6 @@ public interface ChessBoard {
     boolean takeBack();
 
     float evaluate();
+
+    void take(int x, int y);
 }

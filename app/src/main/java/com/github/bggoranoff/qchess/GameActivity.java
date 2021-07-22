@@ -13,6 +13,7 @@ import com.github.bggoranoff.qchess.engine.board.Board;
 import com.github.bggoranoff.qchess.engine.board.Square;
 import com.github.bggoranoff.qchess.engine.move.Move;
 import com.github.bggoranoff.qchess.engine.piece.King;
+import com.github.bggoranoff.qchess.engine.piece.Pawn;
 import com.github.bggoranoff.qchess.engine.piece.Piece;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import com.github.bggoranoff.qchess.engine.util.Coordinates;
@@ -22,7 +23,6 @@ import com.github.bggoranoff.qchess.util.TextFormatter;
 
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,17 +36,23 @@ public class GameActivity extends AppCompatActivity {
     private PieceView currentPiece = null;
     private PieceView lastPiece = null;
     private View currentSquare = null;
-    private HashMap<String, PieceView> pieceViews;
+    private PieceView[][] pieceViews;
 
     private void clickSquare(View view) {
         if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
             // TODO: check if there is a split to perform
             if(lastPiece != null && currentSquare != null) {
+                Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
+                Coordinates endCoordinates = TextFormatter.getCoordinates(view.getTag().toString());
+
                 Move move = new Move(
-                        TextFormatter.getCoordinates(currentSquare.getTag().toString()),
-                        TextFormatter.getCoordinates(view.getTag().toString())
+                        startCoordinates,
+                        endCoordinates
                 );
                 lastPiece.getPiece().move(move);
+
+                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
+                pieceViews[endCoordinates.getY()][endCoordinates.getX()] = lastPiece;
 
                 // Castling check
                 if(Math.abs(move.getStart().getX() - move.getEnd().getX()) == 2 && lastPiece.getPiece() instanceof King) {
@@ -55,11 +61,11 @@ public class GameActivity extends AppCompatActivity {
                     Coordinates updatedRookCoordinates;
                     if(move.getStart().getX() > move.getEnd().getX()) {
                         rookCoordinates = new Coordinates(move.getStart().getX() - 3, move.getStart().getY());
-                        rook = pieceViews.get(rookCoordinates.toString());
+                        rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
                         updatedRookCoordinates = new Coordinates(rookCoordinates.getX() + 2, rookCoordinates.getY());
                     } else {
                         rookCoordinates = new Coordinates(move.getStart().getX() + 4, move.getStart().getY());
-                        rook = pieceViews.get(rookCoordinates.toString());
+                        rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
                         updatedRookCoordinates = new Coordinates(rookCoordinates.getX() - 3, rookCoordinates.getY());
                     }
 
@@ -70,6 +76,9 @@ public class GameActivity extends AppCompatActivity {
                         );
                         rook.getPiece().move(rookMove);
 
+                        pieceViews[rookCoordinates.getY()][rookCoordinates.getX()] = null;
+                        pieceViews[updatedRookCoordinates.getY()][updatedRookCoordinates.getX()] = null;
+
                         int rookSquareId = ResourceSelector.getResourceId(
                                 this,
                                 "cell" + updatedRookCoordinates.getY() + "" + updatedRookCoordinates.getX()
@@ -77,6 +86,16 @@ public class GameActivity extends AppCompatActivity {
                         View rookSquare = findViewById(rookSquareId);
                         rook.setSquareId(rookSquareId);
                         visualiseMove(rook, rookSquare);
+                    }
+                }
+
+                if(lastPiece.getPiece() instanceof Pawn && move.getStart().getX() != move.getEnd().getX() && currentPiece == null) {
+                    Coordinates pieceCoordinates = new Coordinates(move.getEnd().getX(), move.getStart().getY());
+                    PieceView pieceToTake = pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()];
+                    if(pieceToTake != null) {
+                        board.take(move.getEnd().getX(), move.getStart().getY());
+                        ((ViewManager) pieceToTake.getParent()).removeView(pieceToTake);
+                        pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
                     }
                 }
 
@@ -157,7 +176,7 @@ public class GameActivity extends AppCompatActivity {
                 squareView.setOnClickListener(this::clickSquare);
                 if(currentSquare.getPiece() != null) {
                     PieceView pieceView = new PieceView(this, currentSquare.getPiece(), squareId);
-                    pieceViews.put(currentSquare.getCoordinates().toString(), pieceView);
+                    pieceViews[currentSquare.getCoordinates().getY()][currentSquare.getCoordinates().getX()] = pieceView;
                     pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
                     layout.addView(pieceView);
                     setPieceLocation(pieceView, squareView);
@@ -194,7 +213,7 @@ public class GameActivity extends AppCompatActivity {
 
         board = new Board();
         board.reset(ChessColor.WHITE);
-        pieceViews = new HashMap<>();
+        pieceViews = new PieceView[8][8];
         fillBoard();
     }
 }
