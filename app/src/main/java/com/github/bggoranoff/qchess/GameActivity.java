@@ -106,6 +106,14 @@ public class GameActivity extends AppCompatActivity {
 
                 if(currentPiece != null) {
                     ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+
+                    if(currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
+                        lastPiece.setAlpha(1.0f);
+                        lastPiece.getPiece().setProbability(1.0f);
+                    }
+
+                    Coordinates pieceCoordinates = new Coordinates(move.getEnd().getX(), move.getStart().getY());
+                    pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
                 }
 
                 resetBoardColors();
@@ -161,6 +169,7 @@ public class GameActivity extends AppCompatActivity {
                 pieceViews[startCoordinates.getY()][startCoordinates.getX()] = secondPieceView;
                 resetBoardColors();
                 ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+                firstSplitMove = null;
             }
         } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_200)).getConstantState())) {
             Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
@@ -197,6 +206,7 @@ public class GameActivity extends AppCompatActivity {
                 pieceViews[endCoordinates.getY()][endCoordinates.getX()] = secondPieceView;
                 resetBoardColors();
                 ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+                firstSplitMove = null;
             }
         } else {
             resetBoardColors();

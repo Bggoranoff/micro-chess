@@ -86,7 +86,9 @@ public class Board implements ChessBoard {
     public void executeMove(Piece piece, Move move) {
         get(move.getStart().getX(), move.getStart().getY()).setPiece(null);
         Square square = get(move.getEnd().getX(), move.getEnd().getY());
-        take(move.getEnd().getX(), move.getEnd().getY());
+        if(square.getPiece() != null && !square.getPiece().getColor().equals(piece.getColor())) {
+            take(move.getEnd().getX(), move.getEnd().getY());
+        }
         square.setPiece(piece);
         history.add(move.toString());
     }
@@ -106,12 +108,10 @@ public class Board implements ChessBoard {
     @Override
     public void take(int x, int y) {
         Piece pieceToTake = get(x, y).getPiece();
-        if(pieceToTake != null) {
-            if(pieceToTake.getColor().equals(ChessColor.WHITE)) {
-                takenWhitePieces.add(pieceToTake);
-            } else {
-                takenBlackPieces.add(pieceToTake);
-            }
+        if(pieceToTake.getColor().equals(ChessColor.WHITE)) {
+            takenWhitePieces.add(pieceToTake);
+        } else {
+            takenBlackPieces.add(pieceToTake);
         }
     }
 

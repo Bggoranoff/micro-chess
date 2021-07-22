@@ -61,11 +61,11 @@ public abstract class Piece implements ChessPiece {
     }
 
     protected boolean isValid(int x, int y) {
-        return x >= 0 && x < 8 && y >= 0 && y < 8 && (board.get(x, y).getPiece() == null || board.get(x, y).getPiece().getColor() != color);
+        return x >= 0 && x < 8 && y >= 0 && y < 8 && (board.get(x, y).getPiece() == null || board.get(x, y).getPiece().getColor() != color || board.get(x, y).getPiece().getId().equals(id));
     }
 
     protected boolean isAvailableForSplit(int x, int y) {
-        return x >= 0 && x < 8 && y >= 0 && y < 8 && (board.get(x, y).getPiece() == null || board.get(x, y).getPiece().getId().equals(id));
+        return x >= 0 && x < 8 && y >= 0 && y < 8 && (board.get(x, y).getPiece() == null);
     }
 
     protected void getRookAvailableSquares(List<String> availableSquares, int x, int y) {
