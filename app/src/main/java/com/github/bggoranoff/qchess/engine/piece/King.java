@@ -105,32 +105,34 @@ public class King extends Piece {
         int x = square.getCoordinates().getX();
         int y = square.getCoordinates().getY();
 
-        if(isAvailableForSplit(x - 1, y)) {
-            availableSquares.add(formatTag(x - 1, y));
-        }
-        if(isAvailableForSplit(x + 1, y)) {
-            availableSquares.add(formatTag(x + 1, y));
-        }
+        if(probability == 1.0f) {
+            if (isAvailableForSplit(x - 1, y)) {
+                availableSquares.add(formatTag(x - 1, y));
+            }
+            if (isAvailableForSplit(x + 1, y)) {
+                availableSquares.add(formatTag(x + 1, y));
+            }
 
-        if(isAvailableForSplit(x, y - 1)) {
-            availableSquares.add(formatTag(x, y - 1));
-        }
-        if(isAvailableForSplit(x, y + 1)) {
-            availableSquares.add(formatTag(x, y + 1));
-        }
+            if (isAvailableForSplit(x, y - 1)) {
+                availableSquares.add(formatTag(x, y - 1));
+            }
+            if (isAvailableForSplit(x, y + 1)) {
+                availableSquares.add(formatTag(x, y + 1));
+            }
 
-        if(isAvailableForSplit(x - 1, y - 1)) {
-            availableSquares.add(formatTag(x - 1, y - 1));
-        }
-        if(isAvailableForSplit(x - 1, y + 1)) {
-            availableSquares.add(formatTag(x - 1, y + 1));
-        }
+            if (isAvailableForSplit(x - 1, y - 1)) {
+                availableSquares.add(formatTag(x - 1, y - 1));
+            }
+            if (isAvailableForSplit(x - 1, y + 1)) {
+                availableSquares.add(formatTag(x - 1, y + 1));
+            }
 
-        if(isAvailableForSplit(x + 1, y - 1)) {
-            availableSquares.add(formatTag(x + 1, y - 1));
-        }
-        if(isAvailableForSplit(x + 1, y + 1)) {
-            availableSquares.add(formatTag(x + 1, y + 1));
+            if (isAvailableForSplit(x + 1, y - 1)) {
+                availableSquares.add(formatTag(x + 1, y - 1));
+            }
+            if (isAvailableForSplit(x + 1, y + 1)) {
+                availableSquares.add(formatTag(x + 1, y + 1));
+            }
         }
 
         return availableSquares;

@@ -42,8 +42,10 @@ public class Queen extends Piece {
         int x = square.getCoordinates().getX();
         int y = square.getCoordinates().getY();
 
-        getBishopAvailableSplitSquares(availableSquares, x, y);
-        getRookAvailableSplitSquares(availableSquares, x, y);
+        if(probability == 1.0f) {
+            getBishopAvailableSplitSquares(availableSquares, x, y);
+            getRookAvailableSplitSquares(availableSquares, x, y);
+        }
 
         return availableSquares;
     }

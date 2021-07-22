@@ -43,7 +43,9 @@ public class Rook extends Piece {
         int x = square.getCoordinates().getX();
         int y = square.getCoordinates().getY();
 
-        getRookAvailableSplitSquares(availableSquares, x, y);
+        if(probability == 1.0f) {
+            getRookAvailableSplitSquares(availableSquares, x, y);
+        }
 
         return availableSquares;
     }
