@@ -34,7 +34,7 @@ public class King extends Piece {
                 break;
             }
         }
-        if(isCastlingAvailable && isRookForCastling(x - 3, file)) {
+        if(isCastlingAvailable && isRookForCastling(x - 4, file)) {
             availableSquares.add(formatTag(x - 2, file));
         }
 
@@ -46,7 +46,7 @@ public class King extends Piece {
                 break;
             }
         }
-        if(isCastlingAvailable && isRookForCastling(x + 4, file)) {
+        if(isCastlingAvailable && isRookForCastling(x + 3, file)) {
             availableSquares.add(formatTag(x + 2, file));
         }
     }

@@ -60,13 +60,13 @@ public class GameActivity extends AppCompatActivity {
                     Coordinates rookCoordinates;
                     Coordinates updatedRookCoordinates;
                     if(move.getStart().getX() > move.getEnd().getX()) {
-                        rookCoordinates = new Coordinates(move.getStart().getX() - 3, move.getStart().getY());
+                        rookCoordinates = new Coordinates(move.getStart().getX() - 4, move.getStart().getY());
                         rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
-                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() + 2, rookCoordinates.getY());
+                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() + 3, rookCoordinates.getY());
                     } else {
-                        rookCoordinates = new Coordinates(move.getStart().getX() + 4, move.getStart().getY());
+                        rookCoordinates = new Coordinates(move.getStart().getX() + 3, move.getStart().getY());
                         rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
-                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() - 3, rookCoordinates.getY());
+                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() - 2, rookCoordinates.getY());
                     }
 
                     if(rook != null) {

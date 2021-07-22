@@ -57,8 +57,8 @@ public class Board implements ChessBoard {
         matrix[0][5].setPiece(new Bishop(this, primaryColor));
 
         // user king and queen
-        matrix[0][3].setPiece(new King(this, primaryColor));
-        matrix[0][4].setPiece(new Queen(this, primaryColor));
+        matrix[0][4].setPiece(new King(this, primaryColor));
+        matrix[0][3].setPiece(new Queen(this, primaryColor));
 
         // opponent pawns
         for(int i = 0; i < 8; i++) {
@@ -78,8 +78,8 @@ public class Board implements ChessBoard {
         matrix[7][5].setPiece(new Bishop(this, secondaryColor));
 
         // opponent king and queen
-        matrix[7][3].setPiece(new King(this, secondaryColor));
-        matrix[7][4].setPiece(new Queen(this, secondaryColor));
+        matrix[7][4].setPiece(new King(this, secondaryColor));
+        matrix[7][3].setPiece(new Queen(this, secondaryColor));
     }
 
     @Override
@@ -88,6 +88,7 @@ public class Board implements ChessBoard {
         Square square = get(move.getEnd().getX(), move.getEnd().getY());
         take(move.getEnd().getX(), move.getEnd().getY());
         square.setPiece(piece);
+        history.add(move);
     }
 
     @Override
