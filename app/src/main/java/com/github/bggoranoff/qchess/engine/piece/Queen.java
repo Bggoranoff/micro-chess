@@ -51,7 +51,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public void split(Move firstMove, Move secondMove) {
+    public Queen[] split(Move firstMove, Move secondMove) {
         board.get(firstMove.getStart().getX(), firstMove.getStart().getY()).setPiece(null);
         Square firstSquare = board.get(firstMove.getEnd().getX(), firstMove.getEnd().getY());
         Square secondSquare = board.get(secondMove.getEnd().getX(), secondMove.getEnd().getY());
@@ -63,6 +63,8 @@ public class Queen extends Piece {
         secondSquare.setPiece(secondQueen);
 
         board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
+
+        return new Queen[]{firstQueen, secondQueen};
     }
 
     @NonNull

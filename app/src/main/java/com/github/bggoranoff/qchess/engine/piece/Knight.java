@@ -103,7 +103,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public void split(Move firstMove, Move secondMove) {
+    public Knight[] split(Move firstMove, Move secondMove) {
         board.get(firstMove.getStart().getX(), firstMove.getStart().getY()).setPiece(null);
         Square firstSquare = board.get(firstMove.getEnd().getX(), firstMove.getEnd().getY());
         Square secondSquare = board.get(secondMove.getEnd().getX(), secondMove.getEnd().getY());
@@ -115,6 +115,8 @@ public class Knight extends Piece {
         secondSquare.setPiece(secondKnight);
 
         board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
+
+        return new Knight[]{firstKnight, secondKnight};
     }
 
     @NonNull

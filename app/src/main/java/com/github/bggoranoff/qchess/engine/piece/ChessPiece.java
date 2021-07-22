@@ -14,5 +14,5 @@ public interface ChessPiece {
 
     void move(Move move);
 
-    void split(Move firstMove, Move secondMove);
+    Piece[] split(Move firstMove, Move secondMove);
 }

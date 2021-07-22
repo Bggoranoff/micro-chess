@@ -49,7 +49,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public void split(Move firstMove, Move secondMove) {
+    public Bishop[] split(Move firstMove, Move secondMove) {
         board.get(firstMove.getStart().getX(), firstMove.getStart().getY()).setPiece(null);
         Square firstSquare = board.get(firstMove.getEnd().getX(), firstMove.getEnd().getY());
         Square secondSquare = board.get(secondMove.getEnd().getX(), secondMove.getEnd().getY());
@@ -61,6 +61,8 @@ public class Bishop extends Piece {
         secondSquare.setPiece(secondBishop);
 
         board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
+
+        return new Bishop[]{firstBishop, secondBishop};
     }
 
     @NonNull

@@ -38,6 +38,8 @@ public class GameActivity extends AppCompatActivity {
     private View currentSquare = null;
     private PieceView[][] pieceViews;
 
+    private Move firstSplitMove = null;
+
     private void clickSquare(View view) {
         if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
             // TODO: check if there is a split to perform
@@ -115,7 +117,86 @@ public class GameActivity extends AppCompatActivity {
             currentSquare.setBackground(AppCompatResources.getDrawable(this, ChessAnimator.getSquareColor(currentSquare.getTag().toString())));
             if(currentPiece != null) {
                 resetBoardColors();
-                currentPiece = null;
+                if(currentPiece.getPiece().getProbability() == 1.0f) {
+                    Piece containedPiece = currentPiece.getPiece();
+                    List<String> availableSquares = containedPiece.getAvailableSplitSquares();
+                    if (availableSquares.size() > 0) {
+                        for (String square : availableSquares) {
+                            Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
+                            int squareId = ResourceSelector.getResourceId(
+                                    this,
+                                    "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
+                            );
+                            View v = findViewById(squareId);
+                            v.setBackground(AppCompatResources.getDrawable(this, R.color.teal_200));
+                        }
+                        currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
+                    }
+                    currentPiece = null;
+                }
+            }
+        } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_700)).getConstantState())) {
+            Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
+            if(firstSplitMove == null) {
+                resetBoardColors();
+            } else {
+                Move secondSplitMove = new Move(
+                        startCoordinates,
+                        startCoordinates
+                );
+                Piece[] resultingPieces = lastPiece.getPiece().split(firstSplitMove, secondSplitMove);
+
+                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
+                PieceView firstPieceView = pieceViews[firstSplitMove.getEnd().getY()][firstSplitMove.getEnd().getX()];
+                firstPieceView.setPiece(resultingPieces[0]);
+                firstPieceView.setOnClickListener(v -> clickPiece(firstPieceView));
+
+                PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
+                secondPieceView.setAlpha(.5f);
+                secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+                secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
+                layout.addView(secondPieceView);
+                setPieceLocation(secondPieceView, currentSquare);
+                visualiseMove(secondPieceView, view);
+                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = secondPieceView;
+                resetBoardColors();
+                ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+            }
+        } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_200)).getConstantState())) {
+            Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
+            Coordinates endCoordinates = TextFormatter.getCoordinates(view.getTag().toString());
+            if(firstSplitMove == null) {
+                firstSplitMove = new Move(startCoordinates, endCoordinates);
+                PieceView pieceView = new PieceView(this, lastPiece.getPiece(), view.getId());
+                pieceView.setAlpha(.5f);
+                pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+                pieceView.setOnClickListener(null);
+                layout.addView(pieceView);
+                setPieceLocation(pieceView, currentSquare);
+                visualiseMove(pieceView, view);
+                pieceViews[endCoordinates.getY()][endCoordinates.getX()] = pieceView;
+            } else {
+                Move secondSplitMove = new Move(
+                        startCoordinates,
+                        endCoordinates
+                );
+                Piece[] resultingPieces = lastPiece.getPiece().split(firstSplitMove, secondSplitMove);
+
+                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
+                PieceView firstPieceView = pieceViews[firstSplitMove.getEnd().getY()][firstSplitMove.getEnd().getX()];
+                firstPieceView.setPiece(resultingPieces[0]);
+                firstPieceView.setOnClickListener(v -> clickPiece(firstPieceView));
+
+                PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
+                secondPieceView.setAlpha(.5f);
+                secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+                secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
+                layout.addView(secondPieceView);
+                setPieceLocation(secondPieceView, currentSquare);
+                visualiseMove(secondPieceView, view);
+                pieceViews[endCoordinates.getY()][endCoordinates.getX()] = secondPieceView;
+                resetBoardColors();
+                ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
             }
         } else {
             resetBoardColors();

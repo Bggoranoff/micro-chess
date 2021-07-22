@@ -51,7 +51,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public void split(Move firstMove, Move secondMove) {
+    public Rook[] split(Move firstMove, Move secondMove) {
         board.get(firstMove.getStart().getX(), firstMove.getStart().getY()).setPiece(null);
         Square firstSquare = board.get(firstMove.getEnd().getX(), firstMove.getEnd().getY());
         Square secondSquare = board.get(secondMove.getEnd().getX(), secondMove.getEnd().getY());
@@ -63,6 +63,8 @@ public class Rook extends Piece {
         secondSquare.setPiece(secondRook);
 
         board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
+
+        return new Rook[]{firstRook, secondRook};
     }
 
     @NonNull

@@ -55,9 +55,9 @@ public abstract class Piece implements ChessPiece {
     }
 
     @Override
-    public void split(Move firstMove, Move secondMove) {
+    public Piece[] split(Move firstMove, Move secondMove) {
         // TODO: handle for every instance
-        return;
+        return new Piece[0];
     }
 
     protected boolean isValid(int x, int y) {
