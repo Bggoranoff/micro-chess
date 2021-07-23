@@ -7,7 +7,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewManager;
-import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -106,8 +105,11 @@ public class GameActivity extends AppCompatActivity {
                 visualiseMove(lastPiece, view);
 
                 if(currentPiece != null) {
+                    boolean pieceTaken;
+
                     if(lastPiece.getPiece().isThere()) {
                         ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+                        pieceTaken = true;
 
                         if (currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
                             lastPiece.setAlpha(1.0f);
@@ -121,12 +123,29 @@ public class GameActivity extends AppCompatActivity {
                             lastPiece.getPiece().setPair(null);
                         }
                     } else {
+                        pieceTaken = false;
                         Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
                         PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
                         pair.setAlpha(1.0f);
                         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
                         pair.getPiece().setPair(null);
                     }
+
+                    if(pieceTaken) {
+                        if (currentPiece.getPiece().isThere() && currentPiece.getPiece().getPair() != null) {
+                            Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
+                            PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+                            ((ViewManager) pair.getParent()).removeView(pair);
+                            pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
+                            currentPiece.getPiece().setPair(null);
+                        } else if (currentPiece.getPiece().getPair() != null) {
+                            Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
+                            PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+                            pair.setAlpha(1.0f);
+                            pair.getPiece().setPair(null);
+                        }
+                    }
+
                     Coordinates pieceCoordinates = new Coordinates(move.getStart().getX(), move.getStart().getY()); // TODO: see if fixed, getStart()
                     pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
                 }

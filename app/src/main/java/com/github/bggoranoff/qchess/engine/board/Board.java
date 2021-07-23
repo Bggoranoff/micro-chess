@@ -87,7 +87,6 @@ public class Board implements ChessBoard {
         get(move.getStart().getX(), move.getStart().getY()).setPiece(null);
         Square square = get(move.getEnd().getX(), move.getEnd().getY());
         if(square.getPiece() != null && !square.getPiece().getColor().equals(piece.getColor())) {
-            System.out.println("NOT MERGING CORRECTLY");
             piece.reveal();
             if(piece.isThere()) {
                 if(piece.getProbability() < 1.0f) {
@@ -121,10 +120,23 @@ public class Board implements ChessBoard {
     @Override
     public void take(int x, int y) {
         Piece pieceToTake = get(x, y).getPiece();
-        if(pieceToTake.getColor().equals(ChessColor.WHITE)) {
-            takenWhitePieces.add(pieceToTake);
+        pieceToTake.reveal();
+        if(pieceToTake.isThere()) {
+            if (pieceToTake.getColor().equals(ChessColor.WHITE)) {
+                takenWhitePieces.add(pieceToTake);
+            } else {
+                takenBlackPieces.add(pieceToTake);
+            }
+            if(pieceToTake.getPair() != null) {
+                pieceToTake.setProbability(1.0f);
+                pieceToTake.getPair().getSquare().setPiece(null);
+                pieceToTake.getPair().setProbability(0.0f);
+                pieceToTake.getSquare().setPiece(null);
+            }
         } else {
-            takenBlackPieces.add(pieceToTake);
+            pieceToTake.getPair().setProbability(1.0f);
+            pieceToTake.getSquare().setPiece(null);
+            pieceToTake.setProbability(0.0f);
         }
     }
 
