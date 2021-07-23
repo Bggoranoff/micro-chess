@@ -39,10 +39,10 @@ public class GameActivity extends AppCompatActivity {
     private PieceView[][] pieceViews;
 
     private Move firstSplitMove = null;
+    private boolean pieceTaken = false;
 
     private void clickSquare(View view) {
         if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
-            // TODO: check if there is a split to perform
             if(lastPiece != null && currentSquare != null) {
                 Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
                 Coordinates endCoordinates = TextFormatter.getCoordinates(view.getTag().toString());
@@ -56,95 +56,20 @@ public class GameActivity extends AppCompatActivity {
                 pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
                 pieceViews[endCoordinates.getY()][endCoordinates.getX()] = lastPiece;
 
-                // Castling check
                 if(Math.abs(move.getStart().getX() - move.getEnd().getX()) == 2 && lastPiece.getPiece() instanceof King) {
-                    PieceView rook;
-                    Coordinates rookCoordinates;
-                    Coordinates updatedRookCoordinates;
-                    if(move.getStart().getX() > move.getEnd().getX()) {
-                        rookCoordinates = new Coordinates(move.getStart().getX() - 4, move.getStart().getY());
-                        rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
-                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() + 3, rookCoordinates.getY());
-                    } else {
-                        rookCoordinates = new Coordinates(move.getStart().getX() + 3, move.getStart().getY());
-                        rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
-                        updatedRookCoordinates = new Coordinates(rookCoordinates.getX() - 2, rookCoordinates.getY());
-                    }
-
-                    if(rook != null) {
-                        Move rookMove = new Move(
-                                rookCoordinates,
-                                updatedRookCoordinates
-                        );
-                        rook.getPiece().move(rookMove);
-
-                        pieceViews[rookCoordinates.getY()][rookCoordinates.getX()] = null;
-                        pieceViews[updatedRookCoordinates.getY()][updatedRookCoordinates.getX()] = null;
-
-                        int rookSquareId = ResourceSelector.getResourceId(
-                                this,
-                                "cell" + updatedRookCoordinates.getY() + "" + updatedRookCoordinates.getX()
-                        );
-                        View rookSquare = findViewById(rookSquareId);
-                        rook.setSquareId(rookSquareId);
-                        visualiseMove(rook, rookSquare);
-                    }
+                    performCastling(move);
                 }
 
                 if(lastPiece.getPiece() instanceof Pawn && move.getStart().getX() != move.getEnd().getX() && currentPiece == null) {
-                    Coordinates pieceCoordinates = new Coordinates(move.getEnd().getX(), move.getStart().getY());
-                    PieceView pieceToTake = pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()];
-                    if(pieceToTake != null) {
-                        board.take(move.getEnd().getX(), move.getStart().getY());
-                        ((ViewManager) pieceToTake.getParent()).removeView(pieceToTake);
-                        pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
-                    }
+                    performEnPassant(move);
                 }
 
                 lastPiece.setSquareId(view.getId());
                 visualiseMove(lastPiece, view);
 
                 if(currentPiece != null) {
-                    boolean pieceTaken;
-
-                    if(lastPiece.getPiece().isThere()) {
-                        ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
-                        pieceTaken = true;
-
-                        if (currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
-                            lastPiece.setAlpha(1.0f);
-                            lastPiece.getPiece().setProbability(1.0f);
-                        } else if(lastPiece.getPiece().getPair() != null) {
-                            lastPiece.setAlpha(1.0f);
-                            Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
-                            PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
-                            ((ViewManager) pair.getParent()).removeView(pair);
-                            pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
-                            lastPiece.getPiece().setPair(null);
-                        }
-                    } else {
-                        pieceTaken = false;
-                        Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
-                        PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
-                        pair.setAlpha(1.0f);
-                        ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
-                        pair.getPiece().setPair(null);
-                    }
-
-                    if(pieceTaken) {
-                        if (currentPiece.getPiece().isThere() && currentPiece.getPiece().getPair() != null) {
-                            Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
-                            PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
-                            ((ViewManager) pair.getParent()).removeView(pair);
-                            pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
-                            currentPiece.getPiece().setPair(null);
-                        } else if (currentPiece.getPiece().getPair() != null) {
-                            Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
-                            PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
-                            pair.setAlpha(1.0f);
-                            pair.getPiece().setPair(null);
-                        }
-                    }
+                    revealPieceOnTake();
+                    revealTakenPiece();
 
                     Coordinates pieceCoordinates = new Coordinates(move.getStart().getX(), move.getStart().getY()); // TODO: see if fixed, getStart()
                     pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
@@ -156,112 +81,30 @@ public class GameActivity extends AppCompatActivity {
                 currentPiece = null;
             }
         } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
-            // TODO: check if a split should be initiated
             currentSquare.setBackground(AppCompatResources.getDrawable(this, ChessAnimator.getSquareColor(currentSquare.getTag().toString())));
             if(currentPiece != null) {
-                resetBoardColors();
-                if(currentPiece.getPiece().getProbability() == 1.0f) {
-                    Piece containedPiece = currentPiece.getPiece();
-                    List<String> availableSquares = containedPiece.getAvailableSplitSquares();
-                    if (availableSquares.size() > 0) {
-                        for (String square : availableSquares) {
-                            Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
-                            int squareId = ResourceSelector.getResourceId(
-                                    this,
-                                    "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
-                            );
-                            View v = findViewById(squareId);
-                            v.setBackground(AppCompatResources.getDrawable(this, R.color.teal_200));
-                        }
-                        currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
-                    }
-                    currentPiece = null;
-                }
+                displaySplitMoves();
             }
         } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_700)).getConstantState())) {
             Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
             if(firstSplitMove == null) {
                 resetBoardColors();
             } else {
-                Move secondSplitMove = new Move(
-                        startCoordinates,
-                        startCoordinates
-                );
-                Piece[] resultingPieces = lastPiece.getPiece().split(firstSplitMove, secondSplitMove);
-
-                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
-                PieceView firstPieceView = pieceViews[firstSplitMove.getEnd().getY()][firstSplitMove.getEnd().getX()];
-                firstPieceView.setPiece(resultingPieces[0]);
-                firstPieceView.setOnClickListener(v -> clickPiece(firstPieceView));
-
-                PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
-                secondPieceView.setAlpha(.5f);
-                secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
-                secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
-                layout.addView(secondPieceView);
-                setPieceLocation(secondPieceView, currentSquare);
-                visualiseMove(secondPieceView, view);
-                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = secondPieceView;
-                resetBoardColors();
-                ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+                completeSplit(view, startCoordinates, startCoordinates);
                 firstSplitMove = null;
             }
         } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_200)).getConstantState())) {
             Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
             Coordinates endCoordinates = TextFormatter.getCoordinates(view.getTag().toString());
             if(firstSplitMove == null) {
-                firstSplitMove = new Move(startCoordinates, endCoordinates);
-                PieceView pieceView = new PieceView(this, lastPiece.getPiece(), view.getId());
-                pieceView.setAlpha(.5f);
-                pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
-                pieceView.setOnClickListener(null);
-                layout.addView(pieceView);
-                setPieceLocation(pieceView, currentSquare);
-                visualiseMove(pieceView, view);
-                pieceViews[endCoordinates.getY()][endCoordinates.getX()] = pieceView;
+                initiateSplit(view, startCoordinates, endCoordinates);
             } else {
-                Move secondSplitMove = new Move(
-                        startCoordinates,
-                        endCoordinates
-                );
-                Piece[] resultingPieces = lastPiece.getPiece().split(firstSplitMove, secondSplitMove);
-
-                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
-                PieceView firstPieceView = pieceViews[firstSplitMove.getEnd().getY()][firstSplitMove.getEnd().getX()];
-                firstPieceView.setPiece(resultingPieces[0]);
-                firstPieceView.setOnClickListener(v -> clickPiece(firstPieceView));
-
-                PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
-                secondPieceView.setAlpha(.5f);
-                secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
-                secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
-                layout.addView(secondPieceView);
-                setPieceLocation(secondPieceView, currentSquare);
-                visualiseMove(secondPieceView, view);
-                pieceViews[endCoordinates.getY()][endCoordinates.getX()] = secondPieceView;
-                resetBoardColors();
-                ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+                completeSplit(view, startCoordinates, endCoordinates);
                 firstSplitMove = null;
             }
         } else {
             resetBoardColors();
-            if(currentPiece != null) {
-                Piece containedPiece = currentPiece.getPiece();
-                List<String> availableSquares = containedPiece.getAvailableSquares();
-                for(String square : availableSquares) {
-                    Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
-                    int squareId = ResourceSelector.getResourceId(
-                            this,
-                            "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
-                    );
-                    View v = findViewById(squareId);
-                    v.setBackground(AppCompatResources.getDrawable(this, R.color.dark_red));
-                }
-                lastPiece = currentPiece;
-                currentPiece = null;
-            }
-            view.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
-            currentSquare = view;
+            clickOnEmptySquare(view);
         }
     }
 
@@ -271,13 +114,180 @@ public class GameActivity extends AppCompatActivity {
         squareView.performClick();
     }
 
+    private void clickOnEmptySquare(View view) {
+        if(currentPiece != null) {
+            Piece containedPiece = currentPiece.getPiece();
+            List<String> availableSquares = containedPiece.getAvailableSquares();
+            for(String square : availableSquares) {
+                Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
+                int squareId = ResourceSelector.getResourceId(
+                        this,
+                        "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
+                );
+                View v = findViewById(squareId);
+                v.setBackground(AppCompatResources.getDrawable(this, R.color.dark_red));
+            }
+            lastPiece = currentPiece;
+            currentPiece = null;
+        }
+        view.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
+        currentSquare = view;
+    }
+
+    private void displaySplitMoves() {
+        resetBoardColors();
+        if(currentPiece.getPiece().getProbability() == 1.0f) {
+            Piece containedPiece = currentPiece.getPiece();
+            List<String> availableSquares = containedPiece.getAvailableSplitSquares();
+            if (availableSquares.size() > 0) {
+                for (String square : availableSquares) {
+                    Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
+                    int squareId = ResourceSelector.getResourceId(
+                            this,
+                            "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
+                    );
+                    View v = findViewById(squareId);
+                    v.setBackground(AppCompatResources.getDrawable(this, R.color.teal_200));
+                }
+                currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
+            }
+            currentPiece = null;
+        }
+    }
+
+    private void initiateSplit(View view, Coordinates startCoordinates, Coordinates endCoordinates) {
+        firstSplitMove = new Move(startCoordinates, endCoordinates);
+        PieceView pieceView = new PieceView(this, lastPiece.getPiece(), view.getId());
+        pieceView.setAlpha(.5f);
+        pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        pieceView.setOnClickListener(null);
+        layout.addView(pieceView);
+        setPieceLocation(pieceView, currentSquare);
+        visualiseMove(pieceView, view);
+        pieceViews[endCoordinates.getY()][endCoordinates.getX()] = pieceView;
+    }
+
+    private void completeSplit(View view, Coordinates startCoordinates, Coordinates endCoordinates) {
+        Move secondSplitMove = new Move(
+                startCoordinates,
+                endCoordinates
+        );
+        Piece[] resultingPieces = lastPiece.getPiece().split(firstSplitMove, secondSplitMove);
+
+        pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
+        PieceView firstPieceView = pieceViews[firstSplitMove.getEnd().getY()][firstSplitMove.getEnd().getX()];
+        firstPieceView.setPiece(resultingPieces[0]);
+        firstPieceView.setOnClickListener(v -> clickPiece(firstPieceView));
+
+        PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
+        secondPieceView.setAlpha(.5f);
+        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
+        layout.addView(secondPieceView);
+        setPieceLocation(secondPieceView, currentSquare);
+        visualiseMove(secondPieceView, view);
+        pieceViews[endCoordinates.getY()][endCoordinates.getX()] = secondPieceView;
+        resetBoardColors();
+        ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+    }
+
+    private void revealPieceOnTake() {
+        if(lastPiece.getPiece().isThere()) {
+            ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+
+            if (currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
+                lastPiece.setAlpha(1.0f);
+                lastPiece.getPiece().setProbability(1.0f);
+            } else if(lastPiece.getPiece().getPair() != null) {
+                pieceTaken = true;
+                lastPiece.setAlpha(1.0f);
+                Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
+                PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+                ((ViewManager) pair.getParent()).removeView(pair);
+                pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
+                lastPiece.getPiece().setPair(null);
+            } else {
+                pieceTaken = true;
+            }
+        } else {
+            Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
+            PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+            pair.setAlpha(1.0f);
+            ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+            pair.getPiece().setPair(null);
+        }
+    }
+
+    private void revealTakenPiece() {
+        if(pieceTaken) {
+            if (currentPiece.getPiece().isThere() && currentPiece.getPiece().getPair() != null) {
+                Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
+                PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+                ((ViewManager) pair.getParent()).removeView(pair);
+                pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
+                currentPiece.getPiece().setPair(null);
+            } else if (currentPiece.getPiece().getPair() != null) {
+                Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
+                PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+                pair.setAlpha(1.0f);
+                pair.getPiece().setPair(null);
+            }
+        }
+        pieceTaken = false;
+    }
+
+    private void performCastling(Move move) {
+        PieceView rook;
+        Coordinates rookCoordinates;
+        Coordinates updatedRookCoordinates;
+        if(move.getStart().getX() > move.getEnd().getX()) {
+            rookCoordinates = new Coordinates(move.getStart().getX() - 4, move.getStart().getY());
+            rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
+            updatedRookCoordinates = new Coordinates(rookCoordinates.getX() + 3, rookCoordinates.getY());
+        } else {
+            rookCoordinates = new Coordinates(move.getStart().getX() + 3, move.getStart().getY());
+            rook = pieceViews[rookCoordinates.getY()][rookCoordinates.getX()];
+            updatedRookCoordinates = new Coordinates(rookCoordinates.getX() - 2, rookCoordinates.getY());
+        }
+        performCastling(rook, rookCoordinates, updatedRookCoordinates);
+    }
+
+    private void performCastling(PieceView rook, Coordinates rookCoordinates, Coordinates updatedRookCoordinates) {
+        if(rook != null) {
+            Move rookMove = new Move(
+                    rookCoordinates,
+                    updatedRookCoordinates
+            );
+            rook.getPiece().move(rookMove);
+
+            pieceViews[rookCoordinates.getY()][rookCoordinates.getX()] = null;
+            pieceViews[updatedRookCoordinates.getY()][updatedRookCoordinates.getX()] = null;
+
+            int rookSquareId = ResourceSelector.getResourceId(
+                    this,
+                    "cell" + updatedRookCoordinates.getY() + "" + updatedRookCoordinates.getX()
+            );
+            View rookSquare = findViewById(rookSquareId);
+            rook.setSquareId(rookSquareId);
+            visualiseMove(rook, rookSquare);
+        }
+    }
+
+    private void performEnPassant(Move move) {
+        Coordinates pieceCoordinates = new Coordinates(move.getEnd().getX(), move.getStart().getY());
+        PieceView pieceToTake = pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()];
+        if(pieceToTake != null) {
+            board.take(move.getEnd().getX(), move.getStart().getY());
+            ((ViewManager) pieceToTake.getParent()).removeView(pieceToTake);
+            pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
+        }
+    }
+
     private void setPieceLocation(PieceView pieceView, View squareView) {
-        squareView.post(() -> {
-            int[] location = new int[2];
-            squareView.getLocationOnScreen(location);
-            pieceView.setX(location[0]);
-            pieceView.setY(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET);
-        });
+        int[] location = new int[2];
+        squareView.getLocationOnScreen(location);
+        pieceView.setX(location[0]);
+        pieceView.setY(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET);
     }
 
     private void visualiseMove(PieceView pieceView, View squareView) {
@@ -305,7 +315,9 @@ public class GameActivity extends AppCompatActivity {
                     pieceViews[currentSquare.getCoordinates().getY()][currentSquare.getCoordinates().getX()] = pieceView;
                     pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
                     layout.addView(pieceView);
-                    setPieceLocation(pieceView, squareView);
+                    squareView.post(() -> {
+                        setPieceLocation(pieceView, squareView);
+                    });
                     pieceView.setOnClickListener(v -> clickPiece(pieceView));
                 }
             }
