@@ -15,4 +15,6 @@ public interface ChessPiece {
     void move(Move move);
 
     Piece[] split(Move firstMove, Move secondMove);
+
+    boolean reveal();
 }

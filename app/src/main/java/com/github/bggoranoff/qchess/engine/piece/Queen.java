@@ -59,6 +59,9 @@ public class Queen extends Piece {
         Queen firstQueen = new Queen(board, color, id, .5f);
         Queen secondQueen = new Queen(board, color, id, .5f);
 
+        firstQueen.setPair(secondQueen);
+        secondQueen.setPair(firstQueen);
+
         firstSquare.setPiece(firstQueen);
         secondSquare.setPiece(secondQueen);
 

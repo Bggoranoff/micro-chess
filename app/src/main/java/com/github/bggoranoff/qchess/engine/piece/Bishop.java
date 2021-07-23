@@ -57,6 +57,9 @@ public class Bishop extends Piece {
         Bishop firstBishop = new Bishop(board, color, id, .5f);
         Bishop secondBishop = new Bishop(board, color, id, .5f);
 
+        firstBishop.setPair(secondBishop);
+        secondBishop.setPair(firstBishop);
+
         firstSquare.setPiece(firstBishop);
         secondSquare.setPiece(secondBishop);
 

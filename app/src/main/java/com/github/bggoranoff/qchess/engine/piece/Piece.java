@@ -7,6 +7,7 @@ import com.github.bggoranoff.qchess.engine.util.ChessColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.github.bggoranoff.qchess.engine.util.ChessTextFormatter.formatTag;
@@ -21,6 +22,8 @@ public abstract class Piece implements ChessPiece {
     protected boolean moved = false;
     protected String id;
     protected boolean split = false;
+    protected boolean isThere = true;
+    protected Piece pair = null;
 
     public Piece(Board board, ChessColor color) {
         this.board = board;
@@ -49,7 +52,6 @@ public abstract class Piece implements ChessPiece {
 
     @Override
     public void move(Move move) {
-        // TODO: handle probability measurements
         moved = true;
         board.executeMove(this, move);
     }
@@ -58,6 +60,12 @@ public abstract class Piece implements ChessPiece {
     public Piece[] split(Move firstMove, Move secondMove) {
         // TODO: handle for every instance
         return new Piece[0];
+    }
+
+    @Override
+    public boolean reveal() {
+        isThere = new Random().nextFloat() < probability;
+        return isThere;
     }
 
     protected boolean isValid(int x, int y) {
@@ -228,6 +236,10 @@ public abstract class Piece implements ChessPiece {
         }
     }
 
+    public Square getSquare() {
+        return square;
+    }
+
     public void setSquare(Square square) {
         this.square = square;
     }
@@ -248,12 +260,24 @@ public abstract class Piece implements ChessPiece {
         this.probability = probability;
     }
 
+    public Piece getPair() {
+        return pair;
+    }
+
+    public void setPair(Piece pair) {
+        this.pair = pair;
+    }
+
     public String getId() {
         return id;
     }
 
     public boolean isSplit() {
         return split;
+    }
+
+    public boolean isThere() {
+        return isThere;
     }
 
     public ChessColor getColor() {

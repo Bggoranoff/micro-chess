@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewManager;
+import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -105,20 +106,35 @@ public class GameActivity extends AppCompatActivity {
                 visualiseMove(lastPiece, view);
 
                 if(currentPiece != null) {
-                    ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
+                    if(lastPiece.getPiece().isThere()) {
+                        ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
 
-                    if(currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
-                        lastPiece.setAlpha(1.0f);
-                        lastPiece.getPiece().setProbability(1.0f);
+                        if (currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
+                            lastPiece.setAlpha(1.0f);
+                            lastPiece.getPiece().setProbability(1.0f);
+                        } else if(lastPiece.getPiece().getPair() != null) {
+                            lastPiece.setAlpha(1.0f);
+                            Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
+                            PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+                            ((ViewManager) pair.getParent()).removeView(pair);
+                            pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
+                            lastPiece.getPiece().setPair(null);
+                        }
+                    } else {
+                        Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
+                        PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
+                        pair.setAlpha(1.0f);
+                        ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+                        pair.getPiece().setPair(null);
                     }
-
-                    Coordinates pieceCoordinates = new Coordinates(move.getEnd().getX(), move.getStart().getY());
+                    Coordinates pieceCoordinates = new Coordinates(move.getStart().getX(), move.getStart().getY()); // TODO: see if fixed, getStart()
                     pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
                 }
 
                 resetBoardColors();
                 currentSquare = null;
                 lastPiece = null;
+                currentPiece = null;
             }
         } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
             // TODO: check if a split should be initiated

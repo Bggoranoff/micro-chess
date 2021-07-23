@@ -32,34 +32,29 @@ public class Knight extends Piece {
         int x = square.getCoordinates().getX();
         int y = square.getCoordinates().getY();
 
-        if(probability == 1.0f) {
-            if (isValid(x - 2, y + 1)) {
-                availableSquares.add(formatTag(x - 2, y + 1));
-            }
-            if (isValid(x - 2, y - 1)) {
-                availableSquares.add(formatTag(x - 2, y - 1));
-            }
-
-            if (isValid(x + 2, y + 1)) {
-                availableSquares.add(formatTag(x + 2, y + 1));
-            }
-            if (isValid(x + 2, y - 1)) {
-                availableSquares.add(formatTag(x + 2, y - 1));
-            }
-
-            if (isValid(x + 1, y - 2)) {
-                availableSquares.add(formatTag(x + 1, y - 2));
-            }
-            if (isValid(x - 1, y - 2)) {
-                availableSquares.add(formatTag(x - 1, y - 2));
-            }
-
-            if (isValid(x + 1, y + 2)) {
-                availableSquares.add(formatTag(x + 1, y + 2));
-            }
-            if (isValid(x - 1, y + 2)) {
-                availableSquares.add(formatTag(x - 1, y + 2));
-            }
+        if (isValid(x - 2, y + 1)) {
+            availableSquares.add(formatTag(x - 2, y + 1));
+        }
+        if (isValid(x - 2, y - 1)) {
+            availableSquares.add(formatTag(x - 2, y - 1));
+        }
+        if (isValid(x + 2, y + 1)) {
+            availableSquares.add(formatTag(x + 2, y + 1));
+        }
+        if (isValid(x + 2, y - 1)) {
+            availableSquares.add(formatTag(x + 2, y - 1));
+        }
+        if (isValid(x + 1, y - 2)) {
+            availableSquares.add(formatTag(x + 1, y - 2));
+        }
+        if (isValid(x - 1, y - 2)) {
+            availableSquares.add(formatTag(x - 1, y - 2));
+        }
+        if (isValid(x + 1, y + 2)) {
+            availableSquares.add(formatTag(x + 1, y + 2));
+        }
+        if (isValid(x - 1, y + 2)) {
+            availableSquares.add(formatTag(x - 1, y + 2));
         }
 
         return availableSquares;
@@ -110,6 +105,9 @@ public class Knight extends Piece {
 
         Knight firstKnight = new Knight(board, color, id, .5f);
         Knight secondKnight = new Knight(board, color, id, .5f);
+
+        firstKnight.setPair(secondKnight);
+        secondKnight.setPair(firstKnight);
 
         firstSquare.setPiece(firstKnight);
         secondSquare.setPiece(secondKnight);

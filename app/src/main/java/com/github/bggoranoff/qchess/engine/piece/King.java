@@ -147,6 +147,9 @@ public class King extends Piece {
         King firstKing = new King(board, color, id, .5f);
         King secondKing = new King(board, color, id, .5f);
 
+        firstKing.setPair(secondKing);
+        secondKing.setPair(firstKing);
+
         firstSquare.setPiece(firstKing);
         secondSquare.setPiece(secondKing);
 

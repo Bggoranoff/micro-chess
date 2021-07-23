@@ -87,7 +87,20 @@ public class Board implements ChessBoard {
         get(move.getStart().getX(), move.getStart().getY()).setPiece(null);
         Square square = get(move.getEnd().getX(), move.getEnd().getY());
         if(square.getPiece() != null && !square.getPiece().getColor().equals(piece.getColor())) {
-            take(move.getEnd().getX(), move.getEnd().getY());
+            System.out.println("NOT MERGING CORRECTLY");
+            piece.reveal();
+            if(piece.isThere()) {
+                if(piece.getProbability() < 1.0f) {
+                    piece.setProbability(1.0f);
+                    piece.getPair().getSquare().setPiece(null);
+                    piece.getPair().setProbability(0.0f);
+                }
+                take(move.getEnd().getX(), move.getEnd().getY());
+            } else {
+                piece.getPair().setProbability(1.0f);
+                piece.getSquare().setPiece(null);
+                piece.setProbability(0.0f);
+            }
         }
         square.setPiece(piece);
         history.add(move.toString());

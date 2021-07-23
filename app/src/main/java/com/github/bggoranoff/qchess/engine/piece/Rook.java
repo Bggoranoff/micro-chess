@@ -59,6 +59,9 @@ public class Rook extends Piece {
         Rook firstRook = new Rook(board, color, id, .5f);
         Rook secondRook = new Rook(board, color, id, .5f);
 
+        firstRook.setPair(secondRook);
+        secondRook.setPair(firstRook);
+
         firstSquare.setPiece(firstRook);
         secondSquare.setPiece(secondRook);
 
