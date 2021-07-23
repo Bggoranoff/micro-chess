@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="cell00" type="id" />
+    <item name="cell01" type="id" />
+    <item name="cell02" type="id" />
+    <item name="cell03" type="id" />
+    <item name="cell04" type="id" />
+    <item name="cell05" type="id" />
+    <item name="cell06" type="id" />
+    <item name="cell07" type="id" />
+
+    <item name="cell10" type="id" />
+    <item name="cell11" type="id" />
+    <item name="cell12" type="id" />
+    <item name="cell13" type="id" />
+    <item name="cell14" type="id" />
+    <item name="cell15" type="id" />
+    <item name="cell16" type="id" />
+    <item name="cell17" type="id" />
+
+    <item name="cell20" type="id" />
+    <item name="cell21" type="id" />
+    <item name="cell22" type="id" />
+    <item name="cell23" type="id" />
+    <item name="cell24" type="id" />
+    <item name="cell25" type="id" />
+    <item name="cell26" type="id" />
+    <item name="cell27" type="id" />
+
+    <item name="cell30" type="id" />
+    <item name="cell31" type="id" />
+    <item name="cell32" type="id" />
+    <item name="cell33" type="id" />
+    <item name="cell34" type="id" />
+    <item name="cell35" type="id" />
+    <item name="cell36" type="id" />
+    <item name="cell37" type="id" />
+
+    <item name="cell40" type="id" />
+    <item name="cell41" type="id" />
+    <item name="cell42" type="id" />
+    <item name="cell43" type="id" />
+    <item name="cell44" type="id" />
+    <item name="cell45" type="id" />
+    <item name="cell46" type="id" />
+    <item name="cell47" type="id" />
+
+    <item name="cell50" type="id" />
+    <item name="cell51" type="id" />
+    <item name="cell52" type="id" />
+    <item name="cell53" type="id" />
+    <item name="cell54" type="id" />
+    <item name="cell55" type="id" />
+    <item name="cell56" type="id" />
+    <item name="cell57" type="id" />
+
+    <item name="cell60" type="id" />
+    <item name="cell61" type="id" />
+    <item name="cell62" type="id" />
+    <item name="cell63" type="id" />
+    <item name="cell64" type="id" />
+    <item name="cell65" type="id" />
+    <item name="cell66" type="id" />
+    <item name="cell67" type="id" />
+
+    <item name="cell70" type="id" />
+    <item name="cell71" type="id" />
+    <item name="cell72" type="id" />
+    <item name="cell73" type="id" />
+    <item name="cell74" type="id" />
+    <item name="cell75" type="id" />
+    <item name="cell76" type="id" />
+    <item name="cell77" type="id" />
+</resources>

@@ -7,6 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewManager;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -16,6 +18,7 @@ import com.github.bggoranoff.qchess.engine.piece.King;
 import com.github.bggoranoff.qchess.engine.piece.Pawn;
 import com.github.bggoranoff.qchess.engine.piece.Piece;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
+import com.github.bggoranoff.qchess.engine.util.ChessTextFormatter;
 import com.github.bggoranoff.qchess.engine.util.Coordinates;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
@@ -31,6 +34,7 @@ public class GameActivity extends AppCompatActivity {
     private static final int PIECE_OFFSET = 10;
 
     private ConstraintLayout layout;
+    private TableLayout boardLayout;
 
     private Board board;
     private PieceView currentPiece = null;
@@ -40,6 +44,7 @@ public class GameActivity extends AppCompatActivity {
 
     private Move firstSplitMove = null;
     private boolean pieceTaken = false;
+    private ChessColor primaryColor;
 
     private void clickSquare(View view) {
         if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
@@ -303,12 +308,24 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     private void fillBoard() {
         for(int i = 0; i < 8; i++) {
+            int rowId = ResourceSelector.getResourceId(this, "row" + i);
+            TableRow currentRow = boardLayout.findViewById(rowId);
             for(int j = 0; j < 8; j++) {
-                Square currentSquare = board.get(i, j);
+                int y = primaryColor.equals(ChessColor.WHITE) ? 7 - i : i;
+                Square currentSquare = board.get(j, y);
                 int squareId = ResourceSelector.getResourceId(this, currentSquare.getId());
-                View squareView = findViewById(squareId);
+                View squareView = new View(this);
+                squareView.setId(squareId);
+                squareView.setLayoutParams(new TableRow.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+                squareView.setTag(ChessTextFormatter.formatTag(y, j));
+                squareView.setBackground(AppCompatResources.getDrawable(
+                        this,
+                        board.get(j, y).getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.black
+                ));
+                currentRow.addView(squareView);
                 squareView.setOnClickListener(this::clickSquare);
                 if(currentSquare.getPiece() != null) {
                     PieceView pieceView = new PieceView(this, currentSquare.getPiece(), squareId);
@@ -352,6 +369,9 @@ public class GameActivity extends AppCompatActivity {
         board = new Board();
         board.reset(ChessColor.WHITE);
         pieceViews = new PieceView[8][8];
+
+        boardLayout = findViewById(R.id.boardLayout);
+        primaryColor = ChessColor.BLACK;
         fillBoard();
     }
 }
