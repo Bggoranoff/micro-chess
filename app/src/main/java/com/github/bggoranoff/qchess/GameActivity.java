@@ -5,10 +5,13 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewManager;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -35,6 +38,7 @@ public class GameActivity extends AppCompatActivity {
 
     private ConstraintLayout layout;
     private TableLayout boardLayout;
+    private Button withdrawButton;
 
     private Board board;
     private PieceView currentPiece = null;
@@ -56,34 +60,7 @@ public class GameActivity extends AppCompatActivity {
                         startCoordinates,
                         endCoordinates
                 );
-                lastPiece.getPiece().move(move);
-
-                pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
-                pieceViews[endCoordinates.getY()][endCoordinates.getX()] = lastPiece;
-
-                if(Math.abs(move.getStart().getX() - move.getEnd().getX()) == 2 && lastPiece.getPiece() instanceof King) {
-                    performCastling(move);
-                }
-
-                if(lastPiece.getPiece() instanceof Pawn && move.getStart().getX() != move.getEnd().getX() && currentPiece == null) {
-                    performEnPassant(move);
-                }
-
-                lastPiece.setSquareId(view.getId());
-                visualiseMove(lastPiece, view);
-
-                if(currentPiece != null) {
-                    revealPieceOnTake();
-                    revealTakenPiece();
-
-                    Coordinates pieceCoordinates = new Coordinates(move.getStart().getX(), move.getStart().getY()); // TODO: see if fixed, getStart()
-                    pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
-                }
-
-                resetBoardColors();
-                currentSquare = null;
-                lastPiece = null;
-                currentPiece = null;
+                performMove(move, view);
             }
         } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
             currentSquare.setBackground(AppCompatResources.getDrawable(this, ChessAnimator.getSquareColor(currentSquare.getTag().toString())));
@@ -241,6 +218,76 @@ public class GameActivity extends AppCompatActivity {
         pieceTaken = false;
     }
 
+    private void performMove(Move move, View view) {
+        Coordinates startCoordinates = move.getStart();
+        Coordinates endCoordinates = move.getEnd();
+
+        lastPiece.getPiece().move(move);
+
+        pieceViews[startCoordinates.getY()][startCoordinates.getX()] = null;
+        pieceViews[endCoordinates.getY()][endCoordinates.getX()] = lastPiece;
+
+        if(Math.abs(move.getStart().getX() - move.getEnd().getX()) == 2 && lastPiece.getPiece() instanceof King) {
+            performCastling(move);
+        }
+
+        if(lastPiece.getPiece() instanceof Pawn && move.getStart().getX() != move.getEnd().getX() && currentPiece == null) {
+            performEnPassant(move);
+        }
+
+        lastPiece.setSquareId(view.getId());
+        visualiseMove(lastPiece, view);
+
+        if(currentPiece != null) {
+            revealPieceOnTake();
+            revealTakenPiece();
+
+            Coordinates pieceCoordinates = new Coordinates(move.getStart().getX(), move.getStart().getY()); // TODO: see if fixed, getStart()
+            pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
+        }
+
+        resetBoardColors();
+        currentSquare = null;
+        lastPiece = null;
+        currentPiece = null;
+    }
+
+    private void performSplit(Move firstMove, Move secondMove) {
+        Piece[] resultingPieces = lastPiece.getPiece().split(firstMove, secondMove);
+
+        View firstView = findViewById(ResourceSelector.getResourceId(
+                this,
+                "cell" + firstMove.getEnd().getX() + "" + firstMove.getEnd().getY()
+        ));
+        View secondView = findViewById(ResourceSelector.getResourceId(
+                this,
+                "cell" + secondMove.getEnd().getX() + "" + secondMove.getEnd().getY()
+        ));
+
+        PieceView firstPieceView = new PieceView(this, lastPiece.getPiece(), firstView.getId());
+        firstPieceView.setAlpha(.5f);
+        firstPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        layout.addView(firstPieceView);
+        setPieceLocation(firstPieceView, currentSquare);
+        visualiseMove(firstPieceView, firstView);
+        pieceViews[firstMove.getEnd().getY()][firstMove.getEnd().getX()] = firstPieceView;
+        firstPieceView.setPiece(resultingPieces[0]);
+        firstPieceView.setOnClickListener(v -> clickPiece(firstPieceView));
+
+        PieceView secondPieceView = new PieceView(this, resultingPieces[1], secondView.getId());
+        secondPieceView.setAlpha(.5f);
+        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
+        layout.addView(secondPieceView);
+        setPieceLocation(secondPieceView, currentSquare);
+        visualiseMove(secondPieceView, secondView);
+        pieceViews[secondMove.getEnd().getY()][secondMove.getEnd().getX()] = secondPieceView;
+
+        resetBoardColors();
+        ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+        pieceViews[firstMove.getStart().getY()][firstMove.getStart().getX()] = null;
+    }
+
     private void performCastling(Move move) {
         PieceView rook;
         Coordinates rookCoordinates;
@@ -308,6 +355,54 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    public void parseMove(String moveMessage) {
+        if(moveMessage.contains("$")) {
+            // TODO: parse split move
+        } else {
+            String[] decomposedMove = moveMessage.split("-");
+            String[] decomposedStart = decomposedMove[0].split("\\s+");
+            String[] decomposedEnd = decomposedMove[1].split("\\s+");
+
+            boolean takingPieceIsThere = decomposedMove[2].equals("y");
+            boolean takenPieceIsThere = decomposedMove[3].equals("y");
+
+            Coordinates startCoordinates = new Coordinates(
+                    Integer.parseInt(decomposedStart[0]),
+                    Integer.parseInt(decomposedStart[1])
+            );
+            Coordinates endCoordinates = new Coordinates(
+                    Integer.parseInt(decomposedEnd[0]),
+                    Integer.parseInt(decomposedEnd[1])
+            );
+
+            Move move = new Move(startCoordinates, endCoordinates);
+
+            View view = findViewById(ResourceSelector.getResourceId(
+                    this,
+                    "cell" + endCoordinates.getY() + "" + endCoordinates.getX()
+            ));
+            currentSquare = findViewById(ResourceSelector.getResourceId(
+                    this,
+                    "cell" + startCoordinates.getY() + "" + startCoordinates.getX()
+            ));
+            currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
+
+            lastPiece = pieceViews[startCoordinates.getY()][startCoordinates.getX()];
+            lastPiece.getPiece().setThere(takingPieceIsThere);
+
+            currentPiece = pieceViews[endCoordinates.getY()][endCoordinates.getX()];
+
+            if(currentPiece != null) {
+                currentPiece.getPiece().setThere(takenPieceIsThere);
+            }
+
+            performMove(move, view);
+            // TODO: add move to history
+        }
+    }
+
+
+
     @SuppressWarnings("SuspiciousNameCombination")
     private void fillBoard() {
         for(int i = 0; i < 8; i++) {
@@ -373,5 +468,14 @@ public class GameActivity extends AppCompatActivity {
         boardLayout = findViewById(R.id.boardLayout);
         primaryColor = ChessColor.BLACK;
         fillBoard();
+
+        withdrawButton = findViewById(R.id.withdrawButton);
+        withdrawButton.setOnClickListener(v -> {
+            parseMove("2 0-4 6-y-n");
+            final Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                parseMove("4 6-2 0-y-n");
+            }, 1000);
+        });
     }
 }

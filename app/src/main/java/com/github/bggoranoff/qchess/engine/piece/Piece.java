@@ -24,6 +24,7 @@ public abstract class Piece implements ChessPiece {
     protected boolean split = false;
     protected boolean isThere = true;
     protected Piece pair = null;
+    protected boolean revealed = false;
 
     public Piece(Board board, ChessColor color) {
         this.board = board;
@@ -64,7 +65,9 @@ public abstract class Piece implements ChessPiece {
 
     @Override
     public boolean reveal() {
-        isThere = new Random().nextFloat() < probability;
+        if(!revealed) {
+            isThere = new Random().nextFloat() < probability;
+        }
         return isThere;
     }
 
@@ -278,6 +281,11 @@ public abstract class Piece implements ChessPiece {
 
     public boolean isThere() {
         return isThere;
+    }
+
+    public void setThere(boolean there) {
+        revealed = true;
+        isThere = there;
     }
 
     public ChessColor getColor() {
