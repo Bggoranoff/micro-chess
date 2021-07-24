@@ -102,7 +102,6 @@ public class Board implements ChessBoard {
             }
         }
         square.setPiece(piece);
-        history.add(move.toString());
     }
 
     @Override

@@ -169,6 +169,8 @@ public class GameActivity extends AppCompatActivity {
         setPieceLocation(secondPieceView, currentSquare);
         visualiseMove(secondPieceView, view);
         pieceViews[endCoordinates.getY()][endCoordinates.getX()] = secondPieceView;
+
+        board.getHistory().add(firstSplitMove.toString() + "$" + secondSplitMove.toString());
         resetBoardColors();
         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
     }
@@ -246,6 +248,8 @@ public class GameActivity extends AppCompatActivity {
             pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
         }
 
+        board.getHistory().add(move.toString());
+
         resetBoardColors();
         currentSquare = null;
         lastPiece = null;
@@ -286,6 +290,7 @@ public class GameActivity extends AppCompatActivity {
         resetBoardColors();
         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
         pieceViews[firstMove.getStart().getY()][firstMove.getStart().getX()] = null;
+        board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
     }
 
     private void performCastling(Move move) {
