@@ -357,7 +357,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void parseMove(String moveMessage) {
         if(moveMessage.contains("$")) {
-            // TODO: parse split move
+            parseSplit(moveMessage);
         } else {
             String[] decomposedMove = moveMessage.split("-");
             String[] decomposedStart = decomposedMove[0].split("\\s+");
@@ -401,7 +401,39 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void parseSplit(String moveMessage) {
+        String[] decomposedSplit = moveMessage.split("\\$");
+        String[] decomposedFirstMove = decomposedSplit[0].split("-");
+        String[] decomposedSecondMove = decomposedSplit[1].split("-");
 
+        String[] decomposedStart = decomposedFirstMove[0].split("\\s+");
+        String[] decomposedFirstEnd = decomposedFirstMove[1].split("\\s+");
+        String[] decomposedSecondEnd = decomposedSecondMove[1].split("\\s+");
+
+        Coordinates startCoordinates = new Coordinates(
+                Integer.parseInt(decomposedStart[0]),
+                Integer.parseInt(decomposedStart[1])
+        );
+        Coordinates firstEndCoordinates = new Coordinates(
+                Integer.parseInt(decomposedFirstEnd[0]),
+                Integer.parseInt(decomposedFirstEnd[1])
+        );
+        Coordinates secondEndCoordinates = new Coordinates(
+                Integer.parseInt(decomposedSecondEnd[0]),
+                Integer.parseInt(decomposedSecondEnd[1])
+        );
+
+        Move firstMove = new Move(startCoordinates, firstEndCoordinates);
+        Move secondMove = new Move(startCoordinates, secondEndCoordinates);
+
+        currentSquare = findViewById(ResourceSelector.getResourceId(
+                this,
+                "cell" + startCoordinates.getX() + "" + startCoordinates.getY()
+        ));
+        lastPiece = pieceViews[startCoordinates.getY()][startCoordinates.getX()];
+
+        performSplit(firstMove, secondMove);
+    }
 
     @SuppressWarnings("SuspiciousNameCombination")
     private void fillBoard() {
@@ -471,10 +503,10 @@ public class GameActivity extends AppCompatActivity {
 
         withdrawButton = findViewById(R.id.withdrawButton);
         withdrawButton.setOnClickListener(v -> {
-            parseMove("2 0-4 6-y-n");
+            parseSplit("2 0-4 3$2 0-3 4");
             final Handler handler = new Handler();
             handler.postDelayed(() -> {
-                parseMove("4 6-2 0-y-n");
+                parseMove("4 3-3 4-y-n");
             }, 1000);
         });
     }
