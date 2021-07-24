@@ -39,6 +39,9 @@ import java.util.Objects;
 
 public class LobbyActivity extends AppCompatActivity implements DeviceActionListener, WifiP2pManager.ChannelListener, WifiP2pManager.ConnectionInfoListener {
 
+    private static final int SEND_PORT = 8889;
+    private static final int RECEIVE_PORT = 8888;
+
     private ConstraintLayout layout;
     private TextView firstUserTextView;
     private TextView secondUserTextView;
@@ -55,9 +58,15 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
     private String currentIp;
     private String username;
 
-    public void redirectToGameActivity() {
+    public void redirectToGameActivity(String color) {
         runOnUiThread(() -> {
             Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+            WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+            String opponentName = getIntent().getStringExtra("opponentName");
+            String opponentIp = TextFormatter.formatDeviceIp(opponentDevice.deviceName);
+            intent.putExtra("opponentIp", opponentIp);
+            intent.putExtra("opponentName", opponentName);
+            intent.putExtra("color", color);
             startActivity(intent);
         });
     }
@@ -182,13 +191,13 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
                 WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
                 String opponentIp = TextFormatter.formatDeviceIp(opponentDevice.deviceName);
                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
-                MessageSendTask sendTask = new MessageSendTask(serverAddress, currentIp + "|" + username, 8888);
+                MessageSendTask sendTask = new MessageSendTask(serverAddress, currentIp + "|" + username, SEND_PORT);
                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } catch(UnknownHostException ex) {
                 ex.printStackTrace();
             }
         });
-        InviteReceiveTask receiveTask = new InviteReceiveTask(this, 10000);
+        InviteReceiveTask receiveTask = new InviteReceiveTask(this, RECEIVE_PORT);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

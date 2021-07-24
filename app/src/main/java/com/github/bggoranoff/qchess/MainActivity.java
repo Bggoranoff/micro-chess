@@ -73,9 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        Intent intent = new Intent(getApplicationContext(), GameActivity.class);
-        startActivity(intent);
-
         sharedPreferences = this.getSharedPreferences(
                 "com.github.bggoranoff.qchess",
                 Context.MODE_PRIVATE

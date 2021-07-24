@@ -54,8 +54,9 @@ public class InviteReceiveTask extends AsyncTask<Void, Void, Void> {
                     String[] messageData = message.split("\\|");
                     ((UserListActivity) activity).popDialog(messageData[1], messageData[0]);
                 } else {
-                    if(message.equals("Yes")) {
-                        ((LobbyActivity) activity).redirectToGameActivity();
+                    String[] commands = message.split("\\s+");
+                    if(commands[0].equals("Yes")) {
+                        ((LobbyActivity) activity).redirectToGameActivity(commands[1]);
                     } else {
                         ((LobbyActivity) activity).disconnect();
                     }

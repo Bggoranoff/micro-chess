@@ -44,10 +44,10 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
 
                 message = (String) ois.readObject();
                 if (message != null) {
-                    String[] decomposedMessage = message.split(":");
-                    switch(decomposedMessage[0]) {
+                    String[] commands = message.split(":");
+                    switch(commands[0]) {
                         case MOVE:
-                            // TODO: implement move functionality
+                            activity.parseMove(commands[1]);
                             break;
                         case WITHDRAW:
                             // TODO: implement opponent withdraw functionality

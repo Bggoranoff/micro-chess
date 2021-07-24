@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -11,7 +14,7 @@ import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -26,9 +29,14 @@ import com.github.bggoranoff.qchess.engine.util.Coordinates;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 import com.github.bggoranoff.qchess.util.TextFormatter;
+import com.github.bggoranoff.qchess.util.connection.InviteReceiveTask;
+import com.github.bggoranoff.qchess.util.connection.MessageSendTask;
+import com.github.bggoranoff.qchess.util.connection.MoveReceiveTask;
 
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +47,15 @@ public class GameActivity extends AppCompatActivity {
     private ConstraintLayout layout;
     private TableLayout boardLayout;
     private Button withdrawButton;
+    private TextView currentUsernameView;
+    private TextView opponentUsernameView;
+
+    private String opponentIp;
+    private String username;
+    private String opponentName;
+    private SharedPreferences sharedPreferences;
+    private int receivePort;
+    private int sendPort;
 
     private Board board;
     private PieceView currentPiece = null;
@@ -48,45 +65,54 @@ public class GameActivity extends AppCompatActivity {
 
     private Move firstSplitMove = null;
     private boolean pieceTaken = false;
+    private boolean onTurn;
     private ChessColor primaryColor;
 
+    private String pieceOnTakeIsThere = "y";
+    private String pieceTakenIsThere = "y";
+
     private void clickSquare(View view) {
-        if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
-            if(lastPiece != null && currentSquare != null) {
+        if(onTurn) {
+            if (view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
+                if (lastPiece != null && currentSquare != null) {
+                    Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
+                    Coordinates endCoordinates = TextFormatter.getCoordinates(view.getTag().toString());
+
+                    Move move = new Move(
+                            startCoordinates,
+                            endCoordinates
+                    );
+                    performMove(move, view);
+
+                    pieceOnTakeIsThere = "y";
+                    pieceTakenIsThere = "y";
+                }
+            } else if (view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
+                currentSquare.setBackground(AppCompatResources.getDrawable(this, ChessAnimator.getSquareColor(currentSquare.getTag().toString())));
+                if (currentPiece != null) {
+                    displaySplitMoves();
+                }
+            } else if (view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_700)).getConstantState())) {
+                Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
+                if (firstSplitMove == null) {
+                    resetBoardColors();
+                } else {
+                    completeSplit(view, startCoordinates, startCoordinates);
+                    firstSplitMove = null;
+                }
+            } else if (view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_200)).getConstantState())) {
                 Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
                 Coordinates endCoordinates = TextFormatter.getCoordinates(view.getTag().toString());
-
-                Move move = new Move(
-                        startCoordinates,
-                        endCoordinates
-                );
-                performMove(move, view);
-            }
-        } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
-            currentSquare.setBackground(AppCompatResources.getDrawable(this, ChessAnimator.getSquareColor(currentSquare.getTag().toString())));
-            if(currentPiece != null) {
-                displaySplitMoves();
-            }
-        } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_700)).getConstantState())) {
-            Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
-            if(firstSplitMove == null) {
+                if (firstSplitMove == null) {
+                    initiateSplit(view, startCoordinates, endCoordinates);
+                } else {
+                    completeSplit(view, startCoordinates, endCoordinates);
+                    firstSplitMove = null;
+                }
+            } else {
                 resetBoardColors();
-            } else {
-                completeSplit(view, startCoordinates, startCoordinates);
-                firstSplitMove = null;
+                clickOnEmptySquare(view);
             }
-        } else if(view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.teal_200)).getConstantState())) {
-            Coordinates startCoordinates = TextFormatter.getCoordinates(currentSquare.getTag().toString());
-            Coordinates endCoordinates = TextFormatter.getCoordinates(view.getTag().toString());
-            if(firstSplitMove == null) {
-                initiateSplit(view, startCoordinates, endCoordinates);
-            } else {
-                completeSplit(view, startCoordinates, endCoordinates);
-                firstSplitMove = null;
-            }
-        } else {
-            resetBoardColors();
-            clickOnEmptySquare(view);
         }
     }
 
@@ -170,13 +196,22 @@ public class GameActivity extends AppCompatActivity {
         visualiseMove(secondPieceView, view);
         pieceViews[endCoordinates.getY()][endCoordinates.getX()] = secondPieceView;
 
-        board.getHistory().add(firstSplitMove.toString() + "$" + secondSplitMove.toString());
+        String moveMessage = firstSplitMove.toString() + "$" + secondSplitMove.toString();
+        board.getHistory().add(moveMessage);
+        if(onTurn) {
+            sendMessageToOpponent("move:" + moveMessage);
+            onTurn = false;
+        } else {
+            onTurn = true;
+        }
+
         resetBoardColors();
         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
     }
 
     private void revealPieceOnTake() {
         if(lastPiece.getPiece().isThere()) {
+            pieceOnTakeIsThere = "y";
             ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
 
             if (currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
@@ -194,6 +229,7 @@ public class GameActivity extends AppCompatActivity {
                 pieceTaken = true;
             }
         } else {
+            pieceOnTakeIsThere = "n";
             Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
             PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
             pair.setAlpha(1.0f);
@@ -205,12 +241,14 @@ public class GameActivity extends AppCompatActivity {
     private void revealTakenPiece() {
         if(pieceTaken) {
             if (currentPiece.getPiece().isThere() && currentPiece.getPiece().getPair() != null) {
+                pieceTakenIsThere = "y";
                 Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
                 PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
                 ((ViewManager) pair.getParent()).removeView(pair);
                 pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
                 currentPiece.getPiece().setPair(null);
             } else if (currentPiece.getPiece().getPair() != null) {
+                pieceTakenIsThere = "n";
                 Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
                 PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
                 pair.setAlpha(1.0f);
@@ -248,7 +286,14 @@ public class GameActivity extends AppCompatActivity {
             pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
         }
 
-        board.getHistory().add(move.toString());
+        String moveMessage = move.toString() + "-" + pieceOnTakeIsThere + "-" + pieceTakenIsThere;
+        board.getHistory().add(moveMessage);
+        if(onTurn) {
+            sendMessageToOpponent("move:" + moveMessage);
+            onTurn = false;
+        } else {
+            onTurn = true;
+        }
 
         resetBoardColors();
         currentSquare = null;
@@ -489,6 +534,18 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void sendMessageToOpponent(String message) {
+        AsyncTask.execute(() -> {
+            try {
+                InetAddress serverAddress = InetAddress.getByName(opponentIp);
+                MessageSendTask sendTask = new MessageSendTask(serverAddress, message, sendPort);
+                sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } catch(UnknownHostException ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -503,8 +560,20 @@ public class GameActivity extends AppCompatActivity {
         pieceViews = new PieceView[8][8];
 
         boardLayout = findViewById(R.id.boardLayout);
-        primaryColor = ChessColor.BLACK;
+        primaryColor = getIntent().getStringExtra("color").equals("white") ? ChessColor.WHITE : ChessColor.BLACK;
         fillBoard();
+
+        opponentIp = getIntent().getStringExtra("opponentIp");
+        opponentName = getIntent().getStringExtra("opponentName");
+
+        sharedPreferences = getSharedPreferences("com.github.bggoranoff.qchess", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString("username", "guest");
+
+        currentUsernameView = findViewById(R.id.currentUsernameView);
+        currentUsernameView.setText(username);
+
+        opponentUsernameView = findViewById(R.id.opponentUsernameView);
+        opponentUsernameView.setText(opponentName);
 
         withdrawButton = findViewById(R.id.withdrawButton);
         withdrawButton.setOnClickListener(v -> {
@@ -514,5 +583,11 @@ public class GameActivity extends AppCompatActivity {
                 parseMove("4 3-3 4-y-n");
             }, 1000);
         });
+
+        receivePort = primaryColor.equals(ChessColor.WHITE) ? 8891 : 8890;
+        sendPort = primaryColor.equals(ChessColor.WHITE) ? 8890 : 8891;
+
+        MoveReceiveTask receiveTask = new MoveReceiveTask(this, receivePort);
+        receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }
