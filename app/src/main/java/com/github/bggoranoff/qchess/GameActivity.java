@@ -377,6 +377,10 @@ public class GameActivity extends AppCompatActivity {
         currentSquare = null;
         lastPiece = null;
         currentPiece = null;
+
+        if(board.isFinished()) {
+            finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color));
+        }
     }
 
     private void performSplit(Move firstMove, Move secondMove) {

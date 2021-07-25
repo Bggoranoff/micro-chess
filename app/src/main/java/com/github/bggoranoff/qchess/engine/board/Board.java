@@ -122,8 +122,16 @@ public class Board implements ChessBoard {
         pieceToTake.reveal();
         if(pieceToTake.isThere() || pieceToTake.getPair() == null) {
             if (pieceToTake.getColor().equals(ChessColor.WHITE)) {
+                if(pieceToTake instanceof King) {
+                    result = "Black";
+                    finished = true;
+                }
                 takenWhitePieces.add(pieceToTake);
             } else {
+                if(pieceToTake instanceof King) {
+                    result = "White";
+                    finished = true;
+                }
                 takenBlackPieces.add(pieceToTake);
             }
             if(pieceToTake.getPair() != null) {
