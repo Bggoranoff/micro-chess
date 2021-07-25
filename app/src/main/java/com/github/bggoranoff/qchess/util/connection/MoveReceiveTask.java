@@ -16,9 +16,6 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
     public static final String ASK_DRAW = "draw?";
     public static final String DRAW = "draw";
     public static final String NO_DRAW = "!draw";
-    public static final String ASK_TAKE_BACK = "takeBack?";
-    public static final String TAKE_BACK = "takeBack";
-    public static final String NO_TAKE_BACK = "!takeBack";
 
     private ServerSocket serverSocket;
     private Socket client;
@@ -66,15 +63,6 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
                             break;
                         case NO_DRAW:
                             activity.notifyDrawRejected();
-                            break;
-                        case ASK_TAKE_BACK:
-                            // TODO: implement take back ask functionality
-                            break;
-                        case TAKE_BACK:
-                            // TODO: implement take back accepted functionality
-                            break;
-                        case NO_TAKE_BACK:
-                            // TODO: implement take back rejected functionality
                             break;
                         default:
                             activity.exit();

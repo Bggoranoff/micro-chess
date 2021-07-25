@@ -105,12 +105,6 @@ public class Board implements ChessBoard {
     }
 
     @Override
-    public boolean takeBack() {
-        // TODO: undo the last move and remove it from the game history
-        return false;
-    }
-
-    @Override
     public float evaluate() {
         // TODO: use an algorithm to make an evaluation of the current board state
         return 0.0f;

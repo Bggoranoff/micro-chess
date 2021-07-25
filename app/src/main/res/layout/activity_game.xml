@@ -17,17 +17,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/returnImageView"
+            android:id="@+id/swordsImageView"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="100dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="100dp"
-            android:contentDescription="@string/take_back"
+            android:contentDescription="@string/app_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/take_back" />
+            app:srcCompat="@drawable/swords" />
 
         <TextView
             android:id="@+id/scoreTextView"

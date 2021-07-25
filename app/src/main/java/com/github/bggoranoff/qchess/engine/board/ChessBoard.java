@@ -7,8 +7,6 @@ public interface ChessBoard {
 
     void executeMove(Piece piece, Move move);
 
-    boolean takeBack();
-
     float evaluate();
 
     void take(int x, int y);

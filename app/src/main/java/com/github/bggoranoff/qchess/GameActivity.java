@@ -151,7 +151,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void saveGame(int iconId) {
-        SQLiteDatabase db = this.openOrCreateDatabase("Games", Context.MODE_PRIVATE, null);
+        SQLiteDatabase db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
         Date date = new Date();
         long timeInMillis = date.getTime();
