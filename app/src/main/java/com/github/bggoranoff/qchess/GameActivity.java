@@ -286,8 +286,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void revealPieceOnTake() {
-        if(lastPiece.getPiece().isThere()) {
+        if(lastPiece.getAlpha() == 1.0f || lastPiece.getPiece().isThere()) {
             pieceOnTakeIsThere = "y";
+            lastPiece.getPiece().setThere(true);
             ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
 
             if (currentPiece.getPiece().getId().equals(lastPiece.getPiece().getId())) {
@@ -390,14 +391,13 @@ public class GameActivity extends AppCompatActivity {
                 "cell" + secondMove.getEnd().getY() + "" + secondMove.getEnd().getX()
         ));
 
-        PieceView firstPieceView = new PieceView(this, lastPiece.getPiece(), firstView.getId());
+        PieceView firstPieceView = new PieceView(this, resultingPieces[0], firstView.getId());
         firstPieceView.setAlpha(.5f);
         firstPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
         layout.addView(firstPieceView);
         setPieceLocation(firstPieceView, currentSquare);
         visualiseMove(firstPieceView, firstView);
         pieceViews[firstMove.getEnd().getY()][firstMove.getEnd().getX()] = firstPieceView;
-        firstPieceView.setPiece(resultingPieces[0]);
         firstPieceView.setOnClickListener(v -> clickPiece(firstPieceView));
 
         PieceView secondPieceView = new PieceView(this, resultingPieces[1], secondView.getId());
@@ -528,6 +528,9 @@ public class GameActivity extends AppCompatActivity {
                 }
 
                 performMove(move, view);
+
+                pieceOnTakeIsThere = "y";
+                pieceTakenIsThere = "y";
             }
         });
     }
