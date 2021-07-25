@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewManager;
 import android.widget.Button;
@@ -41,7 +42,7 @@ import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
 
-    private static final int PIECE_OFFSET = 10;
+    private float pieceOffset = 10.0f;
 
     private ConstraintLayout layout;
     private TableLayout boardLayout;
@@ -55,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private int receivePort;
     private int sendPort;
+    private float deviceHeight;
 
     private Board board;
     private PieceView currentPiece = null;
@@ -392,7 +394,7 @@ public class GameActivity extends AppCompatActivity {
         int[] location = new int[2];
         squareView.getLocationOnScreen(location);
         pieceView.setX(location[0]);
-        pieceView.setY(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET);
+        pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);
     }
 
     private void visualiseMove(PieceView pieceView, View squareView) {
@@ -400,11 +402,11 @@ public class GameActivity extends AppCompatActivity {
             int[] location = new int[2];
             squareView.getLocationOnScreen(location);
             pieceView.animate()
-                    .y(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET)
+                    .y(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset)
                     .x(location[0])
                     .setDuration(350)
                     .start();
-            pieceView.setY(location[1] - (float) squareView.getHeight() / 2 - PIECE_OFFSET);
+            pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);
         });
     }
 
@@ -555,6 +557,11 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        deviceHeight = (float) metrics.heightPixels / metrics.ydpi;
+        pieceOffset = (4.780f - deviceHeight) * 100;
 
         layout = findViewById(R.id.gameLayout);
         ChessAnimator.animateBackground(layout);
