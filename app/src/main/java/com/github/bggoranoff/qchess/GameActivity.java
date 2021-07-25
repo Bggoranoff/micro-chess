@@ -6,12 +6,10 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewManager;
@@ -19,7 +17,6 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -50,7 +47,7 @@ public class GameActivity extends AppCompatActivity {
 
     private ConstraintLayout layout;
     private TableLayout boardLayout;
-    private Button withdrawButton;
+    private Button resignButton;
     private TextView currentUsernameView;
     private TextView opponentUsernameView;
 
@@ -74,6 +71,7 @@ public class GameActivity extends AppCompatActivity {
     private boolean pieceTaken = false;
     private boolean onTurn;
     private ChessColor primaryColor;
+    private String color;
 
     private String pieceOnTakeIsThere = "y";
     private String pieceTakenIsThere = "y";
@@ -81,6 +79,36 @@ public class GameActivity extends AppCompatActivity {
     public void exit() {
         manager.removeGroup(channel, null);
         finish();
+    }
+    
+    private void resign(View view) {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Resign")
+                .setMessage("Do you want to resign?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    finishGame(color + " lost by resignation!", false);
+                    sendMessageToOpponent("resign");
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+    
+    public void finishGame(String message, boolean won) {
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setIcon(won ? android.R.drawable.ic_input_add : android.R.drawable.ic_delete)
+                    .setTitle(message)
+                    .setMessage("Do you want to save this game?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // TODO: save game
+                        exit();
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        exit();
+                    })
+                    .show();
+        });
     }
 
     private void clickSquare(View view) {
@@ -562,6 +590,10 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
+    
+    public String getColor() {
+        return color;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -581,7 +613,8 @@ public class GameActivity extends AppCompatActivity {
         board.reset(ChessColor.WHITE);
         pieceViews = new PieceView[8][8];
 
-        primaryColor = getIntent().getStringExtra("color").equals("white") ? ChessColor.WHITE : ChessColor.BLACK;
+        color = getIntent().getStringExtra("color");
+        primaryColor = color.equals("White") ? ChessColor.WHITE : ChessColor.BLACK;
         onTurn = primaryColor.equals(ChessColor.WHITE);
 
         boardLayout = findViewById(R.id.boardLayout);
@@ -599,14 +632,8 @@ public class GameActivity extends AppCompatActivity {
         opponentUsernameView = findViewById(R.id.opponentUsernameView);
         opponentUsernameView.setText(opponentName);
 
-        withdrawButton = findViewById(R.id.withdrawButton);
-        withdrawButton.setOnClickListener(v -> {
-            parseSplit("2 0-4 3$2 0-3 4");
-            final Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                parseMove("4 3-3 4-y-n");
-            }, 1000);
-        });
+        resignButton = findViewById(R.id.resignButton);
+        resignButton.setOnClickListener(this::resign);
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);

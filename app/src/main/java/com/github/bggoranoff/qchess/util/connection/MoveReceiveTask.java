@@ -12,11 +12,13 @@ import java.net.Socket;
 
 public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
     public static final String MOVE = "move";
-    public static final String WITHDRAW = "withdraw";
+    public static final String RESIGN = "resign";
     public static final String ASK_DRAW = "draw?";
     public static final String DRAW = "draw";
+    public static final String NO_DRAW = "!draw";
     public static final String ASK_TAKE_BACK = "takeBack?";
     public static final String TAKE_BACK = "takeBack";
+    public static final String NO_TAKE_BACK = "!takeBack";
 
     private ServerSocket serverSocket;
     private Socket client;
@@ -53,8 +55,8 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
                         case MOVE:
                             activity.parseMove(commands[1]);
                             break;
-                        case WITHDRAW:
-                            // TODO: implement opponent withdraw functionality
+                        case RESIGN:
+                            activity.finishGame(activity.getColor() + " won by resignation!", true);
                             break;
                         case ASK_DRAW:
                             // TODO: implement draw ask functionality
@@ -62,11 +64,17 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
                         case DRAW:
                             // TODO: implement draw accepted functionality
                             break;
+                        case NO_DRAW:
+                            // TODO: implement draw rejected functionality
+                            break;
                         case ASK_TAKE_BACK:
                             // TODO: implement take back ask functionality
                             break;
                         case TAKE_BACK:
                             // TODO: implement take back accepted functionality
+                            break;
+                        case NO_TAKE_BACK:
+                            // TODO: implement take back rejected functionality
                             break;
                         default:
                             activity.exit();

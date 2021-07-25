@@ -78,10 +78,10 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
                         AsyncTask.execute(() -> {
                             try {
                                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
-                                String opponentColor = new Random().nextFloat() > 0.5 ? "white" : "black";
+                                String opponentColor = new Random().nextFloat() > 0.5 ? "White" : "Black";
                                 MessageSendTask sendTask = new MessageSendTask(serverAddress, "Yes " + opponentColor, SEND_PORT);
                                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                redirectToGameActivity(opponentColor.equals("white") ? "black" : "white", opponentName, opponentIp);
+                                redirectToGameActivity(opponentColor.equals("White") ? "Black" : "White", opponentName, opponentIp);
                             } catch(UnknownHostException ex) {
                                 ex.printStackTrace();
                             }
@@ -135,12 +135,14 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         icons.clear();
         devices.clear();
         for(WifiP2pDevice peer : peerList) {
-            String deviceName = TextFormatter.formatDeviceName(peer.deviceName);
-            String username = TextFormatter.formatDeviceUsername(deviceName);
-            String icon = TextFormatter.formatDeviceIconName(deviceName);
-            usernames.add(username);
-            icons.add(icon);
-            devices.add(peer);
+            if(peer.deviceName.contains(".")) {
+                String deviceName = TextFormatter.formatDeviceName(peer.deviceName);
+                String username = TextFormatter.formatDeviceUsername(deviceName);
+                String icon = TextFormatter.formatDeviceIconName(deviceName);
+                usernames.add(username);
+                icons.add(icon);
+                devices.add(peer);
+            }
         }
         adapter.notifyDataSetChanged();
     }

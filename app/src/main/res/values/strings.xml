@@ -31,7 +31,7 @@
     <string name="my_name">emz2</string>
     <string name="opponent_name">goranoff</string>
     <string name="story">c2 a7 kb3 qg7…</string>
-    <string name="withdraw">Withdraw</string>
+    <string name="resign">Resign</string>
     <string name="offer_draw">Draw</string>
     <string name="take_back">Take Back</string>
 </resources>
