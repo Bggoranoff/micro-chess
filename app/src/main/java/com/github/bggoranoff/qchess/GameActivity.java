@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import com.github.bggoranoff.qchess.engine.util.ChessTextFormatter;
 import com.github.bggoranoff.qchess.engine.util.Coordinates;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.DatabaseManager;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.util.connection.MessageSendTask;
@@ -39,6 +41,7 @@ import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -89,7 +92,7 @@ public class GameActivity extends AppCompatActivity {
                 .setTitle("Resign")
                 .setMessage("Do you want to resign?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    finishGame(color + " lost by resignation!", false);
+                    finishGame(color + " lost by resignation!", android.R.drawable.ic_delete);
                     sendMessageToOpponent(MoveReceiveTask.RESIGN);
                 })
                 .setNegativeButton("No", null)
@@ -108,7 +111,7 @@ public class GameActivity extends AppCompatActivity {
                     .setTitle("Draw")
                     .setMessage("Your opponent requested a draw")
                     .setPositiveButton("Accept", (dialog, which) -> {
-                        finishGame("Game drawn!", true);
+                        finishGame("Game drawn!", android.R.drawable.ic_menu_close_clear_cancel);
                         sendMessageToOpponent(MoveReceiveTask.DRAW);
                     })
                     .setNegativeButton("Decline", (dialog, which) -> {
@@ -126,18 +129,18 @@ public class GameActivity extends AppCompatActivity {
 
     public void notifyDrawAccepted() {
         runOnUiThread(() -> {
-            finishGame("Game drawn!", true);
+            finishGame("Game drawn!", android.R.drawable.ic_menu_close_clear_cancel);
         });
     }
     
-    public void finishGame(String message, boolean won) {
+    public void finishGame(String message, int iconId) {
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
-                    .setIcon(won ? android.R.drawable.ic_input_add : android.R.drawable.ic_delete)
+                    .setIcon(iconId)
                     .setTitle(message)
                     .setMessage("Do you want to save this game?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        // TODO: save game
+                        saveGame(iconId);
                         exit();
                     })
                     .setNegativeButton("No", (dialog, which) -> {
@@ -145,6 +148,14 @@ public class GameActivity extends AppCompatActivity {
                     })
                     .show();
         });
+    }
+
+    private void saveGame(int iconId) {
+        SQLiteDatabase db = this.openOrCreateDatabase("Games", Context.MODE_PRIVATE, null);
+        DatabaseManager.openOrCreateTable(db);
+        Date date = new Date();
+        long timeInMillis = date.getTime();
+        DatabaseManager.saveGame(db, username, opponentName, color, timeInMillis, iconId, board.getHistory());
     }
 
     private void clickSquare(View view) {
@@ -379,7 +390,7 @@ public class GameActivity extends AppCompatActivity {
         currentPiece = null;
 
         if(board.isFinished()) {
-            finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color));
+            finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color) ? android.R.drawable.ic_input_add : android.R.drawable.ic_delete);
         }
     }
 

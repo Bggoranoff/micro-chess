@@ -56,7 +56,7 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
                             activity.parseMove(commands[1]);
                             break;
                         case RESIGN:
-                            activity.finishGame(activity.getColor() + " won by resignation!", true);
+                            activity.finishGame(activity.getColor() + " won by resignation!", android.R.drawable.ic_input_add);
                             break;
                         case ASK_DRAW:
                             activity.notifyDrawRequested();
