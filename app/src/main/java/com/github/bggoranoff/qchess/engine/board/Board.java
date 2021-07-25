@@ -120,7 +120,7 @@ public class Board implements ChessBoard {
     public void take(int x, int y) {
         Piece pieceToTake = get(x, y).getPiece();
         pieceToTake.reveal();
-        if(pieceToTake.isThere()) {
+        if(pieceToTake.isThere() || pieceToTake.getPair() == null) {
             if (pieceToTake.getColor().equals(ChessColor.WHITE)) {
                 takenWhitePieces.add(pieceToTake);
             } else {

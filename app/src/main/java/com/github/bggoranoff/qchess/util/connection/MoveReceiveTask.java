@@ -31,9 +31,13 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while(true) {
             try {
-                serverSocket = new ServerSocket(port);
                 client = serverSocket.accept();
                 if (isCancelled()) {
                     return null;

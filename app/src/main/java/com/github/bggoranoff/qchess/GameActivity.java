@@ -29,7 +29,6 @@ import com.github.bggoranoff.qchess.engine.util.Coordinates;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 import com.github.bggoranoff.qchess.util.TextFormatter;
-import com.github.bggoranoff.qchess.util.connection.InviteReceiveTask;
 import com.github.bggoranoff.qchess.util.connection.MessageSendTask;
 import com.github.bggoranoff.qchess.util.connection.MoveReceiveTask;
 
@@ -247,6 +246,7 @@ public class GameActivity extends AppCompatActivity {
                 ((ViewManager) pair.getParent()).removeView(pair);
                 pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
                 currentPiece.getPiece().setPair(null);
+                currentPiece.setAlpha(1.0f);
             } else if (currentPiece.getPiece().getPair() != null) {
                 pieceTakenIsThere = "n";
                 Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
@@ -306,11 +306,11 @@ public class GameActivity extends AppCompatActivity {
 
         View firstView = findViewById(ResourceSelector.getResourceId(
                 this,
-                "cell" + firstMove.getEnd().getX() + "" + firstMove.getEnd().getY()
+                "cell" + firstMove.getEnd().getY() + "" + firstMove.getEnd().getX()
         ));
         View secondView = findViewById(ResourceSelector.getResourceId(
                 this,
-                "cell" + secondMove.getEnd().getX() + "" + secondMove.getEnd().getY()
+                "cell" + secondMove.getEnd().getY() + "" + secondMove.getEnd().getX()
         ));
 
         PieceView firstPieceView = new PieceView(this, lastPiece.getPiece(), firstView.getId());
@@ -336,6 +336,9 @@ public class GameActivity extends AppCompatActivity {
         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
         pieceViews[firstMove.getStart().getY()][firstMove.getStart().getX()] = null;
         board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
+        if(!onTurn) {
+            onTurn = true;
+        }
     }
 
     private void performCastling(Move move) {
@@ -406,49 +409,50 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void parseMove(String moveMessage) {
-        if(moveMessage.contains("$")) {
-            parseSplit(moveMessage);
-        } else {
-            String[] decomposedMove = moveMessage.split("-");
-            String[] decomposedStart = decomposedMove[0].split("\\s+");
-            String[] decomposedEnd = decomposedMove[1].split("\\s+");
+        runOnUiThread(() -> {
+            if(moveMessage.contains("$")) {
+                parseSplit(moveMessage);
+            } else {
+                String[] decomposedMove = moveMessage.split("-");
+                String[] decomposedStart = decomposedMove[0].split("\\s+");
+                String[] decomposedEnd = decomposedMove[1].split("\\s+");
 
-            boolean takingPieceIsThere = decomposedMove[2].equals("y");
-            boolean takenPieceIsThere = decomposedMove[3].equals("y");
+                boolean takingPieceIsThere = decomposedMove[2].equals("y");
+                boolean takenPieceIsThere = decomposedMove[3].equals("y");
 
-            Coordinates startCoordinates = new Coordinates(
-                    Integer.parseInt(decomposedStart[0]),
-                    Integer.parseInt(decomposedStart[1])
-            );
-            Coordinates endCoordinates = new Coordinates(
-                    Integer.parseInt(decomposedEnd[0]),
-                    Integer.parseInt(decomposedEnd[1])
-            );
+                Coordinates startCoordinates = new Coordinates(
+                        Integer.parseInt(decomposedStart[0]),
+                        Integer.parseInt(decomposedStart[1])
+                );
+                Coordinates endCoordinates = new Coordinates(
+                        Integer.parseInt(decomposedEnd[0]),
+                        Integer.parseInt(decomposedEnd[1])
+                );
 
-            Move move = new Move(startCoordinates, endCoordinates);
+                Move move = new Move(startCoordinates, endCoordinates);
 
-            View view = findViewById(ResourceSelector.getResourceId(
-                    this,
-                    "cell" + endCoordinates.getY() + "" + endCoordinates.getX()
-            ));
-            currentSquare = findViewById(ResourceSelector.getResourceId(
-                    this,
-                    "cell" + startCoordinates.getY() + "" + startCoordinates.getX()
-            ));
-            currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
+                View view = findViewById(ResourceSelector.getResourceId(
+                        this,
+                        "cell" + endCoordinates.getY() + "" + endCoordinates.getX()
+                ));
+                currentSquare = findViewById(ResourceSelector.getResourceId(
+                        this,
+                        "cell" + startCoordinates.getY() + "" + startCoordinates.getX()
+                ));
+                currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
 
-            lastPiece = pieceViews[startCoordinates.getY()][startCoordinates.getX()];
-            lastPiece.getPiece().setThere(takingPieceIsThere);
+                lastPiece = pieceViews[startCoordinates.getY()][startCoordinates.getX()];
+                lastPiece.getPiece().setThere(takingPieceIsThere);
 
-            currentPiece = pieceViews[endCoordinates.getY()][endCoordinates.getX()];
+                currentPiece = pieceViews[endCoordinates.getY()][endCoordinates.getX()];
 
-            if(currentPiece != null) {
-                currentPiece.getPiece().setThere(takenPieceIsThere);
+                if (currentPiece != null) {
+                    currentPiece.getPiece().setThere(takenPieceIsThere);
+                }
+
+                performMove(move, view);
             }
-
-            performMove(move, view);
-            // TODO: add move to history
-        }
+        });
     }
 
     private void parseSplit(String moveMessage) {
@@ -478,7 +482,7 @@ public class GameActivity extends AppCompatActivity {
 
         currentSquare = findViewById(ResourceSelector.getResourceId(
                 this,
-                "cell" + startCoordinates.getX() + "" + startCoordinates.getY()
+                "cell" + startCoordinates.getY() + "" + startCoordinates.getX()
         ));
         lastPiece = pieceViews[startCoordinates.getY()][startCoordinates.getX()];
 
@@ -559,8 +563,10 @@ public class GameActivity extends AppCompatActivity {
         board.reset(ChessColor.WHITE);
         pieceViews = new PieceView[8][8];
 
-        boardLayout = findViewById(R.id.boardLayout);
         primaryColor = getIntent().getStringExtra("color").equals("white") ? ChessColor.WHITE : ChessColor.BLACK;
+        onTurn = primaryColor.equals(ChessColor.WHITE);
+
+        boardLayout = findViewById(R.id.boardLayout);
         fillBoard();
 
         opponentIp = getIntent().getStringExtra("opponentIp");
