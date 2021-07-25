@@ -18,6 +18,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
@@ -68,6 +69,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
             intent.putExtra("opponentName", opponentName);
             intent.putExtra("color", color);
             startActivity(intent);
+            finish();
         });
     }
 
@@ -83,6 +85,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         runOnUiThread(() -> {
             Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 

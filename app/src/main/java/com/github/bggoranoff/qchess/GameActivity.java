@@ -1,11 +1,14 @@
 package com.github.bggoranoff.qchess;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +19,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -57,6 +61,8 @@ public class GameActivity extends AppCompatActivity {
     private int receivePort;
     private int sendPort;
     private float deviceHeight;
+    private WifiP2pManager manager;
+    private WifiP2pManager.Channel channel;
 
     private Board board;
     private PieceView currentPiece = null;
@@ -71,6 +77,11 @@ public class GameActivity extends AppCompatActivity {
 
     private String pieceOnTakeIsThere = "y";
     private String pieceTakenIsThere = "y";
+
+    public void exit() {
+        manager.removeGroup(channel, null);
+        finish();
+    }
 
     private void clickSquare(View view) {
         if(onTurn) {
@@ -597,10 +608,27 @@ public class GameActivity extends AppCompatActivity {
             }, 1000);
         });
 
+        manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        channel = manager.initialize(this, getMainLooper(), null);
+
         receivePort = primaryColor.equals(ChessColor.WHITE) ? 8891 : 8890;
         sendPort = primaryColor.equals(ChessColor.WHITE) ? 8890 : 8891;
 
         MoveReceiveTask receiveTask = new MoveReceiveTask(this, receivePort);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exit")
+                .setMessage("Do you want to exit this game?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    sendMessageToOpponent("exit");
+                    exit();
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 }

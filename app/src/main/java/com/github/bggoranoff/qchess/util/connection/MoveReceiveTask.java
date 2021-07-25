@@ -68,6 +68,9 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
                         case TAKE_BACK:
                             // TODO: implement take back accepted functionality
                             break;
+                        default:
+                            activity.exit();
+                            break;
                     }
                 }
 
