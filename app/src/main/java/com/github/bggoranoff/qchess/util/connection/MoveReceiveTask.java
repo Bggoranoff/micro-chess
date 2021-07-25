@@ -59,13 +59,13 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
                             activity.finishGame(activity.getColor() + " won by resignation!", true);
                             break;
                         case ASK_DRAW:
-                            // TODO: implement draw ask functionality
+                            activity.notifyDrawRequested();
                             break;
                         case DRAW:
-                            // TODO: implement draw accepted functionality
+                            activity.notifyDrawAccepted();
                             break;
                         case NO_DRAW:
-                            // TODO: implement draw rejected functionality
+                            activity.notifyDrawRejected();
                             break;
                         case ASK_TAKE_BACK:
                             // TODO: implement take back ask functionality

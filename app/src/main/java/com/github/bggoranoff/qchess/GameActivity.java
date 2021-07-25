@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.component.PieceView;
 import com.github.bggoranoff.qchess.engine.board.Board;
@@ -48,6 +49,7 @@ public class GameActivity extends AppCompatActivity {
     private ConstraintLayout layout;
     private TableLayout boardLayout;
     private Button resignButton;
+    private Button drawButton;
     private TextView currentUsernameView;
     private TextView opponentUsernameView;
 
@@ -88,10 +90,44 @@ public class GameActivity extends AppCompatActivity {
                 .setMessage("Do you want to resign?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     finishGame(color + " lost by resignation!", false);
-                    sendMessageToOpponent("resign");
+                    sendMessageToOpponent(MoveReceiveTask.RESIGN);
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    private void requestDraw(View view) {
+        sendMessageToOpponent(MoveReceiveTask.ASK_DRAW);
+        Toast.makeText(this, "Draw requested!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void notifyDrawRequested() {
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Draw")
+                    .setMessage("Your opponent requested a draw")
+                    .setPositiveButton("Accept", (dialog, which) -> {
+                        finishGame("Game drawn!", true);
+                        sendMessageToOpponent(MoveReceiveTask.DRAW);
+                    })
+                    .setNegativeButton("Decline", (dialog, which) -> {
+                        sendMessageToOpponent(MoveReceiveTask.NO_DRAW);
+                    })
+                    .show();
+        });
+    }
+
+    public void notifyDrawRejected() {
+        runOnUiThread(() -> {
+            Toast.makeText(this, "Draw rejected!", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    public void notifyDrawAccepted() {
+        runOnUiThread(() -> {
+            finishGame("Game drawn!", true);
+        });
     }
     
     public void finishGame(String message, boolean won) {
@@ -634,6 +670,9 @@ public class GameActivity extends AppCompatActivity {
 
         resignButton = findViewById(R.id.resignButton);
         resignButton.setOnClickListener(this::resign);
+
+        drawButton = findViewById(R.id.drawButton);
+        drawButton.setOnClickListener(this::requestDraw);
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
