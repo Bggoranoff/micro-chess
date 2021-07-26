@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         iconView = findViewById(R.id.iconView);
         iconView.setOnClickListener(this::redirectToIconsActivity);
-//        updateIcon();
+        updateIcon();
     }
 
     @Override

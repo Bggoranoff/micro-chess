@@ -16,13 +16,20 @@
         android:roundIcon="@drawable/chess_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.QChess">
-        <activity android:name=".GameActivity"></activity>
-        <activity android:name=".LobbyActivity" />
-        <activity android:name=".GameListActivity" />
-        <activity android:name=".ManualActivity" />
-        <activity android:name=".UserListActivity" />
-        <activity android:name=".IconsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".GameActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LobbyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".GameListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ManualActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UserListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".IconsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -12,4 +12,6 @@
     <color name="gray">#5D6D7E</color>
     <color name="white">#FFFFFFFF</color>
     <color name="cream">#FAE5D3</color>
+    <color name="dark_green">#117864</color>
+    <color name="dark_red">#B03A2E</color>
 </resources>
