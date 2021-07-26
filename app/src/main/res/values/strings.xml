@@ -34,4 +34,6 @@
     <string name="resign">Resign</string>
     <string name="offer_draw">Draw</string>
     <string name="take_back">Take Back</string>
+
+    <string name="past_games">Past Games</string>
 </resources>
