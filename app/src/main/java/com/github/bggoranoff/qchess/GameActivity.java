@@ -213,13 +213,21 @@ public class GameActivity extends AppCompatActivity {
                 resetBoardColors();
                 clickOnEmptySquare(view);
             }
+        } else {
+            resetBoardColors();
+            view.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
         }
     }
 
     private void clickPiece(PieceView pieceView) {
         currentPiece = pieceView;
         View squareView = findViewById(pieceView.getSquareId());
-        squareView.performClick();
+        if(currentPiece.getPiece().getColor().equals(primaryColor)) {
+            squareView.performClick();
+        } else {
+            resetBoardColors();
+            squareView.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
+        }
     }
 
     private void clickOnEmptySquare(View view) {
