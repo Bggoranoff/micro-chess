@@ -18,6 +18,7 @@ public class DatabaseManager {
     public static final String COLOR = "color";
     public static final String WINNER = "winner";
     public static final String HISTORY = "history";
+    public static final String FORMATTED_HISTORY = "formattedHistory";
 
     public static void openOrCreateTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
@@ -27,7 +28,8 @@ public class DatabaseManager {
                 COLOR + " VARCHAR, " +
                 TIME + " INTEGER, " +
                 WINNER + " INTEGER, " +
-                HISTORY + " VARCHAR" +
+                HISTORY + " VARCHAR," +
+                FORMATTED_HISTORY + " VARCHAR" +
                 ")"
         );
     }
@@ -46,8 +48,9 @@ public class DatabaseManager {
         return Arrays.asList(splitHistory);
     }
 
-    public static void saveGame(SQLiteDatabase db, String user, String opponent, String color, long time, int winner, ArrayList<String> history) {
+    public static void saveGame(SQLiteDatabase db, String user, String opponent, String color, long time, int winner, ArrayList<String> history, ArrayList<String> formattedHistory) {
         String parsedHistory = parseHistory(history);
+        String parsedFormattedHistory = parseHistory(formattedHistory);
         ContentValues values = new ContentValues();
         values.put(USER, user);
         values.put(OPPONENT, opponent);
@@ -55,6 +58,7 @@ public class DatabaseManager {
         values.put(TIME, time);
         values.put(WINNER, winner);
         values.put(HISTORY, parsedHistory);
+        values.put(FORMATTED_HISTORY, parsedFormattedHistory);
         db.insert(TABLE_NAME, null, values);
     }
 }

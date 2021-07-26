@@ -9,6 +9,8 @@ import com.github.bggoranoff.qchess.engine.piece.Piece;
 import com.github.bggoranoff.qchess.engine.piece.Queen;
 import com.github.bggoranoff.qchess.engine.piece.Rook;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
+import com.github.bggoranoff.qchess.engine.util.ChessTextFormatter;
+import com.github.bggoranoff.qchess.engine.util.Coordinates;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +21,8 @@ public class Board implements ChessBoard {
     private Square[][] matrix;
     private ArrayList<Piece> takenBlackPieces;
     private ArrayList<Piece> takenWhitePieces;
-    private ArrayList<String> history; // could be deque
+    private ArrayList<String> history;
+    private ArrayList<String> formattedHistory;
     private boolean finished = false;
     private String result = "";
 
@@ -34,6 +37,7 @@ public class Board implements ChessBoard {
         takenBlackPieces = new ArrayList<>();
         takenWhitePieces = new ArrayList<>();
         history = new ArrayList<>();
+        formattedHistory = new ArrayList<>();
     }
 
     public void reset(ChessColor primaryColor) {
@@ -175,8 +179,43 @@ public class Board implements ChessBoard {
         return result;
     }
 
+    public void addToHistory(String move, String piece, Coordinates end) {
+        history.add(move);
+        String formattedMove = piece + ChessTextFormatter.formatTag(end.getX(), end.getY());
+        formattedHistory.add(formattedMove);
+    }
+
+    public void addToHistory(String move, String piece, Coordinates firstEnd, Coordinates secondEnd) {
+        history.add(move);
+        String formattedMove = piece + ChessTextFormatter.formatTag(firstEnd.getX(), firstEnd.getY()) +
+                "$" + ChessTextFormatter.formatTag(secondEnd.getX(), secondEnd.getY());
+        formattedHistory.add(formattedMove);
+    }
+
+    public String formatHistory() {
+        StringBuilder result = new StringBuilder();
+        for(int i = formattedHistory.size() - 1; i >= 0 && i >= formattedHistory.size() - 4; i--) {
+            result.append(formattedHistory.get(i)).append(" ");
+        }
+        result.deleteCharAt(result.length() - 1);
+        result.append("...");
+        return result.toString();
+    }
+
+    public String formatFullHistory() {
+        StringBuilder result = new StringBuilder();
+        for(String move : formattedHistory) {
+            result.append(move).append(" ");
+        }
+        return result.toString();
+    }
+
     public ArrayList<String> getHistory() {
         return history;
+    }
+
+    public ArrayList<String> getFormattedHistory() {
+        return formattedHistory;
     }
 
     public Square get(int x, int y) {

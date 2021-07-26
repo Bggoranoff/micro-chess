@@ -57,6 +57,8 @@ public class GameActivity extends AppCompatActivity {
     private TextView currentUsernameView;
     private TextView opponentUsernameView;
     private TextView scoreView;
+    private TextView historyView;
+    private TextView historyBackgroundView;
 
     private String opponentIp;
     private String username;
@@ -152,12 +154,21 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    private void displayHistory(View view) {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_menu_save)
+                .setTitle("Game History")
+                .setMessage(board.formatFullHistory())
+                .setPositiveButton("Ok", null)
+                .show();
+    }
+
     private void saveGame(int iconId) {
         SQLiteDatabase db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
         Date date = new Date();
         long timeInMillis = date.getTime();
-        DatabaseManager.saveGame(db, username, opponentName, color, timeInMillis, iconId, board.getHistory());
+        DatabaseManager.saveGame(db, username, opponentName, color, timeInMillis, iconId, board.getHistory(), board.getFormattedHistory());
     }
 
     private void clickSquare(View view) {
@@ -286,7 +297,9 @@ public class GameActivity extends AppCompatActivity {
         pieceViews[endCoordinates.getY()][endCoordinates.getX()] = secondPieceView;
 
         String moveMessage = firstSplitMove.toString() + "$" + secondSplitMove.toString();
-        board.getHistory().add(moveMessage);
+        board.addToHistory(moveMessage, firstPieceView.getPiece().toString(), firstSplitMove.getEnd(), secondSplitMove.getEnd());
+        historyView.setText(board.formatHistory());
+        historyBackgroundView.setText(historyView.getText().toString());
         if(onTurn) {
             sendMessageToOpponent("move:" + moveMessage);
             onTurn = false;
@@ -379,7 +392,9 @@ public class GameActivity extends AppCompatActivity {
         }
 
         String moveMessage = move.toString() + "-" + pieceOnTakeIsThere + "-" + pieceTakenIsThere;
-        board.getHistory().add(moveMessage);
+        board.addToHistory(moveMessage, lastPiece.getPiece().toString(), endCoordinates);
+        historyView.setText(board.formatHistory());
+        historyBackgroundView.setText(historyView.getText().toString());
         if(onTurn) {
             sendMessageToOpponent("move:" + moveMessage);
             onTurn = false;
@@ -432,7 +447,9 @@ public class GameActivity extends AppCompatActivity {
         resetBoardColors();
         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
         pieceViews[firstMove.getStart().getY()][firstMove.getStart().getX()] = null;
-        board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
+        board.addToHistory(firstMove.toString() + "$" + secondMove.toString(), firstPieceView.getPiece().toString(), firstMove.getEnd(), secondMove.getEnd());
+        historyView.setText(board.formatHistory());
+        historyBackgroundView.setText(historyView.getText().toString());
         if(!onTurn) {
             onTurn = true;
         }
@@ -652,7 +669,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setScore(float score) {
-        scoreView.setText(String.format(Locale.ENGLISH, "%.1f", score));
+        scoreView.setText(String.format(Locale.ENGLISH, (score > 0 ? "+" : "") + "%.1f", score));
         scoreView.setTextColor(getResources().getColor(score < 0 ? R.color.dark_red : R.color.dark_green, getTheme()));
     }
     
@@ -700,6 +717,12 @@ public class GameActivity extends AppCompatActivity {
         scoreView = findViewById(R.id.scoreTextView);
         scoreView.setText("0.0");
         scoreView.setTextColor(getResources().getColor(R.color.dark_green, getTheme()));
+
+        historyView = findViewById(R.id.historyTextView);
+        historyView.setText("...");
+        historyView.setOnClickListener(this::displayHistory);
+        historyBackgroundView = findViewById(R.id.backgroundHistoryTextView);
+        historyBackgroundView.setText("...");
 
         resignButton = findViewById(R.id.resignButton);
         resignButton.setOnClickListener(this::resign);
