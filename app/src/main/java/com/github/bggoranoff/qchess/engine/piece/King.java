@@ -16,14 +16,37 @@ import java.util.List;
 
 public class King extends Piece {
 
+    private final int[][] SCORE_MATRIX_MIDDLE = new int[][]{
+            new int[]{-30,-40,-40,-50,-50,-40,-40,-30},
+            new int[]{-30,-40,-40,-50,-50,-40,-40,-30},
+            new int[]{-30,-40,-40,-50,-50,-40,-40,-30},
+            new int[]{-30,-40,-40,-50,-50,-40,-40,-30},
+            new int[]{-20,-30,-30,-40,-40,-30,-30,-20},
+            new int[]{-10,-20,-20,-20,-20,-20,-20,-10},
+            new int[]{20, 20,  0,  0,  0,  0, 20, 20},
+            new int[]{20, 30, 10, 0, 0, 10, 30, 20}
+    };
+    private final int[][] SCORE_MATRIX_END = new int[][]{
+            new int[]{-50,-40,-30,-20,-20,-30,-40,-50},
+            new int[]{-30,-20,-10,  0,  0,-10,-20,-30},
+            new int[]{-30,-10, 20, 30, 30, 20,-10,-30},
+            new int[]{-30,-10, 30, 40, 40, 30,-10,-30},
+            new int[]{-30,-10, 30, 40, 40, 30,-10,-30},
+            new int[]{-30,-10, 20, 30, 30, 20,-10,-30},
+            new int[]{-30,-30,  0,  0,  0,  0,-30,-30},
+            new int[]{-50,-30,-30,-30,-30,-30,-30,-50}
+    };
+
     public King(Board board, ChessColor color) {
         super(board, color);
         this.iconName = color.getLabel() + "_k";
+        score = 20000;
     }
 
     public King(Board board, ChessColor color, String id, float probability) {
         super(board, color, id, probability);
         this.iconName = color.getLabel() + "_k";
+        score = 20000;
     }
 
     private boolean isRookForCastling(int x, int y) {
@@ -156,6 +179,19 @@ public class King extends Piece {
         board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
 
         return new King[]{firstKing, secondKing};
+    }
+
+    @Override
+    public float evaluate() {
+        int x = square.getCoordinates().getX();
+        int y = color.equals(ChessColor.WHITE) ? square.getCoordinates().getY() : 7 - square.getCoordinates().getY();
+        if(board.getTotalScore() <= 42000) {
+            float result = score + SCORE_MATRIX_END[y][x];
+            return result / 100;
+        } else {
+            float result = score + SCORE_MATRIX_MIDDLE[y][x];
+            return result / 100;
+        }
     }
 
     @NonNull

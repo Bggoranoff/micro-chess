@@ -19,11 +19,33 @@ public class Knight extends Piece {
     public Knight(Board board, ChessColor color) {
         super(board, color);
         this.iconName = color.getLabel() + "_n";
+        score = 320;
+        scoreMatrix = new int[][]{
+                new int[]{-50,-40,-30,-30,-30,-30,-40,-50},
+                new int[]{-40,-20,  0,  0,  0,  0,-20,-40},
+                new int[]{-30,  0, 10, 15, 15, 10,  0,-30},
+                new int[]{-30,  5, 15, 20, 20, 15,  5,-30},
+                new int[]{-30,  0, 15, 20, 20, 15,  0,-30},
+                new int[]{-30,  5, 10, 15, 15, 10,  5,-30},
+                new int[]{-40,-20,  0,  5,  5,  0,-20,-40},
+                new int[]{-50,-40,-30,-30,-30,-30,-40,-50}
+        };
     }
 
     public Knight(Board board, ChessColor color, String id, float probability) {
         super(board, color, id, probability);
         this.iconName = color.getLabel() + "_n";
+        score = 320;
+        scoreMatrix = new int[][]{
+                new int[]{-50,-40,-30,-30,-30,-30,-40,-50},
+                new int[]{-40,-20,  0,  0,  0,  0,-20,-40},
+                new int[]{-30,  0, 10, 15, 15, 10,  0,-30},
+                new int[]{-30,  5, 15, 20, 20, 15,  5,-30},
+                new int[]{-30,  0, 15, 20, 20, 15,  0,-30},
+                new int[]{-30,  5, 10, 15, 15, 10,  5,-30},
+                new int[]{-40,-20,  0,  5,  5,  0,-20,-40},
+                new int[]{-50,-40,-30,-30,-30,-30,-40,-50}
+        };
     }
 
     @Override

@@ -43,6 +43,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
@@ -55,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
     private Button drawButton;
     private TextView currentUsernameView;
     private TextView opponentUsernameView;
+    private TextView scoreView;
 
     private String opponentIp;
     private String username;
@@ -294,6 +296,7 @@ public class GameActivity extends AppCompatActivity {
 
         resetBoardColors();
         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+        setScore(board.evaluate());
     }
 
     private void revealPieceOnTake() {
@@ -392,6 +395,8 @@ public class GameActivity extends AppCompatActivity {
         if(board.isFinished()) {
             finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color) ? android.R.drawable.ic_input_add : android.R.drawable.ic_delete);
         }
+
+        setScore(board.evaluate());
     }
 
     private void performSplit(Move firstMove, Move secondMove) {
@@ -431,6 +436,7 @@ public class GameActivity extends AppCompatActivity {
         if(!onTurn) {
             onTurn = true;
         }
+        setScore(board.evaluate());
     }
 
     private void performCastling(Move move) {
@@ -644,6 +650,11 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setScore(float score) {
+        scoreView.setText(String.format(Locale.ENGLISH, "%.1f", score));
+        scoreView.setTextColor(getResources().getColor(score < 0 ? R.color.dark_red : R.color.dark_green, getTheme()));
+    }
     
     public String getColor() {
         return color;
@@ -685,6 +696,10 @@ public class GameActivity extends AppCompatActivity {
 
         opponentUsernameView = findViewById(R.id.opponentUsernameView);
         opponentUsernameView.setText(opponentName);
+
+        scoreView = findViewById(R.id.scoreTextView);
+        scoreView.setText("0.0");
+        scoreView.setTextColor(getResources().getColor(R.color.dark_green, getTheme()));
 
         resignButton = findViewById(R.id.resignButton);
         resignButton.setOnClickListener(this::resign);

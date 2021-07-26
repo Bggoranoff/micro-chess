@@ -17,11 +17,33 @@ public class Queen extends Piece {
     public Queen(Board board, ChessColor color) {
         super(board, color);
         this.iconName = color.getLabel() + "_q";
+        score = 900;
+        scoreMatrix = new int[][] {
+                new int[]{-20,-10,-10, -5, -5,-10,-10,-20},
+                new int[]{-10,  0,  0,  0,  0,  0,  0,-10},
+                new int[]{-10,  0,  5,  5,  5,  5,  0,-10},
+                new int[]{-5,  0,  5,  5,  5,  5,  0, -5},
+                new int[]{0,  0,  5,  5,  5,  5,  0, -5},
+                new int[]{-10,  5,  5,  5,  5,  5,  0,-10},
+                new int[]{-10,  0,  5,  0,  0,  0,  0,-10},
+                new int[]{-20,-10,-10, -5, -5,-10,-10,-20}
+        };
     }
 
     public Queen(Board board, ChessColor color, String id, float probability) {
         super(board, color, id, probability);
         this.iconName = color.getLabel() + "_q";
+        score = 900;
+        scoreMatrix = new int[][] {
+                new int[]{-20,-10,-10, -5, -5,-10,-10,-20},
+                new int[]{-10,  0,  0,  0,  0,  0,  0,-10},
+                new int[]{-10,  0,  5,  5,  5,  5,  0,-10},
+                new int[]{-5,  0,  5,  5,  5,  5,  0, -5},
+                new int[]{0,  0,  5,  5,  5,  5,  0, -5},
+                new int[]{-10,  5,  5,  5,  5,  5,  0,-10},
+                new int[]{-10,  0,  5,  0,  0,  0,  0,-10},
+                new int[]{-20,-10,-10, -5, -5,-10,-10,-20}
+        };
     }
 
     @Override

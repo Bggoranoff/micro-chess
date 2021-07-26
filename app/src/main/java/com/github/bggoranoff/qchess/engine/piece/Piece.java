@@ -25,6 +25,8 @@ public abstract class Piece implements ChessPiece {
     protected boolean isThere = true;
     protected Piece pair = null;
     protected boolean revealed = false;
+    protected int score;
+    protected int[][] scoreMatrix;
 
     public Piece(Board board, ChessColor color) {
         this.board = board;
@@ -69,6 +71,19 @@ public abstract class Piece implements ChessPiece {
             isThere = new Random().nextFloat() < probability;
         }
         return isThere;
+    }
+
+    @Override
+    public float evaluate() {
+        int x = square.getCoordinates().getX();
+        int y = color.equals(ChessColor.WHITE) ? 7 - square.getCoordinates().getY() : square.getCoordinates().getY();
+        float result = probability * score + scoreMatrix[y][x];
+        return result / 100;
+    }
+
+    @Override
+    public int getScore() {
+        return (int) (probability * score);
     }
 
     protected boolean isValid(int x, int y) {

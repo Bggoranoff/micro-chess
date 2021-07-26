@@ -106,8 +106,22 @@ public class Board implements ChessBoard {
 
     @Override
     public float evaluate() {
-        // TODO: use an algorithm to make an evaluation of the current board state
-        return 0.0f;
+        float scoreForWhite = evaluate(ChessColor.WHITE);
+        float scoreForBlack = evaluate(ChessColor.BLACK);
+        return scoreForWhite - scoreForBlack;
+    }
+
+    private float evaluate(ChessColor color) {
+        float result = 0.0f;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Piece piece = get(j, i).getPiece();
+                if(piece != null && piece.getColor().equals(color)) {
+                    result += piece.evaluate();
+                }
+            }
+        }
+        return result;
     }
 
     @Override
@@ -139,6 +153,18 @@ public class Board implements ChessBoard {
             pieceToTake.getSquare().setPiece(null);
             pieceToTake.setProbability(0.0f);
         }
+    }
+
+    public int getTotalScore() {
+        int result = 0;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if(get(j, i).getPiece() != null) {
+                    result += get(j, i).getPiece().getScore();
+                }
+            }
+        }
+        return result;
     }
 
     public boolean isFinished() {

@@ -17,11 +17,33 @@ public class Bishop extends Piece {
     public Bishop(Board board, ChessColor color) {
         super(board, color);
         this.iconName = color.getLabel() + "_b";
+        score = 330;
+        scoreMatrix = new int[][]{
+                new int[]{-20,-10,-10,-10,-10,-10,-10,-20},
+                new int[]{-10,  0,  0,  0,  0,  0,  0,-10},
+                new int[]{-10,  0,  5, 10, 10,  5,  0,-10},
+                new int[]{-10,  5,  5, 10, 10,  5,  5,-10},
+                new int[]{-10,  0, 10, 10, 10, 10,  0,-10},
+                new int[]{-10, 10, 10, 10, 10, 10, 10,-10},
+                new int[]{-10,  5,  0,  0,  0,  0,  5,-10},
+                new int[]{-20,-10,-10,-10,-10,-10,-10,-20}
+        };
     }
 
     public Bishop(Board board, ChessColor color, String id, float probability) {
         super(board, color, id, probability);
         this.iconName = color.getLabel() + "_b";
+        score = 330;
+        scoreMatrix = new int[][]{
+                new int[]{-20,-10,-10,-10,-10,-10,-10,-20},
+                new int[]{-10,  0,  0,  0,  0,  0,  0,-10},
+                new int[]{-10,  0,  5, 10, 10,  5,  0,-10},
+                new int[]{-10,  5,  5, 10, 10,  5,  5,-10},
+                new int[]{-10,  0, 10, 10, 10, 10,  0,-10},
+                new int[]{-10, 10, 10, 10, 10, 10, 10,-10},
+                new int[]{-10,  5,  0,  0,  0,  0,  5,-10},
+                new int[]{-20,-10,-10,-10,-10,-10,-10,-20}
+        };
     }
 
     @Override

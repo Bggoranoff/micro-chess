@@ -17,4 +17,8 @@ public interface ChessPiece {
     Piece[] split(Move firstMove, Move secondMove);
 
     boolean reveal();
+
+    float evaluate();
+
+    int getScore();
 }

@@ -19,11 +19,33 @@ public class Rook extends Piece {
     public Rook(Board board, ChessColor color) {
         super(board, color);
         this.iconName = color.getLabel() + "_r";
+        score = 500;
+        scoreMatrix = new int[][]{
+                new int[]{0,  0,  0,  0,  0,  0,  0,  0},
+                new int[]{5, 10, 10, 10, 10, 10, 10,  5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{0,  0,  0,  5,  5,  0,  0,  0}
+        };
     }
 
     public Rook(Board board, ChessColor color, String id, float probability) {
         super(board, color, id, probability);
         this.iconName = color.getLabel() + "_r";
+        score = 500;
+        scoreMatrix = new int[][]{
+                new int[]{0,  0,  0,  0,  0,  0,  0,  0},
+                new int[]{5, 10, 10, 10, 10, 10, 10,  5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{-5,  0,  0,  0,  0,  0,  0, -5},
+                new int[]{0,  0,  0,  5,  5,  0,  0,  0}
+        };
     }
 
     @Override

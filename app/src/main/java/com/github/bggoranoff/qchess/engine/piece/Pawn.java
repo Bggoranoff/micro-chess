@@ -20,6 +20,17 @@ public class Pawn extends Piece {
     public Pawn(Board board, ChessColor color) {
         super(board, color);
         this.iconName = color.getLabel() + "_p";
+        score = 100;
+        scoreMatrix = new int[][]{
+                new int[]{0,  0,  0,  0,  0,  0,  0,  0},
+                new int[]{50, 50, 50, 50, 50, 50, 50, 50},
+                new int[]{10, 10, 20, 30, 30, 20, 10, 10},
+                new int[]{5,  5, 10, 25, 25, 10,  5,  5},
+                new int[]{0,  0,  0, 20, 20,  0,  0,  0},
+                new int[]{5, -5,-10,  0,  0,-10, -5,  5},
+                new int[]{5, 10, 10,-20,-20, 10, 10,  5},
+                new int[]{0,  0,  0,  0,  0,  0,  0,  0}
+        };
     }
 
     public void getEnPassantMoves(List<String> availableMoves, int x, int y) {
