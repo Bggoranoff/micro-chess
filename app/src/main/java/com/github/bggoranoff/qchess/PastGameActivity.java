@@ -50,6 +50,7 @@ public class PastGameActivity extends AppCompatActivity {
     private TextView historyView;
     private TextView historyBackgroundView;
     private ImageView forwardView;
+    private ImageView resetView;
 
     private Board board;
     private PieceView currentPiece = null;
@@ -102,24 +103,35 @@ public class PastGameActivity extends AppCompatActivity {
                 int y = primaryColor.equals(ChessColor.WHITE) ? 7 - i : i;
                 Square currentSquare = board.get(j, y);
                 int squareId = ResourceSelector.getResourceId(this, currentSquare.getId());
-                View squareView = new View(this);
-                squareView.setId(squareId);
-                squareView.setLayoutParams(new TableRow.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
-                squareView.setTag(ChessTextFormatter.formatTag(y, j));
-                squareView.setBackground(AppCompatResources.getDrawable(
-                        this,
-                        board.get(j, y).getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.black
-                ));
-                currentRow.addView(squareView);
-                squareView.setOnClickListener(this::clickSquare);
+                View squareView = findViewById(squareId);
+                boolean squareAlreadyExists = false;
+                if(squareView == null) {
+                    squareView = new View(this);
+                    squareView.setId(squareId);
+                    squareView.setLayoutParams(new TableRow.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+                    squareView.setTag(ChessTextFormatter.formatTag(y, j));
+                    squareView.setBackground(AppCompatResources.getDrawable(
+                            this,
+                            board.get(j, y).getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.black
+                    ));
+                    currentRow.addView(squareView);
+                    squareView.setOnClickListener(this::clickSquare);
+                } else {
+                    squareAlreadyExists = true;
+                }
                 if(currentSquare.getPiece() != null) {
                     PieceView pieceView = new PieceView(this, currentSquare.getPiece(), squareId);
                     pieceViews[currentSquare.getCoordinates().getY()][currentSquare.getCoordinates().getX()] = pieceView;
                     pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
                     layout.addView(pieceView);
-                    squareView.post(() -> {
-                        setPieceLocation(pieceView, squareView);
-                    });
+                    View finalSquareView = squareView;
+                    if(squareAlreadyExists) {
+                        setPieceLocation(pieceView, finalSquareView);
+                    } else {
+                        squareView.post(() -> {
+                            setPieceLocation(pieceView, finalSquareView);
+                        });
+                    }
                     pieceView.setOnClickListener(v -> clickPiece(pieceView));
                 }
             }
@@ -415,12 +427,28 @@ public class PastGameActivity extends AppCompatActivity {
     }
 
     private void performNextMove(View view) {
-        System.out.println(Arrays.toString(gameHistory));
         parseMove(gameHistory[currentMove]);
         currentMove++;
         if(currentMove >= gameHistory.length) {
             view.setEnabled(false);
         }
+    }
+
+    private void resetBoard(View view) {
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if(pieceViews[i][j] != null) {
+                    ((ViewManager) pieceViews[i][j].getParent()).removeView(pieceViews[i][j]);
+                    pieceViews[i][j] = null;
+                }
+            }
+        }
+        board.reset(ChessColor.WHITE);
+        fillBoard();
+        forwardView.setEnabled(true);
+        currentMove = 0;
+        scoreView.setText("0.0");
+        scoreView.setTextColor(getResources().getColor(R.color.dark_green));
     }
 
     @Override
@@ -484,6 +512,9 @@ public class PastGameActivity extends AppCompatActivity {
 
         forwardView = findViewById(R.id.forwardImageView);
         forwardView.setOnClickListener(this::performNextMove);
+
+        resetView = findViewById(R.id.resetImageView);
+        resetView.setOnClickListener(this::resetBoard);
 
         cursor.close();
     }
