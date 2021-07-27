@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -32,7 +33,9 @@ public class GameListActivity extends AppCompatActivity {
     private SQLiteDatabase db;
 
     private void clickGame(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, titles.get(position), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), PastGameActivity.class);
+        intent.putExtra("id", ids.get(position));
+        startActivity(intent);
     }
 
     public void resetGames() {
