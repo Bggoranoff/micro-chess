@@ -69,6 +69,7 @@ public abstract class Piece implements ChessPiece {
     public boolean reveal() {
         if(!revealed) {
             isThere = new Random().nextFloat() < probability;
+            revealed = true;
         }
         return isThere;
     }
@@ -295,12 +296,17 @@ public abstract class Piece implements ChessPiece {
     }
 
     public boolean isThere() {
+        reveal();
         return isThere;
     }
 
     public void setThere(boolean there) {
         revealed = true;
         isThere = there;
+    }
+
+    public void setMoved(boolean moved) {
+        this.moved = moved;
     }
 
     public ChessColor getColor() {

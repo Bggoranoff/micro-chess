@@ -110,6 +110,7 @@ public class Board implements ChessBoard {
             }
         }
         square.setPiece(piece);
+        System.out.println(toString());
     }
 
     @Override

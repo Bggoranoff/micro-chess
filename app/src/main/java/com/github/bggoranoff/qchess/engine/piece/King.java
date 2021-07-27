@@ -173,8 +173,13 @@ public class King extends Piece {
         firstKing.setPair(secondKing);
         secondKing.setPair(firstKing);
 
+        firstKing.setMoved(true);
+        secondKing.setMoved(true);
+
         firstSquare.setPiece(firstKing);
         secondSquare.setPiece(secondKing);
+
+        moved = true;
 
         return new King[]{firstKing, secondKing};
     }
@@ -184,10 +189,10 @@ public class King extends Piece {
         int x = square.getCoordinates().getX();
         int y = color.equals(ChessColor.WHITE) ? square.getCoordinates().getY() : 7 - square.getCoordinates().getY();
         if(board.getTotalScore() <= 42000) {
-            float result = score + SCORE_MATRIX_END[y][x];
+            float result = probability * score + SCORE_MATRIX_END[y][x];
             return result / 100;
         } else {
-            float result = score + SCORE_MATRIX_MIDDLE[y][x];
+            float result = probability * score + SCORE_MATRIX_MIDDLE[y][x];
             return result / 100;
         }
     }

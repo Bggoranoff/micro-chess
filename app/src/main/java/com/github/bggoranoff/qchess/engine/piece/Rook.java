@@ -84,6 +84,9 @@ public class Rook extends Piece {
         firstRook.setPair(secondRook);
         secondRook.setPair(firstRook);
 
+        firstRook.setMoved(true);
+        secondRook.setMoved(true);
+
         firstSquare.setPiece(firstRook);
         secondSquare.setPiece(secondRook);
 
