@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/gameListIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:contentDescription="@string/past_game" />
+
+    <TextView
+        android:id="@+id/gameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/gameListIcon"
+        android:layout_toEndOf="@+id/gameListIcon"
+        android:layout_toStartOf="@+id/gameDeleteIcon"
+        android:text="@string/past_game"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/gameTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gameTitle"
+        android:layout_toEndOf="@+id/gameListIcon"
+        android:layout_toStartOf="@+id/gameDeleteIcon"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        android:text="@string/default_date" />
+
+    <ImageView
+        android:id="@+id/gameDeleteIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@android:drawable/ic_menu_delete"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/delete" />
+
+</RelativeLayout>

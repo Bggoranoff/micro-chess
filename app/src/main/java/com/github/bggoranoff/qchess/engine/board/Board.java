@@ -27,13 +27,16 @@ public class Board implements ChessBoard {
     private String result = "";
 
     public Board() {
+        clear();
+    }
+
+    private void clear() {
         matrix = new Square[8][8];
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 matrix[i][j] = new Square(j, i);
             }
         }
-
         takenBlackPieces = new ArrayList<>();
         takenWhitePieces = new ArrayList<>();
         history = new ArrayList<>();
@@ -42,6 +45,7 @@ public class Board implements ChessBoard {
 
     public void reset(ChessColor primaryColor) {
         ChessColor secondaryColor = primaryColor.equals(ChessColor.WHITE) ? ChessColor.BLACK : ChessColor.WHITE;
+        clear();
 
         // user pawns
         for(int i = 0; i < 8; i++) {
@@ -106,6 +110,7 @@ public class Board implements ChessBoard {
             }
         }
         square.setPiece(piece);
+        System.out.println(toString());
     }
 
     @Override
