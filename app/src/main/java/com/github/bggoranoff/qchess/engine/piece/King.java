@@ -176,8 +176,6 @@ public class King extends Piece {
         firstSquare.setPiece(firstKing);
         secondSquare.setPiece(secondKing);
 
-        board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
-
         return new King[]{firstKing, secondKing};
     }
 

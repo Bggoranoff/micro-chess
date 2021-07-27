@@ -85,8 +85,6 @@ public class Bishop extends Piece {
         firstSquare.setPiece(firstBishop);
         secondSquare.setPiece(secondBishop);
 
-        board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
-
         return new Bishop[]{firstBishop, secondBishop};
     }
 

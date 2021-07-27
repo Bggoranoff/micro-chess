@@ -87,8 +87,6 @@ public class Queen extends Piece {
         firstSquare.setPiece(firstQueen);
         secondSquare.setPiece(secondQueen);
 
-        board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
-
         return new Queen[]{firstQueen, secondQueen};
     }
 

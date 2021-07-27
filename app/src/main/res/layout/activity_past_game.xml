@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/swordsImageView"
+            android:id="@+id/resetImageView"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="100dp"
@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/swords" />
+            app:srcCompat="@drawable/take_back" />
 
         <TextView
             android:id="@+id/scoreTextView"
@@ -49,7 +49,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/forwardImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scoreTextView">
@@ -163,6 +163,19 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/boardLayout"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/forwardImageView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginBottom="64dp"
+            android:layout_marginEnd="100dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@android:drawable/ic_media_next" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

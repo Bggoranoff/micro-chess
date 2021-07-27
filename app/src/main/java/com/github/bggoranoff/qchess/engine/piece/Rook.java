@@ -87,8 +87,6 @@ public class Rook extends Piece {
         firstSquare.setPiece(firstRook);
         secondSquare.setPiece(secondRook);
 
-        board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
-
         return new Rook[]{firstRook, secondRook};
     }
 

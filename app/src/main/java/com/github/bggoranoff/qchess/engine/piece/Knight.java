@@ -134,8 +134,6 @@ public class Knight extends Piece {
         firstSquare.setPiece(firstKnight);
         secondSquare.setPiece(secondKnight);
 
-        board.getHistory().add(firstMove.toString() + "$" + secondMove.toString());
-
         return new Knight[]{firstKnight, secondKnight};
     }
 
