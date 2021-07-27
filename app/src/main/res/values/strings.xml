@@ -36,4 +36,7 @@
     <string name="take_back">Take Back</string>
 
     <string name="past_games">Past Games</string>
+    <string name="past_game">Past Game</string>
+    <string name="default_date">10/12/2020</string>
+    <string name="delete">Delete</string>
 </resources>
