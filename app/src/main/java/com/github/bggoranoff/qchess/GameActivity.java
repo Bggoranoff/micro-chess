@@ -222,7 +222,7 @@ public class GameActivity extends AppCompatActivity {
     private void clickPiece(PieceView pieceView) {
         currentPiece = pieceView;
         View squareView = findViewById(pieceView.getSquareId());
-        if(currentPiece.getPiece().getColor().equals(primaryColor)) {
+        if(currentPiece.getPiece().getColor().equals(primaryColor) || squareView.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_red)).getConstantState())) {
             squareView.performClick();
         } else {
             resetBoardColors();
