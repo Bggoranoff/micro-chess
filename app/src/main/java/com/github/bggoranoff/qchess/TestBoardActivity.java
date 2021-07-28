@@ -26,6 +26,12 @@ import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 public class TestBoardActivity extends BoardActivity {
 
     private ImageView resetView;
+    private ImageView flipView;
+
+    private void flipBoard(View view) {
+        primaryColor = primaryColor == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
+        resetBoard(view);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,9 @@ public class TestBoardActivity extends BoardActivity {
         pieceViews = new PieceView[8][8];
         boardLayout = findViewById(R.id.boardLayout);
         fillBoard();
+
+        flipView = findViewById(R.id.flipImageView);
+        flipView.setOnClickListener(this::flipBoard);
     }
 
     @Override
