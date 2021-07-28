@@ -82,6 +82,9 @@ public class Bishop extends Piece {
         firstBishop.setPair(secondBishop);
         secondBishop.setPair(firstBishop);
 
+        firstBishop.setRevealed(false);
+        secondBishop.setRevealed(false);
+
         firstSquare.setPiece(firstBishop);
         secondSquare.setPiece(secondBishop);
 

@@ -296,13 +296,16 @@ public abstract class Piece implements ChessPiece {
     }
 
     public boolean isThere() {
-        reveal();
         return isThere;
     }
 
     public void setThere(boolean there) {
         revealed = true;
         isThere = there;
+    }
+
+    public void setRevealed(boolean revealed) {
+        this.revealed = revealed;
     }
 
     public void setMoved(boolean moved) {

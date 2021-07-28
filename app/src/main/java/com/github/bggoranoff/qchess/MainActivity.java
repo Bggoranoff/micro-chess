@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private TextView manualLink;
     private EditText usernameEditText;
     private Button playButton;
+    private Button boardButton;
     private ImageView iconView;
     private SharedPreferences sharedPreferences;
     private String icon = "b_k";
@@ -67,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         startActivity(intent);
     }
 
+    private void redirectToTestBoardActivity(View view) {
+        saveUsername();
+        hideKeyboard(view);
+        Intent intent = new Intent(getApplicationContext(), TestBoardActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         playButton = findViewById(R.id.playButton);
         playButton.setOnClickListener(this::redirectToUserListActivity);
+
+        boardButton = findViewById(R.id.boardButton);
+        boardButton.setOnClickListener(this::redirectToTestBoardActivity);
 
         iconView = findViewById(R.id.iconView);
         iconView.setOnClickListener(this::redirectToIconsActivity);

@@ -131,6 +131,9 @@ public class Knight extends Piece {
         firstKnight.setPair(secondKnight);
         secondKnight.setPair(firstKnight);
 
+        firstKnight.setRevealed(false);
+        secondKnight.setRevealed(false);
+
         firstSquare.setPiece(firstKnight);
         secondSquare.setPiece(secondKnight);
 

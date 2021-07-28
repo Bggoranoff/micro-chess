@@ -20,9 +20,13 @@ import com.github.bggoranoff.qchess.engine.piece.Piece;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import com.github.bggoranoff.qchess.engine.util.ChessTextFormatter;
 import com.github.bggoranoff.qchess.engine.util.Coordinates;
+import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
+import com.github.bggoranoff.qchess.util.TextFormatter;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
@@ -46,12 +50,66 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected boolean pieceTaken = false;
     protected ChessColor primaryColor;
 
+    protected Move firstSplitMove = null;
     protected String pieceTakenIsThere = "y";
     protected String pieceOnTakeIsThere = "y";
 
     protected abstract void clickSquare(View view);
 
     protected abstract void clickPiece(PieceView pieceView);
+
+    protected void initiateSplit(View view, Coordinates startCoordinates, Coordinates endCoordinates) {
+        firstSplitMove = new Move(startCoordinates, endCoordinates);
+        PieceView pieceView = new PieceView(this, lastPiece.getPiece(), view.getId());
+        pieceView.setAlpha(.5f);
+        pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        pieceView.setOnClickListener(null);
+        layout.addView(pieceView);
+        setPieceLocation(pieceView, currentSquare);
+        visualiseMove(pieceView, view);
+        pieceViews[endCoordinates.getY()][endCoordinates.getX()] = pieceView;
+    }
+
+    protected void clickOnEmptySquare(View view) {
+        if(currentPiece != null) {
+            Piece containedPiece = currentPiece.getPiece();
+            List<String> availableSquares = containedPiece.getAvailableSquares();
+            for(String square : availableSquares) {
+                Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
+                int squareId = ResourceSelector.getResourceId(
+                        this,
+                        "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
+                );
+                View v = findViewById(squareId);
+                v.setBackground(AppCompatResources.getDrawable(this, R.color.dark_red));
+            }
+            lastPiece = currentPiece;
+            currentPiece = null;
+        }
+        view.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
+        currentSquare = view;
+    }
+
+    protected void displaySplitMoves() {
+        resetBoardColors();
+        if(currentPiece.getPiece().getProbability() == 1.0f) {
+            Piece containedPiece = currentPiece.getPiece();
+            List<String> availableSquares = containedPiece.getAvailableSplitSquares();
+            if (availableSquares.size() > 0) {
+                for (String square : availableSquares) {
+                    Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
+                    int squareId = ResourceSelector.getResourceId(
+                            this,
+                            "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
+                    );
+                    View v = findViewById(squareId);
+                    v.setBackground(AppCompatResources.getDrawable(this, R.color.teal_200));
+                }
+                currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
+            }
+            currentPiece = null;
+        }
+    }
 
     protected void setPieceLocation(PieceView pieceView, View squareView) {
         int[] location = new int[2];
@@ -198,39 +256,29 @@ public abstract class BoardActivity extends AppCompatActivity {
         for(int i = 0; i < 8; i++) {
             int rowId = ResourceSelector.getResourceId(this, "row" + i);
             TableRow currentRow = boardLayout.findViewById(rowId);
+            currentRow.removeAllViews();
             for(int j = 0; j < 8; j++) {
                 int y = primaryColor.equals(ChessColor.WHITE) ? 7 - i : i;
                 Square currentSquare = board.get(j, y);
                 int squareId = ResourceSelector.getResourceId(this, currentSquare.getId());
-                View squareView = findViewById(squareId);
-                boolean squareAlreadyExists = false;
-                if(squareView == null) {
-                    squareView = new View(this);
-                    squareView.setId(squareId);
-                    squareView.setLayoutParams(new TableRow.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
-                    squareView.setTag(ChessTextFormatter.formatTag(y, j));
-                    squareView.setBackground(AppCompatResources.getDrawable(
-                            this,
-                            board.get(j, y).getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.black
-                    ));
-                    currentRow.addView(squareView);
-                    squareView.setOnClickListener(this::clickSquare);
-                } else {
-                    squareAlreadyExists = true;
-                }
+                View squareView = new View(this);
+                squareView.setId(squareId);
+                squareView.setLayoutParams(new TableRow.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+                squareView.setTag(ChessTextFormatter.formatTag(y, j));
+                squareView.setBackground(AppCompatResources.getDrawable(
+                        this,
+                        board.get(j, y).getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.black
+                ));
+                currentRow.addView(squareView);
+                squareView.setOnClickListener(this::clickSquare);
                 if(currentSquare.getPiece() != null) {
                     PieceView pieceView = new PieceView(this, currentSquare.getPiece(), squareId);
                     pieceViews[currentSquare.getCoordinates().getY()][currentSquare.getCoordinates().getX()] = pieceView;
                     pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
-                    layout.addView(pieceView);
-                    View finalSquareView = squareView;
-                    if(squareAlreadyExists) {
-                        setPieceLocation(pieceView, finalSquareView);
-                    } else {
-                        squareView.post(() -> {
-                            setPieceLocation(pieceView, finalSquareView);
-                        });
-                    }
+                    squareView.post(() -> {
+                        layout.addView(pieceView);
+                        setPieceLocation(pieceView, squareView);
+                    });
                     pieceView.setOnClickListener(v -> clickPiece(pieceView));
                 }
             }

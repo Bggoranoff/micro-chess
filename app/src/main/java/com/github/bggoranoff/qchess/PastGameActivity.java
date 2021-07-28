@@ -23,8 +23,6 @@ import java.util.Objects;
 
 public class PastGameActivity extends BoardActivity {
 
-    private float deviceHeight;
-
     private ImageView forwardView;
     private ImageView resetView;
 
@@ -114,7 +112,7 @@ public class PastGameActivity extends BoardActivity {
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        deviceHeight = (float) metrics.heightPixels / metrics.ydpi;
+        float deviceHeight = (float) metrics.heightPixels / metrics.ydpi;
         pieceOffset = (4.780f - deviceHeight) * 100;
 
         primaryColor = cursor.getString(colorIndex).equals("White") ? ChessColor.WHITE : ChessColor.BLACK;

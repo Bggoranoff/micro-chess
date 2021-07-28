@@ -176,6 +176,9 @@ public class King extends Piece {
         firstKing.setMoved(true);
         secondKing.setMoved(true);
 
+        firstKing.setRevealed(false);
+        secondKing.setRevealed(false);
+
         firstSquare.setPiece(firstKing);
         secondSquare.setPiece(secondKing);
 
