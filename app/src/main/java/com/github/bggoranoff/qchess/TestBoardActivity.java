@@ -30,7 +30,16 @@ public class TestBoardActivity extends BoardActivity {
 
     private void flipBoard(View view) {
         primaryColor = primaryColor == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
-        resetBoard(view);
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if(pieceViews[i][j] != null) {
+                    ((ViewManager) pieceViews[i][j].getParent()).removeView(pieceViews[i][j]);
+                    pieceViews[i][j] = null;
+                }
+            }
+        }
+        resetBoardColors();
+        fillBoard();
     }
 
     @Override
