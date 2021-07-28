@@ -84,6 +84,9 @@ public class Rook extends Piece {
         firstRook.setPair(secondRook);
         secondRook.setPair(firstRook);
 
+        firstRook.setRevealed(false);
+        secondRook.setRevealed(false);
+
         firstRook.setMoved(true);
         secondRook.setMoved(true);
 

@@ -84,6 +84,9 @@ public class Queen extends Piece {
         firstQueen.setPair(secondQueen);
         secondQueen.setPair(firstQueen);
 
+        firstQueen.setRevealed(false);
+        secondQueen.setRevealed(false);
+
         firstSquare.setPiece(firstQueen);
         secondSquare.setPiece(secondQueen);
 

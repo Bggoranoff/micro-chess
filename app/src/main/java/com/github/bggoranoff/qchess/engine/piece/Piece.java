@@ -305,6 +305,10 @@ public abstract class Piece implements ChessPiece {
         isThere = there;
     }
 
+    public void setRevealed(boolean revealed) {
+        this.revealed = revealed;
+    }
+
     public void setMoved(boolean moved) {
         this.moved = moved;
     }

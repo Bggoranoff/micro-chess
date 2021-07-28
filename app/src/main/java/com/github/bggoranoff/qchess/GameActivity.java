@@ -52,7 +52,6 @@ public class GameActivity extends BoardActivity {
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
 
-    private Move firstSplitMove = null;
     private boolean onTurn;
     private String color;
 
@@ -201,59 +200,6 @@ public class GameActivity extends BoardActivity {
             resetBoardColors();
             squareView.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
         }
-    }
-
-    private void clickOnEmptySquare(View view) {
-        if(currentPiece != null) {
-            Piece containedPiece = currentPiece.getPiece();
-            List<String> availableSquares = containedPiece.getAvailableSquares();
-            for(String square : availableSquares) {
-                Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
-                int squareId = ResourceSelector.getResourceId(
-                        this,
-                        "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
-                );
-                View v = findViewById(squareId);
-                v.setBackground(AppCompatResources.getDrawable(this, R.color.dark_red));
-            }
-            lastPiece = currentPiece;
-            currentPiece = null;
-        }
-        view.setBackground(AppCompatResources.getDrawable(this, R.color.dark_green));
-        currentSquare = view;
-    }
-
-    private void displaySplitMoves() {
-        resetBoardColors();
-        if(currentPiece.getPiece().getProbability() == 1.0f) {
-            Piece containedPiece = currentPiece.getPiece();
-            List<String> availableSquares = containedPiece.getAvailableSplitSquares();
-            if (availableSquares.size() > 0) {
-                for (String square : availableSquares) {
-                    Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
-                    int squareId = ResourceSelector.getResourceId(
-                            this,
-                            "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
-                    );
-                    View v = findViewById(squareId);
-                    v.setBackground(AppCompatResources.getDrawable(this, R.color.teal_200));
-                }
-                currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
-            }
-            currentPiece = null;
-        }
-    }
-
-    private void initiateSplit(View view, Coordinates startCoordinates, Coordinates endCoordinates) {
-        firstSplitMove = new Move(startCoordinates, endCoordinates);
-        PieceView pieceView = new PieceView(this, lastPiece.getPiece(), view.getId());
-        pieceView.setAlpha(.5f);
-        pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
-        pieceView.setOnClickListener(null);
-        layout.addView(pieceView);
-        setPieceLocation(pieceView, currentSquare);
-        visualiseMove(pieceView, view);
-        pieceViews[endCoordinates.getY()][endCoordinates.getX()] = pieceView;
     }
 
     private void completeSplit(View view, Coordinates startCoordinates, Coordinates endCoordinates) {
