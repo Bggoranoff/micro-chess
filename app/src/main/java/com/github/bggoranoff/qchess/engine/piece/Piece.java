@@ -296,7 +296,6 @@ public abstract class Piece implements ChessPiece {
     }
 
     public boolean isThere() {
-        reveal();
         return isThere;
     }
 
