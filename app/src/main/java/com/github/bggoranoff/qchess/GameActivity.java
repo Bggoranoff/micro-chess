@@ -62,7 +62,7 @@ public class GameActivity extends BoardActivity {
     
     private void resign(View view) {
         new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.alert)
                 .setTitle("Resign")
                 .setMessage("Do you want to resign?")
                 .setPositiveButton("Yes", (dialog, which) -> {
@@ -81,11 +81,11 @@ public class GameActivity extends BoardActivity {
     public void notifyDrawRequested() {
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(R.drawable.alert)
                     .setTitle("Draw")
                     .setMessage("Your opponent requested a draw")
                     .setPositiveButton("Accept", (dialog, which) -> {
-                        finishGame("Game drawn!", android.R.drawable.ic_menu_close_clear_cancel);
+                        finishGame("Game drawn!", R.drawable.draw);
                         sendMessageToOpponent(MoveReceiveTask.DRAW);
                     })
                     .setNegativeButton("Decline", (dialog, which) -> {
@@ -103,7 +103,7 @@ public class GameActivity extends BoardActivity {
 
     public void notifyDrawAccepted() {
         runOnUiThread(() -> {
-            finishGame("Game drawn!", android.R.drawable.ic_menu_close_clear_cancel);
+            finishGame("Game drawn!", R.drawable.draw);
         });
     }
     
@@ -126,7 +126,7 @@ public class GameActivity extends BoardActivity {
 
     private void displayHistory(View view) {
         new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_menu_save)
+                .setIcon(R.drawable.save)
                 .setTitle("Game History")
                 .setMessage(board.formatFullHistory())
                 .setPositiveButton("Ok", null)
@@ -267,7 +267,7 @@ public class GameActivity extends BoardActivity {
         }
 
         if(board.isFinished()) {
-            finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color) ? android.R.drawable.ic_input_add : android.R.drawable.ic_delete);
+            finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color) ? R.drawable.win : R.drawable.loss);
         }
 
         lastPiece = null;
@@ -418,7 +418,7 @@ public class GameActivity extends BoardActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.alert)
                 .setTitle("Exit")
                 .setMessage("Do you want to exit this game?")
                 .setPositiveButton("Yes", (dialog, which) -> {

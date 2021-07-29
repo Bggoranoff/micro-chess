@@ -41,7 +41,7 @@ public class PastGameActivity extends BoardActivity {
         }
 
         new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_menu_save)
+                .setIcon(R.drawable.save)
                 .setTitle("Game History")
                 .setMessage(fullHistory)
                 .setPositiveButton("Ok", null)
