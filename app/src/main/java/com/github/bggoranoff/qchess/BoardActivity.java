@@ -33,6 +33,7 @@ import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 public abstract class BoardActivity extends AppCompatActivity {
     
     protected float pieceOffset = 10.0f;
+    protected float pieceXOffset;
 
     protected ConstraintLayout layout;
     protected TableLayout boardLayout;
@@ -113,8 +114,9 @@ public abstract class BoardActivity extends AppCompatActivity {
 
     protected void setPieceLocation(PieceView pieceView, View squareView) {
         int[] location = new int[2];
+        pieceXOffset = getInDps(this, 3);
         squareView.getLocationOnScreen(location);
-        pieceView.setX(location[0] + getInDps(this, 3));
+        pieceView.setX(location[0] + pieceXOffset);
         pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);
     }
 
@@ -142,10 +144,11 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected void visualiseMove(PieceView pieceView, View squareView) {
         squareView.post(() -> {
             int[] location = new int[2];
+            pieceXOffset = getInDps(this, 3);
             squareView.getLocationOnScreen(location);
             pieceView.animate()
                     .y(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset)
-                    .x(location[0] + getInDps(this, 3))
+                    .x(location[0] + pieceXOffset)
                     .setDuration(350)
                     .start();
             pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);

@@ -66,7 +66,7 @@ public class GameActivity extends BoardActivity {
                 .setTitle("Resign")
                 .setMessage("Do you want to resign?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    finishGame(color + " lost by resignation!", android.R.drawable.ic_delete);
+                    finishGame(color + " lost by resignation!", R.drawable.loss);
                     sendMessageToOpponent(MoveReceiveTask.RESIGN);
                 })
                 .setNegativeButton("No", null)
@@ -216,7 +216,7 @@ public class GameActivity extends BoardActivity {
 
         PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
         secondPieceView.setAlpha(.5f);
-        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
         secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
         layout.addView(secondPieceView);
         setPieceLocation(secondPieceView, currentSquare);

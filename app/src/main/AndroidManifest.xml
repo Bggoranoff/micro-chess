@@ -16,8 +16,12 @@
         android:roundIcon="@drawable/chess_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.QChess">
-        <activity android:name=".TestBoardActivity"></activity>
-        <activity android:name=".PastGameActivity" />
+        <activity
+            android:name=".TestBoardActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".PastGameActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GameActivity"
             android:screenOrientation="portrait" />

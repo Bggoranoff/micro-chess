@@ -111,7 +111,7 @@ public class TestBoardActivity extends BoardActivity {
                 completeSplit(view, startCoordinates, endCoordinates);
                 firstSplitMove = null;
             }
-        } else {
+        } else if(firstSplitMove == null) {
             resetBoardColors();
             clickOnEmptySquare(view);
         }
@@ -131,7 +131,7 @@ public class TestBoardActivity extends BoardActivity {
 
         PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
         secondPieceView.setAlpha(.5f);
-        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
         secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
         layout.addView(secondPieceView);
         setPieceLocation(secondPieceView, currentSquare);
