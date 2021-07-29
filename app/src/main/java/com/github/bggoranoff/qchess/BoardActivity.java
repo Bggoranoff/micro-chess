@@ -62,7 +62,7 @@ public abstract class BoardActivity extends AppCompatActivity {
         firstSplitMove = new Move(startCoordinates, endCoordinates);
         PieceView pieceView = new PieceView(this, lastPiece.getPiece(), view.getId());
         pieceView.setAlpha(.5f);
-        pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
         pieceView.setOnClickListener(null);
         layout.addView(pieceView);
         setPieceLocation(pieceView, currentSquare);
@@ -114,7 +114,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected void setPieceLocation(PieceView pieceView, View squareView) {
         int[] location = new int[2];
         squareView.getLocationOnScreen(location);
-        pieceView.setX(location[0]);
+        pieceView.setX(location[0] + getInDps(this, 3));
         pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);
     }
 
@@ -145,7 +145,7 @@ public abstract class BoardActivity extends AppCompatActivity {
             squareView.getLocationOnScreen(location);
             pieceView.animate()
                     .y(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset)
-                    .x(location[0])
+                    .x(location[0] + getInDps(this, 3))
                     .setDuration(350)
                     .start();
             pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);
@@ -274,7 +274,7 @@ public abstract class BoardActivity extends AppCompatActivity {
                 if(currentSquare.getPiece() != null) {
                     PieceView pieceView = new PieceView(this, currentSquare.getPiece(), squareId);
                     pieceViews[currentSquare.getCoordinates().getY()][currentSquare.getCoordinates().getX()] = pieceView;
-                    pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+                    pieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
                     squareView.post(() -> {
                         layout.addView(pieceView);
                         setPieceLocation(pieceView, squareView);
@@ -399,7 +399,7 @@ public abstract class BoardActivity extends AppCompatActivity {
 
         PieceView firstPieceView = new PieceView(this, resultingPieces[0], firstView.getId());
         firstPieceView.setAlpha(.5f);
-        firstPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        firstPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
         layout.addView(firstPieceView);
         setPieceLocation(firstPieceView, currentSquare);
         visualiseMove(firstPieceView, firstView);
@@ -408,7 +408,7 @@ public abstract class BoardActivity extends AppCompatActivity {
 
         PieceView secondPieceView = new PieceView(this, resultingPieces[1], secondView.getId());
         secondPieceView.setAlpha(.5f);
-        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
+        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
         secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
         layout.addView(secondPieceView);
         setPieceLocation(secondPieceView, currentSquare);
