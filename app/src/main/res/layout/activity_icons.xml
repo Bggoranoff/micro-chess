@@ -68,6 +68,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 android:alpha="1.0"
+                                android:minHeight="64dp"
                                 app:srcCompat="@drawable/b_b"
                                 android:contentDescription="@string/b_b"
                                 android:tag="b_b"
@@ -79,6 +80,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 app:srcCompat="@drawable/w_b"
+                                android:minHeight="64dp"
                                 android:contentDescription="@string/w_b"
                                 android:tag="w_b"
                                 android:id="@+id/whiteBishopIcon"/>
@@ -89,6 +91,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 app:srcCompat="@drawable/b_n"
+                                android:minHeight="64dp"
                                 android:contentDescription="@string/b_n"
                                 android:tag="b_n"
                                 android:id="@+id/blackKnightIcon" />
@@ -105,6 +108,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 app:srcCompat="@drawable/w_n"
+                                android:minHeight="64dp"
                                 android:contentDescription="@string/w_n"
                                 android:tag="w_n"
                                 android:id="@+id/whiteKnightIcon" />
@@ -115,6 +119,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 app:srcCompat="@drawable/b_k"
+                                android:minHeight="64dp"
                                 android:contentDescription="@string/b_k"
                                 android:tag="b_k"
                                 android:id="@+id/blackKingIcon" />
@@ -125,6 +130,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 app:srcCompat="@drawable/w_k"
+                                android:minHeight="64dp"
                                 android:contentDescription="@string/w_k"
                                 android:tag="w_k"
                                 android:id="@+id/whiteKingIcon" />
@@ -141,6 +147,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
                                 app:srcCompat="@drawable/b_q"
+                                android:minHeight="64dp"
                                 android:contentDescription="@string/b_q"
                                 android:tag="b_q"
                                 android:id="@+id/blackQueenIcon" />
@@ -153,6 +160,7 @@
                                 app:srcCompat="@drawable/w_q"
                                 android:contentDescription="@string/w_q"
                                 android:tag="w_q"
+                                android:minHeight="64dp"
                                 android:id="@+id/whiteQueenIcon" />
 
                             <ImageView
@@ -163,6 +171,7 @@
                                 app:srcCompat="@drawable/b_r"
                                 android:contentDescription="@string/b_r"
                                 android:tag="b_r"
+                                android:minHeight="64dp"
                                 android:id="@+id/blackRookIcon" />
 
                         </TableRow>
@@ -179,6 +188,7 @@
                                 app:srcCompat="@drawable/w_r"
                                 android:contentDescription="@string/w_r"
                                 android:tag="w_r"
+                                android:minHeight="64dp"
                                 android:id="@+id/whiteRookIcon" />
 
                             <ImageView
@@ -189,6 +199,7 @@
                                 app:srcCompat="@drawable/b_p"
                                 android:contentDescription="@string/b_p"
                                 android:tag="b_p"
+                                android:minHeight="64dp"
                                 android:id="@+id/blackPawnIcon" />
 
                             <ImageView
@@ -199,6 +210,7 @@
                                 app:srcCompat="@drawable/w_p"
                                 android:contentDescription="@string/w_p"
                                 android:tag="w_p"
+                                android:minHeight="64dp"
                                 android:id="@+id/whitePawnIcon" />
 
                         </TableRow>
