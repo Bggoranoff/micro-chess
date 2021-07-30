@@ -115,18 +115,21 @@ public class PastGameActivity extends BoardActivity {
         float deviceHeight = (float) metrics.heightPixels / metrics.ydpi;
         pieceOffset = (4.780f - deviceHeight) * 100;
 
-        primaryColor = cursor.getString(colorIndex).equals("White") ? ChessColor.WHITE : ChessColor.BLACK;
-        board = new Board();
-        board.reset(ChessColor.WHITE);
-        pieceViews = new PieceView[8][8];
-        boardLayout = findViewById(R.id.boardLayout);
-        fillBoard();
-
         scoreView = findViewById(R.id.scoreTextView);
         setScore(0.0f);
 
         gameHistory = cursor.getString(historyIndex).split(",");
         gameFormattedHistory = cursor.getString(formattedHistoryIndex).split(",");
+
+        primaryColor = cursor.getString(colorIndex).equals("White") ? ChessColor.WHITE : ChessColor.BLACK;
+        cursor.close();
+        db.close();
+
+        board = new Board();
+        board.reset(ChessColor.WHITE);
+        pieceViews = new PieceView[8][8];
+        boardLayout = findViewById(R.id.boardLayout);
+        fillBoard();
 
         StringBuilder formattedHistoryBuilder = new StringBuilder();
         for(int i = gameFormattedHistory.length - 1; i >= 0 && i >= gameFormattedHistory.length - 4; i--) {
@@ -146,7 +149,5 @@ public class PastGameActivity extends BoardActivity {
 
         resetView = findViewById(R.id.resetImageView);
         resetView.setOnClickListener(this::resetBoard);
-
-        cursor.close();
     }
 }

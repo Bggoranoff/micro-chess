@@ -138,6 +138,7 @@ public class GameActivity extends BoardActivity {
         Date date = new Date();
         long timeInMillis = date.getTime();
         DatabaseManager.saveGame(db, username, opponentName, color, timeInMillis, iconId, board.getHistory(), board.getFormattedHistory());
+        db.close();
     }
 
     @Override
