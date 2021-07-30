@@ -127,7 +127,7 @@ public abstract class BoardActivity extends AppCompatActivity {
                 squareView.setBackground(
                         AppCompatResources.getDrawable(
                                 this,
-                                currentSquare.getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.black
+                                currentSquare.getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.gray
                         )
                 );
             }
@@ -270,7 +270,7 @@ public abstract class BoardActivity extends AppCompatActivity {
                 squareView.setTag(ChessTextFormatter.formatTag(y, j));
                 squareView.setBackground(AppCompatResources.getDrawable(
                         this,
-                        board.get(j, y).getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.black
+                        board.get(j, y).getColor().equals(ChessColor.WHITE) ? R.color.white : R.color.gray
                 ));
                 currentRow.addView(squareView);
                 squareView.setOnClickListener(this::clickSquare);
