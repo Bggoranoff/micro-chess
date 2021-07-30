@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewManager;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.content.res.AppCompatResources;
@@ -131,7 +130,7 @@ public class TestBoardActivity extends BoardActivity {
 
         PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
         secondPieceView.setAlpha(.5f);
-        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
+        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
         secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
         layout.addView(secondPieceView);
         setPieceLocation(secondPieceView, currentSquare);

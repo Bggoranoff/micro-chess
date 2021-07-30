@@ -34,7 +34,6 @@ import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class GameActivity extends BoardActivity {
@@ -216,7 +215,7 @@ public class GameActivity extends BoardActivity {
 
         PieceView secondPieceView = new PieceView(this, resultingPieces[1], view.getId());
         secondPieceView.setAlpha(.5f);
-        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 35), getInDps(this, 35)));
+        secondPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
         secondPieceView.setOnClickListener(v -> clickPiece(secondPieceView));
         layout.addView(secondPieceView);
         setPieceLocation(secondPieceView, currentSquare);
