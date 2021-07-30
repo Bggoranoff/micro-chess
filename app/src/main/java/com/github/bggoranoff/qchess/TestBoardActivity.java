@@ -54,8 +54,7 @@ public class TestBoardActivity extends BoardActivity {
         resetView.setOnClickListener(this::resetBoard);
 
         scoreView = findViewById(R.id.scoreTextView);
-        scoreView.setText("0.0");
-        scoreView.setTextColor(getResources().getColor(R.color.dark_green));
+        setScore(0.0f);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);

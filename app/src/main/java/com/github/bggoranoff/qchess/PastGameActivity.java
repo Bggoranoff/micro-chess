@@ -123,8 +123,7 @@ public class PastGameActivity extends BoardActivity {
         fillBoard();
 
         scoreView = findViewById(R.id.scoreTextView);
-        scoreView.setText("0.0");
-        scoreView.setTextColor(getResources().getColor(R.color.dark_green, getTheme()));
+        setScore(0.0f);
 
         gameHistory = cursor.getString(historyIndex).split(",");
         gameFormattedHistory = cursor.getString(formattedHistoryIndex).split(",");

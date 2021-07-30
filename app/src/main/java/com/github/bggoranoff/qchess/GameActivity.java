@@ -389,8 +389,7 @@ public class GameActivity extends BoardActivity {
         opponentUsernameView.setText(opponentName);
 
         scoreView = findViewById(R.id.scoreTextView);
-        scoreView.setText("0.0");
-        scoreView.setTextColor(getResources().getColor(R.color.dark_green, getTheme()));
+        setScore(0.0f);
 
         historyView = findViewById(R.id.historyTextView);
         historyView.setText("...");

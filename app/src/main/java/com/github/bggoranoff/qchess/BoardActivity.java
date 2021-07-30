@@ -135,7 +135,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     }
 
     protected void setScore(float score) {
-        scoreView.setText(String.format(Locale.ENGLISH, (score > 0 ? "+" : "") + "%.1f", score));
+        scoreView.setText(String.format(Locale.ENGLISH, (score >= 0 ? "+" : "") + "%.1f", score));
         scoreView.setTextColor(getResources().getColor(score < 0 ? R.color.dark_red : R.color.dark_green, getTheme()));
     }
 
