@@ -166,7 +166,10 @@ public abstract class BoardActivity extends AppCompatActivity {
                 lastPiece.setAlpha(1.0f);
                 Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
                 PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
-                ((ViewManager) pair.getParent()).removeView(pair);
+                if(pair != null) {
+                    ((ViewManager) pair.getParent()).removeView(pair);
+                    pair.getPiece().setPair(null);
+                }
                 pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
                 lastPiece.getPiece().setPair(null);
             } else {
@@ -447,8 +450,8 @@ public abstract class BoardActivity extends AppCompatActivity {
             revealPieceOnTake();
             revealTakenPiece();
 
-            Coordinates pieceCoordinates = new Coordinates(move.getStart().getX(), move.getStart().getY()); // TODO: see if fixed, getStart()
-            pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
+//            Coordinates pieceCoordinates = new Coordinates(move.getStart().getX(), move.getStart().getY()); // TODO: see if fixed, getStart()
+//            pieceViews[pieceCoordinates.getY()][pieceCoordinates.getX()] = null;
         }
 
         resetBoardColors();

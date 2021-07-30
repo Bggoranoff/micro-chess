@@ -155,10 +155,14 @@ public class Board implements ChessBoard {
                 pieceToTake.setProbability(1.0f);
                 pieceToTake.getPair().getSquare().setPiece(null);
                 pieceToTake.getPair().setProbability(0.0f);
+                pieceToTake.getPair().setPair(null);
+                pieceToTake.setPair(null);
                 pieceToTake.getSquare().setPiece(null);
             }
         } else {
             pieceToTake.getPair().setProbability(1.0f);
+            pieceToTake.getPair().setPair(null);
+            pieceToTake.setPair(null);
             pieceToTake.getSquare().setPiece(null);
             pieceToTake.setProbability(0.0f);
         }
