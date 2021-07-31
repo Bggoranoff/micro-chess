@@ -6,6 +6,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -70,6 +71,7 @@ public class PastGameActivity extends BoardActivity {
     }
 
     private void performNextMove(View view) {
+        cp.start();
         parseMove(gameHistory[currentMove]);
         currentMove++;
         if(currentMove >= gameHistory.length) {
@@ -88,6 +90,9 @@ public class PastGameActivity extends BoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_game);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.move);
+        cp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         layout = findViewById(R.id.pastGameLayout);
         ChessAnimator.animateBackground(layout);

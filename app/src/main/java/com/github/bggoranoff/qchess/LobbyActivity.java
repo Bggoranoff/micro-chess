@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -50,6 +51,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
     private ImageView opponentIconView;
     private Button challengeButton;
     private SharedPreferences sharedPreferences;
+    private MediaPlayer mp;
 
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
@@ -74,6 +76,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
     }
 
     private void challengePlayer(View view) {
+        mp.start();
         WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = opponentDevice.deviceAddress;
@@ -100,6 +103,8 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         layout = findViewById(R.id.lobbyLayout);
         ChessAnimator.animateBackground(layout);

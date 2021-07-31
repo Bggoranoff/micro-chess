@@ -1,5 +1,6 @@
 package com.github.bggoranoff.qchess;
 
+import android.media.MediaPlayer;
 import android.view.View;
 import android.view.ViewManager;
 import android.widget.TableLayout;
@@ -20,19 +21,19 @@ import com.github.bggoranoff.qchess.engine.piece.Piece;
 import com.github.bggoranoff.qchess.engine.util.ChessColor;
 import com.github.bggoranoff.qchess.engine.util.ChessTextFormatter;
 import com.github.bggoranoff.qchess.engine.util.Coordinates;
-import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
 public abstract class BoardActivity extends AppCompatActivity {
     
     protected float pieceOffset = 10.0f;
+    protected MediaPlayer mp;
+    protected MediaPlayer cp;
 
     protected ConstraintLayout layout;
     protected TableLayout boardLayout;
@@ -140,6 +141,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     }
 
     protected void visualiseMove(PieceView pieceView, View squareView) {
+        mp.start();
         squareView.post(() -> {
             int[] location = new int[2];
             squareView.getLocationOnScreen(location);
@@ -191,10 +193,12 @@ public abstract class BoardActivity extends AppCompatActivity {
                 pieceTakenIsThere = "y";
                 Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
                 PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
-                ((ViewManager) pair.getParent()).removeView(pair);
-                pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
-                currentPiece.getPiece().setPair(null);
-                currentPiece.setAlpha(1.0f);
+                if(pair != null) {
+                    ((ViewManager) pair.getParent()).removeView(pair);
+                    pieceViews[pairCoordinates.getY()][pairCoordinates.getX()] = null;
+                    currentPiece.getPiece().setPair(null);
+                    currentPiece.setAlpha(1.0f);
+                }
             } else if (currentPiece.getPiece().getPair() != null) {
                 pieceTakenIsThere = "n";
                 Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
@@ -289,6 +293,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     }
 
     protected void resetBoard(View view) {
+        cp.start();
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if(pieceViews[i][j] != null) {

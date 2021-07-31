@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class IconsActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
+    private MediaPlayer mp;
 
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private ImageView currentImage;
@@ -30,10 +32,12 @@ public class IconsActivity extends AppCompatActivity {
     private String icon;
 
     private void redirectToMain(View view) {
+        mp.start();
         finish();
     }
 
     private void select(ImageView imageView) {
+
         currentImage.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_icon, getTheme()));
         imageView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_icon_selected, getTheme()));
         icon = imageView.getTag().toString();
@@ -46,6 +50,8 @@ public class IconsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_icons);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         sharedPreferences = getSharedPreferences(
                 "com.github.bggoranoff.qchess",
@@ -73,7 +79,10 @@ public class IconsActivity extends AppCompatActivity {
                             currentImage = imageView;
                             select(imageView);
                         }
-                        imageView.setOnClickListener(v -> select((ImageView) v));
+                        imageView.setOnClickListener(v -> {
+                            mp.start();
+                            select((ImageView) v);
+                        });
                         imageViews.add(imageView);
                     }
                 }

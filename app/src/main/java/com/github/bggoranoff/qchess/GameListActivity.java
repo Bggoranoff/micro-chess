@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,8 +33,10 @@ public class GameListActivity extends AppCompatActivity {
     private ArrayList<Integer> icons;
     private PastGamesAdapter adapter;
     private SQLiteDatabase db;
+    private MediaPlayer mp;
 
     private void clickGame(AdapterView<?> parent, View view, int position, long id) {
+        mp.start();
         Intent intent = new Intent(getApplicationContext(), PastGameActivity.class);
         intent.putExtra("id", ids.get(position));
         startActivity(intent);
@@ -100,6 +103,8 @@ public class GameListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         layout = findViewById(R.id.gameListLayout);
         ChessAnimator.animateBackground(layout);

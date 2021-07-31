@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -60,6 +61,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     private ArrayList<WifiP2pDevice> devices = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private SharedPreferences sharedPreferences;
+    private MediaPlayer mp;
 
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
@@ -112,11 +114,13 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     }
 
     private void redirectToGamesActivity(View view) {
+        mp.start();
         Intent intent = new Intent(getApplicationContext(), GameListActivity.class);
         startActivity(intent);
     }
 
     private void redirectToLobbyActivity(int position) {
+        mp.start();
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
         intent.putExtra("opponentName", usernames.get(position));
         intent.putExtra("opponentIcon", icons.get(position));
@@ -174,6 +178,8 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         manager = (WifiP2pManager) getApplicationContext().getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);

@@ -1,5 +1,6 @@
 package com.github.bggoranoff.qchess;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -28,6 +29,7 @@ public class TestBoardActivity extends BoardActivity {
     private ImageView flipView;
 
     private void flipBoard(View view) {
+        cp.start();
         primaryColor = primaryColor == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
@@ -46,6 +48,9 @@ public class TestBoardActivity extends BoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_board);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.move);
+        cp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         layout = findViewById(R.id.testBoardLayout);
         ChessAnimator.animateBackground(layout);

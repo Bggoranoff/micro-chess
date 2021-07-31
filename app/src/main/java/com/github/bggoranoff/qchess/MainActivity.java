@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private ImageView iconView;
     private SharedPreferences sharedPreferences;
     private String icon = "b_k";
+    private MediaPlayer mp;
 
     private void updateIcon() {
         icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", "b_k") : icon;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     }
 
     private void redirectToManualActivity(View view) {
+        mp.start();
         manualLink.animate().alpha(0.5f).setDuration(100);
         Intent intent = new Intent(getApplicationContext(), ManualActivity.class);
         startActivity(intent);
@@ -56,12 +59,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     }
 
     private void redirectToUserListActivity(View view) {
+        mp.start();
         saveUsername();
         Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
         startActivity(intent);
     }
 
     private void redirectToIconsActivity(View view) {
+        mp.start();
         saveUsername();
         hideKeyboard(view);
         Intent intent = new Intent(getApplicationContext(), IconsActivity.class);
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     }
 
     private void redirectToTestBoardActivity(View view) {
+        mp.start();
         saveUsername();
         hideKeyboard(view);
         Intent intent = new Intent(getApplicationContext(), TestBoardActivity.class);
@@ -80,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         sharedPreferences = this.getSharedPreferences(
                 "com.github.bggoranoff.qchess",

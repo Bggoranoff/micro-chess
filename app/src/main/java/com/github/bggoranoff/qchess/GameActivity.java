@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class GameActivity extends BoardActivity {
     }
     
     private void resign(View view) {
+        cp.start();
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.alert)
                 .setTitle("Resign")
@@ -73,6 +75,7 @@ public class GameActivity extends BoardActivity {
     }
 
     private void requestDraw(View view) {
+        cp.start();
         sendMessageToOpponent(MoveReceiveTask.ASK_DRAW);
         Toast.makeText(this, "Draw requested!", Toast.LENGTH_SHORT).show();
     }
@@ -357,6 +360,9 @@ public class GameActivity extends BoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.move);
+        cp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
