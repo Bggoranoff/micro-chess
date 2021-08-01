@@ -364,11 +364,6 @@ public class GameActivity extends BoardActivity {
         mp = MediaPlayer.create(getApplicationContext(), R.raw.move);
         cp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        deviceHeight = (float) metrics.heightPixels / metrics.ydpi;
-        pieceOffset = (4.780f - deviceHeight) * 100;
-
         layout = findViewById(R.id.gameLayout);
         ChessAnimator.animateBackground(layout);
 

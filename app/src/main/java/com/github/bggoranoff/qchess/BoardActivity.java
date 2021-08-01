@@ -1,6 +1,7 @@
 package com.github.bggoranoff.qchess;
 
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewManager;
 import android.widget.TableLayout;
@@ -30,8 +31,7 @@ import java.util.Locale;
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
 public abstract class BoardActivity extends AppCompatActivity {
-    
-    protected float pieceOffset = 10.0f;
+
     protected MediaPlayer mp;
     protected MediaPlayer cp;
 
@@ -115,8 +115,8 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected void setPieceLocation(PieceView pieceView, View squareView) {
         int[] location = new int[2];
         squareView.getLocationOnScreen(location);
-        pieceView.setX(location[0]);
-        pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);
+        pieceView.setX((float) location[0]);
+        pieceView.setY((float) location[1] - getInDps(this, Build.MODEL.toLowerCase().contains("nokia") ? 34 : 24));
     }
 
     protected void resetBoardColors() {
@@ -143,14 +143,15 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected void visualiseMove(PieceView pieceView, View squareView) {
         mp.start();
         squareView.post(() -> {
+            int offset = getInDps(this, Build.MODEL.toLowerCase().contains("nokia") ? 34 : 24);
             int[] location = new int[2];
             squareView.getLocationOnScreen(location);
             pieceView.animate()
-                    .y(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset)
+                    .y(location[1] - offset)
                     .x(location[0])
                     .setDuration(400)
                     .start();
-            pieceView.setY(location[1] - (float) 8 * squareView.getHeight() / 10 + pieceOffset);
+            pieceView.setY(location[1] - offset);
         });
     }
 

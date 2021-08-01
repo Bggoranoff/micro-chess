@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -60,11 +61,6 @@ public class TestBoardActivity extends BoardActivity {
 
         scoreView = findViewById(R.id.scoreTextView);
         setScore(0.0f);
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        float deviceHeight = (float) metrics.heightPixels / metrics.ydpi;
-        pieceOffset = (4.780f - deviceHeight) * 100;
 
         primaryColor = ChessColor.WHITE;
         board = new Board();

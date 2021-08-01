@@ -115,11 +115,6 @@ public class PastGameActivity extends BoardActivity {
         opponentUsernameView = findViewById(R.id.opponentUsernameView);
         opponentUsernameView.setText(cursor.getString(opponentIndex));
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        float deviceHeight = (float) metrics.heightPixels / metrics.ydpi;
-        pieceOffset = (4.780f - deviceHeight) * 100;
-
         scoreView = findViewById(R.id.scoreTextView);
         setScore(0.0f);
 
