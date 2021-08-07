@@ -199,7 +199,7 @@ public class Board implements ChessBoard {
 
     public String formatHistory() {
         StringBuilder result = new StringBuilder();
-        for(int i = formattedHistory.size() - 1; i >= 0 && i >= formattedHistory.size() - 4; i--) {
+        for(int i = formattedHistory.size() - 1; i >= 0 && i >= formattedHistory.size() - 3; i--) {
             result.append(formattedHistory.get(i)).append(" ");
         }
         result.deleteCharAt(result.length() - 1);

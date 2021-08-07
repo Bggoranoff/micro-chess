@@ -132,7 +132,7 @@ public class PastGameActivity extends BoardActivity {
         fillBoard();
 
         StringBuilder formattedHistoryBuilder = new StringBuilder();
-        for(int i = gameFormattedHistory.length - 1; i >= 0 && i >= gameFormattedHistory.length - 4; i--) {
+        for(int i = gameFormattedHistory.length - 1; i >= 0 && i >= gameFormattedHistory.length - 3; i--) {
             formattedHistoryBuilder.append(gameFormattedHistory[i]).append(" ");
         }
         formattedHistoryBuilder.deleteCharAt(formattedHistoryBuilder.length() - 1);

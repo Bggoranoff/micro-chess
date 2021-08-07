@@ -11,7 +11,6 @@ import android.media.MediaPlayer;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewManager;
 import android.widget.Button;
@@ -48,7 +47,6 @@ public class GameActivity extends BoardActivity {
     private SharedPreferences sharedPreferences;
     private int receivePort;
     private int sendPort;
-    private float deviceHeight;
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
 
