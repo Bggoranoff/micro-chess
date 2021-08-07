@@ -207,6 +207,9 @@ public abstract class BoardActivity extends AppCompatActivity {
                 pair.setAlpha(1.0f);
                 pair.getPiece().setPair(null);
             }
+        } else if(currentPiece != null) {
+            Coordinates currentCoordinates = currentPiece.getPiece().getSquare().getCoordinates();
+            pieceViews[currentCoordinates.getY()][currentCoordinates.getX()] = currentPiece;
         }
         pieceTaken = false;
     }
