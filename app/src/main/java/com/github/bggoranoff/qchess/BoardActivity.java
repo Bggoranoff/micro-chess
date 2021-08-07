@@ -237,7 +237,7 @@ public abstract class BoardActivity extends AppCompatActivity {
             rook.getPiece().move(rookMove);
 
             pieceViews[rookCoordinates.getY()][rookCoordinates.getX()] = null;
-            pieceViews[updatedRookCoordinates.getY()][updatedRookCoordinates.getX()] = null;
+            pieceViews[updatedRookCoordinates.getY()][updatedRookCoordinates.getX()] = rook;
 
             int rookSquareId = ResourceSelector.getResourceId(
                     this,
@@ -406,6 +406,9 @@ public abstract class BoardActivity extends AppCompatActivity {
                 "cell" + secondMove.getEnd().getY() + "" + secondMove.getEnd().getX()
         ));
 
+        ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
+        pieceViews[firstMove.getStart().getY()][firstMove.getStart().getX()] = null;
+
         PieceView firstPieceView = new PieceView(this, resultingPieces[0], firstView.getId());
         firstPieceView.setAlpha(.5f);
         firstPieceView.setLayoutParams(new ConstraintLayout.LayoutParams(getInDps(this, 40), getInDps(this, 40)));
@@ -425,8 +428,6 @@ public abstract class BoardActivity extends AppCompatActivity {
         pieceViews[secondMove.getEnd().getY()][secondMove.getEnd().getX()] = secondPieceView;
 
         resetBoardColors();
-        ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
-        pieceViews[firstMove.getStart().getY()][firstMove.getStart().getX()] = null;
         setScore(board.evaluate());
 
         return firstPieceView.getPiece().toString();
