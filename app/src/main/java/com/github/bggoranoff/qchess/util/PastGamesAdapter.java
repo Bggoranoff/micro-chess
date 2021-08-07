@@ -1,5 +1,6 @@
 package com.github.bggoranoff.qchess.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.github.bggoranoff.qchess.GameListActivity;
+import com.github.bggoranoff.qchess.activity.GameListActivity;
 import com.github.bggoranoff.qchess.R;
 
 import java.text.DateFormat;
@@ -50,6 +49,7 @@ public class PastGamesAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;

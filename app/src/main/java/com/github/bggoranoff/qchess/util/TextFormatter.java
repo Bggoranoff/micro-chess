@@ -1,6 +1,6 @@
 package com.github.bggoranoff.qchess.util;
 
-import com.github.bggoranoff.qchess.engine.util.Coordinates;
+import com.github.bggoranoff.qchess.model.util.Coordinates;
 
 public class TextFormatter {
 

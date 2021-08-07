@@ -37,15 +37,10 @@ public class DatabaseManager {
     public static String parseHistory(ArrayList<String> history) {
         StringBuilder historyBuilder = new StringBuilder();
         for(int i = 0; i < history.size() - 1; i++) {
-            historyBuilder.append(history.get(i) + ",");
+            historyBuilder.append(history.get(i)).append(",");
         }
         historyBuilder.append(history.get(history.size() - 1));
         return historyBuilder.toString();
-    }
-
-    public static List<String> parseHistory(String history) {
-        String[] splitHistory = history.split(",");
-        return Arrays.asList(splitHistory);
     }
 
     public static void saveGame(SQLiteDatabase db, String user, String opponent, String color, long time, int winner, ArrayList<String> history, ArrayList<String> formattedHistory) {

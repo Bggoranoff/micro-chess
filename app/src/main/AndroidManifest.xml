@@ -17,31 +17,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QChess">
         <activity
-            android:name=".TestBoardActivity"
+            android:name=".activity.TestBoardActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".PastGameActivity"
+            android:name=".activity.PastGameActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".GameActivity"
+            android:name=".activity.GameActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LobbyActivity"
+            android:name=".activity.LobbyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GameListActivity"
+            android:name=".activity.GameListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ManualActivity"
+            android:name=".activity.ManualActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserListActivity"
+            android:name=".activity.UserListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".IconsActivity"
+            android:name=".activity.IconsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
