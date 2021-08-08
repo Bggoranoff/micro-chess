@@ -39,6 +39,10 @@ import java.util.Objects;
 
 public class GameActivity extends BoardActivity {
 
+    public static final String DRAW = "draw";
+    public static final String WIN = "win";
+    public static final String LOSS = "loss";
+
     private Button resignButton;
     private Button drawButton;
 
@@ -66,7 +70,7 @@ public class GameActivity extends BoardActivity {
                 .setTitle("Resign")
                 .setMessage("Do you want to resign?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    finishGame(color + " lost by resignation!", R.drawable.loss);
+                    finishGame(color + " lost by resignation!", LOSS);
                     sendMessageToOpponent(MoveReceiveTask.RESIGN);
                 })
                 .setNegativeButton("No", null)
@@ -86,7 +90,7 @@ public class GameActivity extends BoardActivity {
                     .setTitle("Draw")
                     .setMessage("Your opponent requested a draw")
                     .setPositiveButton("Accept", (dialog, which) -> {
-                        finishGame("Game drawn!", R.drawable.draw);
+                        finishGame("Game drawn!", DRAW);
                         sendMessageToOpponent(MoveReceiveTask.DRAW);
                     })
                     .setNegativeButton("Decline", (dialog, which) -> {
@@ -104,18 +108,18 @@ public class GameActivity extends BoardActivity {
 
     public void notifyDrawAccepted() {
         runOnUiThread(() -> {
-            finishGame("Game drawn!", R.drawable.draw);
+            finishGame("Game drawn!", DRAW);
         });
     }
     
-    public void finishGame(String message, int iconId) {
+    public void finishGame(String message, String iconName) {
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
-                    .setIcon(iconId)
+                    .setIcon(ResourceSelector.getDrawable(this, iconName))
                     .setTitle(message)
                     .setMessage("Do you want to save this game?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        saveGame(iconId);
+                        saveGame(iconName);
                         exit();
                     })
                     .setNegativeButton("No", (dialog, which) -> {
@@ -134,12 +138,12 @@ public class GameActivity extends BoardActivity {
                 .show();
     }
 
-    private void saveGame(int iconId) {
+    private void saveGame(String iconName) {
         SQLiteDatabase db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
         Date date = new Date();
         long timeInMillis = date.getTime();
-        DatabaseManager.saveGame(db, username, opponentName, color, timeInMillis, iconId, board.getHistory(), board.getFormattedHistory());
+        DatabaseManager.saveGame(db, username, opponentName, color, timeInMillis, iconName, board.getHistory(), board.getFormattedHistory());
         db.close();
     }
 
@@ -269,7 +273,7 @@ public class GameActivity extends BoardActivity {
         }
 
         if(board.isFinished()) {
-            finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color) ? R.drawable.win : R.drawable.loss);
+            finishGame(board.getResult() + " wins by checkmate!", board.getResult().equals(color) ? WIN : LOSS);
         }
 
         lastPiece = null;

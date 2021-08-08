@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import com.github.bggoranoff.qchess.activity.GameActivity;
-import com.github.bggoranoff.qchess.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +55,7 @@ public class MoveReceiveTask extends AsyncTask<Void, Void, Void> {
                             activity.parseMove(commands[1]);
                             break;
                         case RESIGN:
-                            activity.finishGame(activity.getColor() + " won by resignation!", R.drawable.win);
+                            activity.finishGame(activity.getColor() + " won by resignation!", GameActivity.WIN);
                             break;
                         case ASK_DRAW:
                             activity.notifyDrawRequested();

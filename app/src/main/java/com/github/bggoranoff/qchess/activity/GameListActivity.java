@@ -31,7 +31,7 @@ public class GameListActivity extends AppCompatActivity {
     private ArrayList<Integer> ids;
     private ArrayList<String> titles;
     private ArrayList<Long> dates;
-    private ArrayList<Integer> icons;
+    private ArrayList<String> icons;
     private PastGamesAdapter adapter;
     private SQLiteDatabase db;
     private MediaPlayer mp;
@@ -59,7 +59,7 @@ public class GameListActivity extends AppCompatActivity {
             do {
                 ids.add(cursor.getInt(idIndex));
                 titles.add(cursor.getString(titleIndex));
-                icons.add(cursor.getInt(iconIndex));
+                icons.add(cursor.getString(iconIndex));
                 dates.add(cursor.getLong(timeIndex));
             } while (cursor.moveToNext());
         } catch(CursorIndexOutOfBoundsException ex) {

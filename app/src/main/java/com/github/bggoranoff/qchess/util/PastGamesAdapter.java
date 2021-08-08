@@ -23,10 +23,10 @@ public class PastGamesAdapter extends BaseAdapter {
     private GameListActivity activity;
     private ArrayList<String> titles;
     private ArrayList<Long> dates;
-    private ArrayList<Integer> icons;
+    private ArrayList<String> icons;
     private static LayoutInflater inflater = null;
 
-    public PastGamesAdapter(GameListActivity activity, ArrayList<String> titles, ArrayList<Long> dates, ArrayList<Integer> icons) {
+    public PastGamesAdapter(GameListActivity activity, ArrayList<String> titles, ArrayList<Long> dates, ArrayList<String> icons) {
         this.activity = activity;
         this.titles = titles;
         this.dates = dates;
@@ -58,7 +58,7 @@ public class PastGamesAdapter extends BaseAdapter {
         }
 
         ImageView iconView = view.findViewById(R.id.gameListIcon);
-        iconView.setImageResource(icons.get(position));
+        iconView.setImageResource(ResourceSelector.getDrawable(activity, icons.get(position)));
 
         TextView gameTitleView = view.findViewById(R.id.gameTitle);
         gameTitleView.setText(titles.get(position));
