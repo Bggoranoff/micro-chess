@@ -107,10 +107,10 @@ public class Board implements ChessBoard {
                 piece.getPair().setProbability(1.0f);
                 piece.getSquare().setPiece(null);
                 piece.setProbability(0.0f);
+                piece = square.getPiece();
             }
         }
         square.setPiece(piece);
-        System.out.println(toString());
     }
 
     @Override
