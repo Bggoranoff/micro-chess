@@ -47,8 +47,7 @@ import java.util.Random;
 @SuppressLint("SetTextI18n")
 public class UserListActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
-    private static final int SEND_PORT = 8000;
-    private static final int RECEIVE_PORT = 8000;
+    private static final int PORT = 8000;
 
     private ConstraintLayout layout;
     private Button gamesButton;
@@ -84,7 +83,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
                                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
                                 String opponentColor = new Random().nextFloat() > 0.5 ? "White" : "Black";
                                 int uniqueNumber = Integer.parseInt(opponentIp.split("\\.")[3]);
-                                MessageSendTask sendTask = new MessageSendTask(serverAddress, "Yes " + opponentColor, SEND_PORT + uniqueNumber);
+                                MessageSendTask sendTask = new MessageSendTask(serverAddress, "Yes " + opponentColor, PORT + uniqueNumber);
                                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                 redirectToGameActivity(opponentColor.equals("White") ? "Black" : "White", opponentName, opponentIp);
                             } catch(UnknownHostException ex) {
@@ -98,7 +97,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
                             try {
                                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
                                 int uniqueNumber = Integer.parseInt(opponentIp.split("\\.")[3]);
-                                MessageSendTask sendTask = new MessageSendTask(serverAddress, "No", SEND_PORT + uniqueNumber);
+                                MessageSendTask sendTask = new MessageSendTask(serverAddress, "No", PORT + uniqueNumber);
                                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             } catch(UnknownHostException ex) {
                                 ex.printStackTrace();
@@ -260,7 +259,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
         String ip = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
         int uniqueNumber = Integer.parseInt(ip.split("\\.")[3]);
-        receiveTask = new InviteReceiveTask(this, RECEIVE_PORT + uniqueNumber);
+        receiveTask = new InviteReceiveTask(this, PORT + uniqueNumber);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

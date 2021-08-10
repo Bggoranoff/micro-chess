@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     @Override
     protected void onResume() {
         super.onResume();
+        hideKeyboard(iconView);
         updateIcon();
     }
 }

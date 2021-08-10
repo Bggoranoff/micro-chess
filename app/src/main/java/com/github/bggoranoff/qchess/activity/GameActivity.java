@@ -44,6 +44,7 @@ public class GameActivity extends BoardActivity {
     public static final String DRAW = "draw";
     public static final String WIN = "win";
     public static final String LOSS = "loss";
+    public static final int PORT = 9000;
 
     private Button resignButton;
     private Button drawButton;
@@ -420,8 +421,8 @@ public class GameActivity extends BoardActivity {
         int opponentUniqueNumber = Integer.parseInt(opponentIp.split("\\.")[3]);
         int currentUniqueNumber = Integer.parseInt(currentIp.split("\\.")[3]);
 
-        receivePort = 9000 + currentUniqueNumber;
-        sendPort = 9000 + opponentUniqueNumber;
+        receivePort = PORT + currentUniqueNumber;
+        sendPort = PORT + opponentUniqueNumber;
 
         MoveReceiveTask receiveTask = new MoveReceiveTask(this, receivePort);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

@@ -41,8 +41,7 @@ import java.util.Objects;
 
 public class LobbyActivity extends AppCompatActivity implements DeviceActionListener, WifiP2pManager.ChannelListener, WifiP2pManager.ConnectionInfoListener {
 
-    private static final int SEND_PORT = 8000;
-    private static final int RECEIVE_PORT = 8000;
+    private static final int PORT = 8000;
 
     private ConstraintLayout layout;
     private TextView firstUserTextView;
@@ -200,14 +199,14 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
                 String opponentIp = TextFormatter.formatDeviceIp(opponentDevice.deviceName);
                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
                 int uniqueNumber = Integer.parseInt(opponentIp.split("\\.")[3]);
-                MessageSendTask sendTask = new MessageSendTask(serverAddress, currentIp + "|" + username, SEND_PORT + uniqueNumber);
+                MessageSendTask sendTask = new MessageSendTask(serverAddress, currentIp + "|" + username, PORT + uniqueNumber);
                 sendTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } catch(UnknownHostException ex) {
                 ex.printStackTrace();
             }
         });
         int uniqueNumber = Integer.parseInt(currentIp.split("\\.")[3]);
-        InviteReceiveTask receiveTask = new InviteReceiveTask(this, RECEIVE_PORT + uniqueNumber);
+        InviteReceiveTask receiveTask = new InviteReceiveTask(this, PORT + uniqueNumber);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }
