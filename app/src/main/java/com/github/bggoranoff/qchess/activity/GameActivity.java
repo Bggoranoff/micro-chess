@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewManager;
 import android.widget.Button;
@@ -48,6 +50,7 @@ public class GameActivity extends BoardActivity {
 
     private String opponentIp;
     private String username;
+    private String currentIp;
     private String opponentName;
     private SharedPreferences sharedPreferences;
     private int receivePort;
@@ -411,8 +414,14 @@ public class GameActivity extends BoardActivity {
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
 
-        receivePort = primaryColor.equals(ChessColor.WHITE) ? 8891 : 8890;
-        sendPort = primaryColor.equals(ChessColor.WHITE) ? 8890 : 8891;
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        currentIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        int opponentUniqueNumber = Integer.parseInt(opponentIp.split("\\.")[3]);
+        int currentUniqueNumber = Integer.parseInt(currentIp.split("\\.")[3]);
+
+        receivePort = 9000 + currentUniqueNumber;
+        sendPort = 9000 + opponentUniqueNumber;
 
         MoveReceiveTask receiveTask = new MoveReceiveTask(this, receivePort);
         receiveTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
