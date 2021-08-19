@@ -114,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         boardButton = findViewById(R.id.boardButton);
         boardButton.setOnClickListener(this::redirectToTestBoardActivity);
+        boardButton.post(() -> {
+            playButton.setWidth(boardButton.getWidth());
+        });
 
         iconView = findViewById(R.id.iconView);
         iconView.setOnClickListener(this::redirectToIconsActivity);

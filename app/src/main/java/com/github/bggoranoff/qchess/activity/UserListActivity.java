@@ -133,7 +133,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     public void notifyUnsuccessfulConnection() {
         runOnUiThread(() -> {
-            Toast.makeText(this, "Connection unsuccessful!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Connection unsuccessful!", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -250,7 +250,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     public void onPeersAvailable(WifiP2pDeviceList peers) {
         List<WifiP2pDevice> peerList = new ArrayList<>(peers.getDeviceList());
         if(peerList.size() == 0) {
-            Toast.makeText(this, "No devices found!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "No devices found!", Toast.LENGTH_SHORT).show();
         }
         fillUsers(peerList);
     }

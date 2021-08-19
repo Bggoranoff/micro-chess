@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QChess</string>
+    <string name="app_name">Micro Chess</string>
     <string name="username">Username</string>
     <string name="play">Play</string>
     <string name="how_to">How to play?</string>
