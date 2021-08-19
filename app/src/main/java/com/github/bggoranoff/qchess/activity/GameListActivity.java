@@ -67,10 +67,11 @@ public class GameListActivity extends AppCompatActivity {
         }
         cursor.close();
 
-        Collections.sort(ids, (a, b) -> (int) (dates.get(ids.indexOf(b)) - dates.get(ids.indexOf(a))));
-        Collections.sort(titles, (a, b) -> (int) (dates.get(titles.indexOf(b)) - dates.get(titles.indexOf(a))));
-        Collections.sort(icons, (a, b) -> (int) (dates.get(icons.indexOf(b)) - dates.get(icons.indexOf(a))));
-        Collections.sort(dates, (a, b) -> (int) (b - a));
+        // TODO: create a Game object and sort the list by date
+//        Collections.sort(ids, (a, b) -> (int) (dates.get(ids.indexOf(b)) - dates.get(ids.indexOf(a))));
+//        Collections.sort(titles, (a, b) -> (int) (dates.get(titles.indexOf(b)) - dates.get(titles.indexOf(a))));
+//        Collections.sort(icons, (a, b) -> (int) (dates.get(icons.indexOf(b)) - dates.get(icons.indexOf(a))));
+//        Collections.sort(dates, (a, b) -> (int) (b - a));
 
         adapter.notifyDataSetChanged();
     }
