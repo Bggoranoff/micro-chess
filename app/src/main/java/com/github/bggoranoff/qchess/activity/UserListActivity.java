@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.github.bggoranoff.qchess.R;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.Extras;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.network.receiver.UserBroadcastReceiver;
 import com.github.bggoranoff.qchess.network.task.InviteReceiveTask;
@@ -110,9 +111,9 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     private void redirectToGameActivity(String color, String opponentName, String opponentIp) {
         Intent intent = new Intent(getApplicationContext(), GameActivity.class);
-        intent.putExtra("color", color);
-        intent.putExtra("opponentName", opponentName);
-        intent.putExtra("opponentIp", opponentIp);
+        intent.putExtra(Extras.COLOR, color);
+        intent.putExtra(Extras.OPPONENT_NAME, opponentName);
+        intent.putExtra(Extras.OPPONENT_IP, opponentIp);
         startActivity(intent);
     }
 
@@ -125,9 +126,9 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     private void redirectToLobbyActivity(int position) {
         mp.start();
         Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
-        intent.putExtra("opponentName", usernames.get(position));
-        intent.putExtra("opponentIcon", icons.get(position));
-        intent.putExtra("opponentDevice", devices.get(position));
+        intent.putExtra(Extras.OPPONENT_NAME, usernames.get(position));
+        intent.putExtra(Extras.OPPONENT_ICON, icons.get(position));
+        intent.putExtra(Extras.OPPONENT_DEVICE, devices.get(position));
         startActivity(intent);
     }
 
@@ -196,7 +197,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
-        username = sharedPreferences.getString("username", "guest");
+        username = sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME);
 
         layout = findViewById(R.id.userListLayout);
         ChessAnimator.animateBackground(layout);
@@ -205,7 +206,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         gamesButton.setOnClickListener(this::redirectToGamesActivity);
 
         usernameTextView = findViewById(R.id.usernameTextView);
-        String username = sharedPreferences.getString("username", "guest");
+        String username = sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME);
         setUsername(username);
 
         wifiTextView = findViewById(R.id.wifiTextView);
@@ -230,7 +231,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     public String getUserData() {
         String ip = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-        String icon = sharedPreferences.getString("icon", MainActivity.DEFAULT_ICON);
+        String icon = sharedPreferences.getString(Extras.ICON, MainActivity.DEFAULT_ICON);
         return icon + "|" + username + "|" + ip;
     }
 

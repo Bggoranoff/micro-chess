@@ -18,6 +18,7 @@ import com.github.bggoranoff.qchess.model.move.Move;
 import com.github.bggoranoff.qchess.model.util.ChessColor;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.DatabaseManager;
+import com.github.bggoranoff.qchess.util.Extras;
 
 import java.util.Objects;
 
@@ -98,7 +99,7 @@ public class PastGameActivity extends BoardActivity {
 
         db = this.openOrCreateDatabase(DatabaseManager.DB_NAME, Context.MODE_PRIVATE, null);
         DatabaseManager.openOrCreateTable(db);
-        gameId = getIntent().getIntExtra("id", 0);
+        gameId = getIntent().getIntExtra(Extras.ID, 0);
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseManager.TABLE_NAME + " WHERE " + DatabaseManager._ID + " = " + gameId, null);
         int userIndex = cursor.getColumnIndex(DatabaseManager.USER);

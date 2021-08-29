@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.github.bggoranoff.qchess.R;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.Extras;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 
 import java.util.Objects;
@@ -25,6 +26,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
     
     public static final String DEFAULT_ICON = "b_k";
+    public static final String DEFAULT_USERNAME = "guest";
     public static final String PACKAGE = "com.github.bggoranoff.qchess";
 
     private ConstraintLayout homeLayout;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private MediaPlayer mp;
 
     private void updateIcon() {
-        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", DEFAULT_ICON) : icon;
+        icon = sharedPreferences.contains(Extras.ICON) ? sharedPreferences.getString(Extras.ICON, DEFAULT_ICON) : icon;
         iconView.setImageResource(ResourceSelector.getDrawable(getApplicationContext(), icon));
     }
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     private void saveUsername() {
         String username = usernameEditText.getText().toString();
-        sharedPreferences.edit().putString("username", username).apply();
+        sharedPreferences.edit().putString(Extras.USERNAME, username).apply();
     }
 
     private void redirectToUserListActivity(View view) {
@@ -104,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
         usernameEditText = findViewById(R.id.usernameEditText);
         usernameEditText.setText(
-                sharedPreferences.contains("username") ?
-                        sharedPreferences.getString("username", "") :
+                sharedPreferences.contains(Extras.USERNAME) ?
+                        sharedPreferences.getString(Extras.USERNAME, DEFAULT_USERNAME) :
                         ""
         );
 

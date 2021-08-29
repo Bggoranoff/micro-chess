@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.github.bggoranoff.qchess.R;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.DatabaseManager;
+import com.github.bggoranoff.qchess.util.Extras;
 import com.github.bggoranoff.qchess.util.PastGamesAdapter;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class GameListActivity extends AppCompatActivity {
     private void clickGame(AdapterView<?> parent, View view, int position, long id) {
         mp.start();
         Intent intent = new Intent(getApplicationContext(), PastGameActivity.class);
-        intent.putExtra("id", ids.get(position));
+        intent.putExtra(Extras.ID, ids.get(position));
         startActivity(intent);
     }
 

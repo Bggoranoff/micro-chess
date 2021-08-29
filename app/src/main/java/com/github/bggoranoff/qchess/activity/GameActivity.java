@@ -27,6 +27,7 @@ import com.github.bggoranoff.qchess.model.util.ChessColor;
 import com.github.bggoranoff.qchess.model.util.Coordinates;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.util.DatabaseManager;
+import com.github.bggoranoff.qchess.util.Extras;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.network.task.MessageSendTask;
@@ -378,18 +379,18 @@ public class GameActivity extends BoardActivity {
         board.reset(ChessColor.WHITE);
         pieceViews = new PieceView[8][8];
 
-        color = getIntent().getStringExtra("color");
+        color = getIntent().getStringExtra(Extras.COLOR);
         primaryColor = color.equals("White") ? ChessColor.WHITE : ChessColor.BLACK;
         onTurn = primaryColor.equals(ChessColor.WHITE);
 
         boardLayout = findViewById(R.id.boardLayout);
         fillBoard();
 
-        opponentIp = getIntent().getStringExtra("opponentIp");
-        opponentName = getIntent().getStringExtra("opponentName");
+        opponentIp = getIntent().getStringExtra(Extras.OPPONENT_IP);
+        opponentName = getIntent().getStringExtra(Extras.OPPONENT_NAME);
 
         sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
-        username = sharedPreferences.getString("username", "guest");
+        username = sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME);
 
         currentUsernameView = findViewById(R.id.currentUsernameView);
         currentUsernameView.setText(username);

@@ -16,6 +16,7 @@ import android.widget.TableRow;
 
 import com.github.bggoranoff.qchess.R;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
+import com.github.bggoranoff.qchess.util.Extras;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -42,7 +43,7 @@ public class IconsActivity extends AppCompatActivity {
         currentImage.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_icon, getTheme()));
         imageView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_icon_selected, getTheme()));
         icon = imageView.getTag().toString();
-        sharedPreferences.edit().putString("icon", icon).apply();
+        sharedPreferences.edit().putString(Extras.ICON, icon).apply();
         currentImage = imageView;
     }
 
@@ -58,8 +59,8 @@ public class IconsActivity extends AppCompatActivity {
                 MainActivity.PACKAGE,
                 Context.MODE_PRIVATE
         );
-        if(sharedPreferences.contains("icon")) {
-            icon = sharedPreferences.getString("icon", MainActivity.DEFAULT_ICON);
+        if(sharedPreferences.contains(Extras.ICON)) {
+            icon = sharedPreferences.getString(Extras.ICON, MainActivity.DEFAULT_ICON);
         } else {
             icon = MainActivity.DEFAULT_ICON;
         }

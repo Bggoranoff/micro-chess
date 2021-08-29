@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.github.bggoranoff.qchess.R;
 import com.github.bggoranoff.qchess.util.ChessAnimator;
 import com.github.bggoranoff.qchess.network.receiver.LobbyBroadcastReceiver;
+import com.github.bggoranoff.qchess.util.Extras;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 import com.github.bggoranoff.qchess.util.TextFormatter;
 import com.github.bggoranoff.qchess.network.task.DeviceActionListener;
@@ -63,12 +64,12 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
     public void redirectToGameActivity(String color) {
         runOnUiThread(() -> {
             Intent intent = new Intent(getApplicationContext(), GameActivity.class);
-            WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
-            String opponentName = getIntent().getStringExtra("opponentName");
+            WifiP2pDevice opponentDevice = getIntent().getParcelableExtra(Extras.OPPONENT_DEVICE);
+            String opponentName = getIntent().getStringExtra(Extras.OPPONENT_NAME);
             String opponentIp = TextFormatter.formatDeviceIp(opponentDevice.deviceName);
-            intent.putExtra("opponentIp", opponentIp);
-            intent.putExtra("opponentName", opponentName);
-            intent.putExtra("color", color);
+            intent.putExtra(Extras.OPPONENT_IP, opponentIp);
+            intent.putExtra(Extras.OPPONENT_NAME, opponentName);
+            intent.putExtra(Extras.COLOR, color);
             startActivity(intent);
             finish();
         });
@@ -76,7 +77,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
 
     private void challengePlayer(View view) {
         mp.start();
-        WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+        WifiP2pDevice opponentDevice = getIntent().getParcelableExtra(Extras.OPPONENT_DEVICE);
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = opponentDevice.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
@@ -109,10 +110,10 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         ChessAnimator.animateBackground(layout);
 
         sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
-        String opponentName = getIntent().getStringExtra("opponentName");
-        String opponentIcon = getIntent().getStringExtra("opponentIcon");
-        username = sharedPreferences.getString("username", "guest");
-        String icon = sharedPreferences.getString("icon", MainActivity.DEFAULT_ICON);
+        String opponentName = getIntent().getStringExtra(Extras.OPPONENT_NAME);
+        String opponentIcon = getIntent().getStringExtra(Extras.OPPONENT_ICON);
+        username = sharedPreferences.getString(Extras.USERNAME, MainActivity.DEFAULT_USERNAME);
+        String icon = sharedPreferences.getString(Extras.ICON, MainActivity.DEFAULT_ICON);
 
         firstUserTextView = findViewById(R.id.firstUserName);
         firstUserTextView.setText(username);
@@ -195,7 +196,7 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
         AsyncTask.execute(() -> {
             try {
-                WifiP2pDevice opponentDevice = getIntent().getParcelableExtra("opponentDevice");
+                WifiP2pDevice opponentDevice = getIntent().getParcelableExtra(Extras.OPPONENT_DEVICE);
                 String opponentIp = TextFormatter.formatDeviceIp(opponentDevice.deviceName);
                 InetAddress serverAddress = InetAddress.getByName(opponentIp);
                 int uniqueNumber = Integer.parseInt(opponentIp.split("\\.")[3]);
