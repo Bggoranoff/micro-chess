@@ -71,7 +71,7 @@ public class GameActivity extends BoardActivity {
         cp.start();
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.alert)
-                .setTitle("Resign")
+                .setTitle(R.string.resign)
                 .setMessage("Do you want to resign?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     finishGame(color + " lost by resignation!", LOSS);
@@ -91,7 +91,7 @@ public class GameActivity extends BoardActivity {
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
                     .setIcon(R.drawable.alert)
-                    .setTitle("Draw")
+                    .setTitle(R.string.offer_draw)
                     .setMessage("Your opponent requested a draw")
                     .setPositiveButton("Accept", (dialog, which) -> {
                         finishGame("Game drawn!", DRAW);
@@ -136,7 +136,7 @@ public class GameActivity extends BoardActivity {
     private void displayHistory(View view) {
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.save)
-                .setTitle("Game History")
+                .setTitle(R.string.game_history)
                 .setMessage(board.formatFullHistory())
                 .setPositiveButton("Ok", null)
                 .show();
@@ -432,7 +432,7 @@ public class GameActivity extends BoardActivity {
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.alert)
-                .setTitle("Exit")
+                .setTitle(R.string.exit)
                 .setMessage("Do you want to exit this game?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     sendMessageToOpponent("exit");

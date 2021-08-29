@@ -74,7 +74,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
                     .setIcon(R.drawable.swords)
-                    .setTitle("Challenge")
+                    .setTitle(R.string.challenge)
                     .setMessage("You are challenged by " + opponentName + "!")
                     .setPositiveButton("Accept", (dialog, which) -> {
                         Toast.makeText(this, "Accepted request!", Toast.LENGTH_SHORT).show();
@@ -249,9 +249,9 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peers) {
         List<WifiP2pDevice> peerList = new ArrayList<>(peers.getDeviceList());
-        if(peerList.size() == 0) {
+//        if(peerList.size() == 0) {
 //            Toast.makeText(this, "No devices found!", Toast.LENGTH_SHORT).show();
-        }
+//        }
         fillUsers(peerList);
     }
 

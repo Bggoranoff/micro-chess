@@ -35,6 +35,8 @@
     <string name="resign">Resign</string>
     <string name="offer_draw">Draw</string>
     <string name="take_back">Take Back</string>
+    <string name="game_history">Game History</string>
+    <string name="exit">Exit</string>
 
     <string name="past_games">Past Games</string>
     <string name="past_game">Past Game</string>

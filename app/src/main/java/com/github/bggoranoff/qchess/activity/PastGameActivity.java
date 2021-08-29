@@ -42,7 +42,7 @@ public class PastGameActivity extends BoardActivity {
 
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.save)
-                .setTitle("Game History")
+                .setTitle(R.string.game_history)
                 .setMessage(fullHistory)
                 .setPositiveButton("Ok", null)
                 .show();
