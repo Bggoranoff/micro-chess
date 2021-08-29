@@ -37,6 +37,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     public static final String NO = "n";
     public static final String CELL = "cell";
     public static final String ROW = "row";
+    public static final String OFFSET_DEVICE = "nokia";
 
     protected MediaPlayer mp;
     protected MediaPlayer cp;
@@ -122,7 +123,7 @@ public abstract class BoardActivity extends AppCompatActivity {
         int[] location = new int[2];
         squareView.getLocationOnScreen(location);
         pieceView.setX((float) location[0]);
-        pieceView.setY((float) location[1] - getInDps(this, Build.MODEL.toLowerCase().contains("nokia") ? 34 : 24));
+        pieceView.setY((float) location[1] - getInDps(this, Build.MODEL.toLowerCase().contains(OFFSET_DEVICE) ? 34 : 24));
     }
 
     protected void resetBoardColors() {
@@ -149,7 +150,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected void visualiseMove(PieceView pieceView, View squareView) {
         mp.start();
         squareView.post(() -> {
-            int offset = getInDps(this, Build.MODEL.toLowerCase().contains("nokia") ? 34 : 24);
+            int offset = getInDps(this, Build.MODEL.toLowerCase().contains(OFFSET_DEVICE) ? 34 : 24);
             int[] location = new int[2];
             squareView.getLocationOnScreen(location);
             pieceView.animate()
