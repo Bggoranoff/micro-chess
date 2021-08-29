@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QChess</string>
+    <string name="app_name">Micro Chess</string>
     <string name="username">Username</string>
     <string name="play">Play</string>
     <string name="how_to">How to play?</string>
@@ -35,6 +35,8 @@
     <string name="resign">Resign</string>
     <string name="offer_draw">Draw</string>
     <string name="take_back">Take Back</string>
+    <string name="game_history">Game History</string>
+    <string name="exit">Exit</string>
 
     <string name="past_games">Past Games</string>
     <string name="past_game">Past Game</string>

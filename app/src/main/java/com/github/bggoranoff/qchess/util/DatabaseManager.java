@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class DatabaseManager {
     public static final String _ID = BaseColumns._ID;
@@ -27,7 +25,7 @@ public class DatabaseManager {
                 OPPONENT + " VARCHAR, " +
                 COLOR + " VARCHAR, " +
                 TIME + " INTEGER, " +
-                WINNER + " INTEGER, " +
+                WINNER + " VARCHAR, " +
                 HISTORY + " VARCHAR," +
                 FORMATTED_HISTORY + " VARCHAR" +
                 ")"
@@ -37,18 +35,13 @@ public class DatabaseManager {
     public static String parseHistory(ArrayList<String> history) {
         StringBuilder historyBuilder = new StringBuilder();
         for(int i = 0; i < history.size() - 1; i++) {
-            historyBuilder.append(history.get(i) + ",");
+            historyBuilder.append(history.get(i)).append(",");
         }
         historyBuilder.append(history.get(history.size() - 1));
         return historyBuilder.toString();
     }
 
-    public static List<String> parseHistory(String history) {
-        String[] splitHistory = history.split(",");
-        return Arrays.asList(splitHistory);
-    }
-
-    public static void saveGame(SQLiteDatabase db, String user, String opponent, String color, long time, int winner, ArrayList<String> history, ArrayList<String> formattedHistory) {
+    public static void saveGame(SQLiteDatabase db, String user, String opponent, String color, long time, String icon, ArrayList<String> history, ArrayList<String> formattedHistory) {
         String parsedHistory = parseHistory(history);
         String parsedFormattedHistory = parseHistory(formattedHistory);
         ContentValues values = new ContentValues();
@@ -56,7 +49,7 @@ public class DatabaseManager {
         values.put(OPPONENT, opponent);
         values.put(COLOR, color);
         values.put(TIME, time);
-        values.put(WINNER, winner);
+        values.put(WINNER, icon);
         values.put(HISTORY, parsedHistory);
         values.put(FORMATTED_HISTORY, parsedFormattedHistory);
         db.insert(TABLE_NAME, null, values);

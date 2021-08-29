@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameActivity">
+    tools:context=".activity.GameActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gameLayout"
@@ -48,6 +48,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/resign"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -58,6 +59,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/offer_draw"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

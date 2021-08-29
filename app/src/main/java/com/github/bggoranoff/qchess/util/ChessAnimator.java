@@ -9,7 +9,6 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 
 import com.github.bggoranoff.qchess.R;
-import com.github.bggoranoff.qchess.engine.util.ChessColor;
 
 public class ChessAnimator {
 

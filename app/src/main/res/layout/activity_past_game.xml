@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PastGameActivity">
+    tools:context=".activity.PastGameActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pastGameLayout"
@@ -175,7 +175,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@android:drawable/ic_media_next" />
+            app:srcCompat="@drawable/forward" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

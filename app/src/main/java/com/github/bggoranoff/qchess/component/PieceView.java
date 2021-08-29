@@ -2,7 +2,7 @@ package com.github.bggoranoff.qchess.component;
 
 import android.content.Context;
 
-import com.github.bggoranoff.qchess.engine.piece.Piece;
+import com.github.bggoranoff.qchess.model.piece.Piece;
 import com.github.bggoranoff.qchess.util.ResourceSelector;
 
 public class PieceView extends androidx.appcompat.widget.AppCompatImageView {

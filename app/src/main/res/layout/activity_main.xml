@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/homeLayout"
@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/chess_logo"
+            app:srcCompat="@drawable/b_k"
             android:contentDescription="@string/app_name" />
 
         <EditText
@@ -38,6 +38,7 @@
             android:layout_marginTop="64dp"
             android:layout_marginEnd="50dp"
             android:autofillHints="AUTOFILL_HINT_USERNAME"
+            android:maxLength="10"
             android:background="@drawable/rounded_edittext"
             android:ems="10"
             android:padding="5dp"
@@ -57,6 +58,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="100dp"
             android:text="@string/play"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
@@ -82,6 +84,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="100dp"
             android:text="@string/board"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/playButton" />
