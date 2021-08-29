@@ -165,8 +165,8 @@ public class GameActivity extends BoardActivity {
                     );
                     performMove(move, view);
 
-                    pieceOnTakeIsThere = "y";
-                    pieceTakenIsThere = "y";
+                    pieceOnTakeIsThere = YES;
+                    pieceTakenIsThere = YES;
                 }
             } else if (view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
                 currentSquare.setBackground(AppCompatResources.getDrawable(this, ChessAnimator.getSquareColor(currentSquare.getTag().toString())));
@@ -252,9 +252,9 @@ public class GameActivity extends BoardActivity {
     @Override
     protected void revealPieceOnTake() {
         if(lastPiece.getAlpha() == 1.0f || lastPiece.getPiece().isThere()) {
-            pieceOnTakeIsThere = "y";
+            pieceOnTakeIsThere = YES;
         } else {
-            pieceOnTakeIsThere = "n";
+            pieceOnTakeIsThere = NO;
         }
         super.revealPieceOnTake();
     }
@@ -305,8 +305,8 @@ public class GameActivity extends BoardActivity {
                 String[] decomposedStart = decomposedMove[0].split("\\s+");
                 String[] decomposedEnd = decomposedMove[1].split("\\s+");
 
-                boolean takingPieceIsThere = decomposedMove[2].equals("y");
-                boolean takenPieceIsThere = decomposedMove[3].equals("y");
+                boolean takingPieceIsThere = decomposedMove[2].equals(YES);
+                boolean takenPieceIsThere = decomposedMove[3].equals(YES);
 
                 Coordinates startCoordinates = new Coordinates(
                         Integer.parseInt(decomposedStart[0]),
@@ -321,11 +321,11 @@ public class GameActivity extends BoardActivity {
 
                 View view = findViewById(ResourceSelector.getResourceId(
                         this,
-                        "cell" + endCoordinates.getY() + "" + endCoordinates.getX()
+                        CELL + endCoordinates.getY() + "" + endCoordinates.getX()
                 ));
                 currentSquare = findViewById(ResourceSelector.getResourceId(
                         this,
-                        "cell" + startCoordinates.getY() + "" + startCoordinates.getX()
+                        CELL + startCoordinates.getY() + "" + startCoordinates.getX()
                 ));
                 currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
 
@@ -340,8 +340,8 @@ public class GameActivity extends BoardActivity {
 
                 performMove(move, view);
 
-                pieceOnTakeIsThere = "y";
-                pieceTakenIsThere = "y";
+                pieceOnTakeIsThere = YES;
+                pieceTakenIsThere = YES;
             }
         });
     }
@@ -388,7 +388,7 @@ public class GameActivity extends BoardActivity {
         opponentIp = getIntent().getStringExtra("opponentIp");
         opponentName = getIntent().getStringExtra("opponentName");
 
-        sharedPreferences = getSharedPreferences("com.github.bggoranoff.qchess", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
         username = sharedPreferences.getString("username", "guest");
 
         currentUsernameView = findViewById(R.id.currentUsernameView);

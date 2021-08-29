@@ -108,11 +108,11 @@ public class LobbyActivity extends AppCompatActivity implements DeviceActionList
         layout = findViewById(R.id.lobbyLayout);
         ChessAnimator.animateBackground(layout);
 
-        sharedPreferences = getSharedPreferences("com.github.bggoranoff.qchess", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
         String opponentName = getIntent().getStringExtra("opponentName");
         String opponentIcon = getIntent().getStringExtra("opponentIcon");
         username = sharedPreferences.getString("username", "guest");
-        String icon = sharedPreferences.getString("icon", "b_k");
+        String icon = sharedPreferences.getString("icon", MainActivity.DEFAULT_ICON);
 
         firstUserTextView = findViewById(R.id.firstUserName);
         firstUserTextView.setText(username);

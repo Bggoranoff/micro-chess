@@ -55,13 +55,13 @@ public class IconsActivity extends AppCompatActivity {
         mp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         sharedPreferences = getSharedPreferences(
-                "com.github.bggoranoff.qchess",
+                MainActivity.PACKAGE,
                 Context.MODE_PRIVATE
         );
         if(sharedPreferences.contains("icon")) {
-            icon = sharedPreferences.getString("icon", "b_k");
+            icon = sharedPreferences.getString("icon", MainActivity.DEFAULT_ICON);
         } else {
-            icon = "b_k";
+            icon = MainActivity.DEFAULT_ICON;
         }
 
         layout = findViewById(R.id.iconsListLayout);

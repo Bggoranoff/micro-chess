@@ -23,6 +23,9 @@ import com.github.bggoranoff.qchess.util.ResourceSelector;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
+    
+    public static final String DEFAULT_ICON = "b_k";
+    public static final String PACKAGE = "com.github.bggoranoff.qchess";
 
     private ConstraintLayout homeLayout;
     private TextView manualLink;
@@ -31,11 +34,11 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     private Button boardButton;
     private ImageView iconView;
     private SharedPreferences sharedPreferences;
-    private String icon = "b_k";
+    private String icon = DEFAULT_ICON;
     private MediaPlayer mp;
 
     private void updateIcon() {
-        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", "b_k") : icon;
+        icon = sharedPreferences.contains("icon") ? sharedPreferences.getString("icon", DEFAULT_ICON) : icon;
         iconView.setImageResource(ResourceSelector.getDrawable(getApplicationContext(), icon));
     }
 
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         mp = MediaPlayer.create(getApplicationContext(), R.raw.click);
 
         sharedPreferences = this.getSharedPreferences(
-                "com.github.bggoranoff.qchess",
+                PACKAGE,
                 Context.MODE_PRIVATE
         );
 

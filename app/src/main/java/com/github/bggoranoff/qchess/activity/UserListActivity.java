@@ -195,7 +195,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        sharedPreferences = getSharedPreferences("com.github.bggoranoff.qchess", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MainActivity.PACKAGE, Context.MODE_PRIVATE);
         username = sharedPreferences.getString("username", "guest");
 
         layout = findViewById(R.id.userListLayout);
@@ -230,7 +230,7 @@ public class UserListActivity extends AppCompatActivity implements WifiP2pManage
 
     public String getUserData() {
         String ip = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-        String icon = sharedPreferences.getString("icon", "b_k");
+        String icon = sharedPreferences.getString("icon", MainActivity.DEFAULT_ICON);
         return icon + "|" + username + "|" + ip;
     }
 

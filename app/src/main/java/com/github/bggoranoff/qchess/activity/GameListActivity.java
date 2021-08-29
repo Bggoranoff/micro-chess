@@ -21,7 +21,6 @@ import com.github.bggoranoff.qchess.util.DatabaseManager;
 import com.github.bggoranoff.qchess.util.PastGamesAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 public class GameListActivity extends AppCompatActivity {
@@ -91,7 +90,7 @@ public class GameListActivity extends AppCompatActivity {
     }
 
     public void deleteGame(int position) {
-        Toast.makeText(this, "Deleting " + titles.get(position), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Deleted " + titles.get(position), Toast.LENGTH_SHORT).show();
         db.execSQL("DELETE FROM " + DatabaseManager.TABLE_NAME + " WHERE " + DatabaseManager._ID + " = " + ids.get(position));
         ids.remove(position);
         dates.remove(position);

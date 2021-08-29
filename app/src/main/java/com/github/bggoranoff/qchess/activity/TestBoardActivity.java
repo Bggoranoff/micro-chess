@@ -84,8 +84,8 @@ public class TestBoardActivity extends BoardActivity {
                 );
                 performMove(move, view);
 
-                pieceOnTakeIsThere = "y";
-                pieceTakenIsThere = "y";
+                pieceOnTakeIsThere = YES;
+                pieceTakenIsThere = YES;
             }
         } else if (view.getBackground().getConstantState().equals(Objects.requireNonNull(AppCompatResources.getDrawable(this, R.color.dark_green)).getConstantState())) {
             currentSquare.setBackground(AppCompatResources.getDrawable(this, ChessAnimator.getSquareColor(currentSquare.getTag().toString())));

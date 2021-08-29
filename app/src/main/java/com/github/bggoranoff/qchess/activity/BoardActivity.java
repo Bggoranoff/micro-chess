@@ -32,6 +32,11 @@ import java.util.Locale;
 import static com.github.bggoranoff.qchess.util.ChessAnimator.getInDps;
 
 public abstract class BoardActivity extends AppCompatActivity {
+    
+    public static final String YES = "y";
+    public static final String NO = "n";
+    public static final String CELL = "cell";
+    public static final String ROW = "row";
 
     protected MediaPlayer mp;
     protected MediaPlayer cp;
@@ -53,8 +58,8 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected ChessColor primaryColor;
 
     protected Move firstSplitMove = null;
-    protected String pieceTakenIsThere = "y";
-    protected String pieceOnTakeIsThere = "y";
+    protected String pieceTakenIsThere = YES;
+    protected String pieceOnTakeIsThere = YES;
 
     protected abstract void clickSquare(View view);
 
@@ -80,7 +85,7 @@ public abstract class BoardActivity extends AppCompatActivity {
                 Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
                 int squareId = ResourceSelector.getResourceId(
                         this,
-                        "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
+                        CELL + squareCoordinates.getX() + "" + squareCoordinates.getY()
                 );
                 View v = findViewById(squareId);
                 v.setBackground(AppCompatResources.getDrawable(this, R.color.dark_red));
@@ -102,7 +107,7 @@ public abstract class BoardActivity extends AppCompatActivity {
                     Coordinates squareCoordinates = TextFormatter.getCoordinates(square);
                     int squareId = ResourceSelector.getResourceId(
                             this,
-                            "cell" + squareCoordinates.getX() + "" + squareCoordinates.getY()
+                            CELL + squareCoordinates.getX() + "" + squareCoordinates.getY()
                     );
                     View v = findViewById(squareId);
                     v.setBackground(AppCompatResources.getDrawable(this, R.color.teal_200));
@@ -158,7 +163,7 @@ public abstract class BoardActivity extends AppCompatActivity {
 
     protected void revealPieceOnTake() {
         if(lastPiece.getAlpha() == 1.0f || lastPiece.getPiece().isThere()) {
-            pieceOnTakeIsThere = "y";
+            pieceOnTakeIsThere = YES;
             lastPiece.getPiece().setThere(true);
             ((ViewManager) currentPiece.getParent()).removeView(currentPiece);
 
@@ -180,7 +185,7 @@ public abstract class BoardActivity extends AppCompatActivity {
                 pieceTaken = true;
             }
         } else {
-            pieceOnTakeIsThere = "n";
+            pieceOnTakeIsThere = NO;
             Coordinates pairCoordinates = lastPiece.getPiece().getPair().getSquare().getCoordinates();
             PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
             pair.setAlpha(1.0f);
@@ -192,7 +197,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     protected void revealTakenPiece() {
         if(pieceTaken) {
             if (currentPiece.getPiece().isThere() && currentPiece.getPiece().getPair() != null) {
-                pieceTakenIsThere = "y";
+                pieceTakenIsThere = YES;
                 Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
                 PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
                 if(pair != null) {
@@ -202,7 +207,7 @@ public abstract class BoardActivity extends AppCompatActivity {
                     currentPiece.setAlpha(1.0f);
                 }
             } else if (currentPiece.getPiece().getPair() != null) {
-                pieceTakenIsThere = "n";
+                pieceTakenIsThere = NO;
                 Coordinates pairCoordinates = currentPiece.getPiece().getPair().getSquare().getCoordinates();
                 PieceView pair = pieceViews[pairCoordinates.getY()][pairCoordinates.getX()];
                 pair.setAlpha(1.0f);
@@ -245,7 +250,7 @@ public abstract class BoardActivity extends AppCompatActivity {
 
             int rookSquareId = ResourceSelector.getResourceId(
                     this,
-                    "cell" + updatedRookCoordinates.getY() + "" + updatedRookCoordinates.getX()
+                    CELL + updatedRookCoordinates.getY() + "" + updatedRookCoordinates.getX()
             );
             View rookSquare = findViewById(rookSquareId);
             rook.setSquareId(rookSquareId);
@@ -266,7 +271,7 @@ public abstract class BoardActivity extends AppCompatActivity {
     @SuppressWarnings("SuspiciousNameCombination")
     protected void fillBoard() {
         for(int i = 0; i < 8; i++) {
-            int rowId = ResourceSelector.getResourceId(this, "row" + i);
+            int rowId = ResourceSelector.getResourceId(this, ROW + i);
             TableRow currentRow = boardLayout.findViewById(rowId);
             currentRow.removeAllViews();
             for(int j = 0; j < 8; j++) {
@@ -323,8 +328,8 @@ public abstract class BoardActivity extends AppCompatActivity {
                 String[] decomposedStart = decomposedMove[0].split("\\s+");
                 String[] decomposedEnd = decomposedMove[1].split("\\s+");
 
-                boolean takingPieceIsThere = decomposedMove[2].equals("y");
-                boolean takenPieceIsThere = decomposedMove[3].equals("y");
+                boolean takingPieceIsThere = decomposedMove[2].equals(YES);
+                boolean takenPieceIsThere = decomposedMove[3].equals(YES);
 
                 Coordinates startCoordinates = new Coordinates(
                         Integer.parseInt(decomposedStart[0]),
@@ -339,11 +344,11 @@ public abstract class BoardActivity extends AppCompatActivity {
 
                 View view = findViewById(ResourceSelector.getResourceId(
                         this,
-                        "cell" + endCoordinates.getY() + "" + endCoordinates.getX()
+                        CELL + endCoordinates.getY() + "" + endCoordinates.getX()
                 ));
                 currentSquare = findViewById(ResourceSelector.getResourceId(
                         this,
-                        "cell" + startCoordinates.getY() + "" + startCoordinates.getX()
+                        CELL + startCoordinates.getY() + "" + startCoordinates.getX()
                 ));
                 currentSquare.setBackground(AppCompatResources.getDrawable(this, R.color.teal_700));
 
@@ -358,8 +363,8 @@ public abstract class BoardActivity extends AppCompatActivity {
 
                 performMove(move, view);
 
-                pieceOnTakeIsThere = "y";
-                pieceTakenIsThere = "y";
+                pieceOnTakeIsThere = YES;
+                pieceTakenIsThere = YES;
             }
         });
     }
@@ -391,7 +396,7 @@ public abstract class BoardActivity extends AppCompatActivity {
 
         currentSquare = findViewById(ResourceSelector.getResourceId(
                 this,
-                "cell" + startCoordinates.getY() + "" + startCoordinates.getX()
+                CELL + startCoordinates.getY() + "" + startCoordinates.getX()
         ));
         lastPiece = pieceViews[startCoordinates.getY()][startCoordinates.getX()];
 
@@ -403,11 +408,11 @@ public abstract class BoardActivity extends AppCompatActivity {
 
         View firstView = findViewById(ResourceSelector.getResourceId(
                 this,
-                "cell" + firstMove.getEnd().getY() + "" + firstMove.getEnd().getX()
+                CELL + firstMove.getEnd().getY() + "" + firstMove.getEnd().getX()
         ));
         View secondView = findViewById(ResourceSelector.getResourceId(
                 this,
-                "cell" + secondMove.getEnd().getY() + "" + secondMove.getEnd().getX()
+                CELL + secondMove.getEnd().getY() + "" + secondMove.getEnd().getX()
         ));
 
         ((ViewManager) lastPiece.getParent()).removeView(lastPiece);
